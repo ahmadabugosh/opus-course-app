@@ -59,8 +59,20 @@ test('parseRailwayTargetFromJson resolves nested Railway payloads', () => {
     },
   });
 
+  const customServiceShape = JSON.stringify({
+    service: {
+      customDomains: [
+        'https://opus-course.learnopenclaw.ai',
+      ],
+      serviceDomains: [
+        'https://nested-service-domain.up.railway.app',
+      ],
+    },
+  });
+
   assert.equal(parseRailwayTargetFromJson(dataWrapped), 'nested-data-shape.up.railway.app');
   assert.equal(parseRailwayTargetFromJson(serviceWrapped), 'nested-service-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson(customServiceShape), 'nested-service-domain.up.railway.app');
 });
 
 test('parseRailwayTargetFromJson prefers railway host when payload also contains custom domain', () => {
@@ -72,6 +84,21 @@ test('parseRailwayTargetFromJson prefers railway host when payload also contains
   });
 
   assert.equal(parseRailwayTargetFromJson(raw), 'opus-course-production.up.railway.app');
+});
+
+test('parseRailwayTargetFromJson ignores IP-only candidates and keeps hostnames', () => {
+  const mixed = JSON.stringify({
+    target: '34.117.12.5',
+    serviceDomain: 'https://kept-host.up.railway.app',
+  });
+
+  const ipOnly = JSON.stringify({
+    target: '34.117.12.5',
+    dnsTarget: '2606:4700:4700::1111',
+  });
+
+  assert.equal(parseRailwayTargetFromJson(mixed), 'kept-host.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson(ipOnly), null);
 });
 
 test('parseRailwayTargetFromJson returns null on empty or invalid input', () => {
