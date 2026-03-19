@@ -35,10 +35,13 @@ test('certificate email route exists with authenticated POST handler', () => {
   assert.match(route, /certificateId is required/);
 });
 
-test('certificate page includes generation, email, download, and social share UI', () => {
+test('certificate page includes OTP gate + generation + sharing UI', () => {
   const page = readFile('app/certificate/page.tsx');
 
   assert.match(page, /Get your Opus Mastery certificate/i);
+  assert.match(page, /Get Certificate/i);
+  assert.match(page, /\/api\/auth\/otp-send/);
+  assert.match(page, /\/api\/auth\/otp-verify/);
   assert.match(page, /Generate Certificate/i);
   assert.match(page, /Email Certificate/i);
   assert.match(page, /Download Latest PDF/i);

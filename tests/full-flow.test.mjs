@@ -32,3 +32,14 @@ test('certificate generation is gated until all 12 lessons are complete', () => 
   assert.match(certificateRoute, /completedLessons\s*<\s*12/);
   assert.match(certificateRoute, /Complete all 12 lessons before generating a certificate/);
 });
+
+test('certificate end-to-end UI includes OTP gate, download, and social sharing', () => {
+  const certificatePage = readFile('app/certificate/page.tsx');
+
+  assert.match(certificatePage, /Get Certificate/);
+  assert.match(certificatePage, /\/api\/auth\/otp-send/);
+  assert.match(certificatePage, /\/api\/auth\/otp-verify/);
+  assert.match(certificatePage, /Download Latest PDF/);
+  assert.match(certificatePage, /Share on LinkedIn/);
+  assert.match(certificatePage, /Share on Twitter\/?X/);
+});

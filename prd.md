@@ -233,8 +233,8 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Verify PDF certificate generation works: user name, "Opus Mastery" title, completion date, unique certificate ID, achievements count
 - [x] Add "Share on LinkedIn" button to certificate page — pre-filled post text with course name and certificate URL
 - [x] Add "Share on Twitter/X" button to certificate page — pre-filled tweet with course name and profile URL
-- [ ] Ensure OTP sign-in flow still works: complete 12 lessons → click "Get Certificate" → enter email → verify OTP → generate PDF
-- [ ] Test certificate download and social sharing end-to-end
+- [x] Ensure OTP sign-in flow still works: complete 12 lessons → click "Get Certificate" → enter email → verify OTP → generate PDF
+- [x] Test certificate download and social sharing end-to-end
 
 ### Phase 6: Integration & Polish
 - [ ] Update lesson content pages (app/lessons/[lessonId]/page.tsx) to use new LessonVerification component and fit within split-screen right panel
