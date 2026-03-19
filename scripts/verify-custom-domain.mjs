@@ -120,7 +120,6 @@ export async function run(argv = args, env = process.env, deps = {}) {
 
   const deadline = Date.now() + waitSeconds * 1000;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     const result = await dnsResolver(domain);
     const matches = matchesExpectedTarget(result, target);

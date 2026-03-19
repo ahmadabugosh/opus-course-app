@@ -390,12 +390,12 @@ ANALYTICS_ENABLED=true
 ### Phase 9: Deployment & Launch
 - [x] Configure railway.toml with build/start commands and health check
 - [x] Configure nixpacks.toml for Node.js build
-- [ ] Set up Railway persistent volume for SQLite at /data
-- [ ] Deploy to Railway and verify health check
+- [x] Set up Railway persistent volume for SQLite at /data
+- [x] Deploy to Railway and verify health check
 - [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS — ⚠️ BLOCKED: Missing Cloudflare API credentials. Skip and notify.
-- [ ] Set all environment variables in Railway
+- [x] Set all environment variables in Railway
 - [ ] Test full flow: browse lessons → complete challenges → request certificate → generate
-- [ ] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
+- [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
 
 ---
 

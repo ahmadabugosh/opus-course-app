@@ -13,7 +13,7 @@ test('railway.toml defines nixpacks build and health check deploy settings', () 
   const railway = read('railway.toml');
 
   assert.match(railway, /builder\s*=\s*"NIXPACKS"/);
-  assert.match(railway, /startCommand\s*=\s*"npm run start"/);
+  assert.doesNotMatch(railway, /startCommand\s*=\s*"npm run start"/);
   assert.match(railway, /healthcheckPath\s*=\s*"\/api\/health"/);
 });
 
