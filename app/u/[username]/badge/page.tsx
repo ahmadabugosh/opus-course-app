@@ -14,12 +14,18 @@ type UserBadgeRow = {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { username } = await params;
 
+  const badgeUrl = `/u/${username}/badge`;
+
   return {
     title: `${username} • Opus Mastery Badge`,
     description: `Share ${username}'s Opus Mastery progress badge.`,
+    alternates: {
+      canonical: badgeUrl,
+    },
     openGraph: {
       title: `${username} • Opus Mastery Badge`,
       description: `Share ${username}'s Opus Mastery progress badge.`,
+      url: badgeUrl,
       images: [`/u/${username}/badge/image`],
     },
     twitter: {

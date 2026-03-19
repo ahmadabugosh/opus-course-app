@@ -34,12 +34,18 @@ type CertificateRow = {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { username } = await params;
 
+  const profileUrl = `/u/${username}`;
+
   return {
     title: `@${username} • Opus Mastery Profile`,
     description: `View @${username}'s Opus Mastery lessons, achievements, and certificate status.`,
+    alternates: {
+      canonical: profileUrl,
+    },
     openGraph: {
       title: `@${username} • Opus Mastery Profile`,
       description: `View @${username}'s Opus Mastery lessons, achievements, and certificate status.`,
+      url: profileUrl,
       images: [`/u/${username}/badge/image`],
     },
     twitter: {

@@ -1,5 +1,29 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { LESSONS } from "@/lib/lessons";
+
+export const metadata: Metadata = {
+  title: "Opus Mastery — 12-Lesson Gamified Opus Course",
+  description:
+    "Start Opus Mastery instantly: 12 practical lessons, video walkthroughs, challenge-based progress, and certificate unlock at 12/12.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Opus Mastery — 12-Lesson Gamified Opus Course",
+    description:
+      "Start Opus Mastery instantly: 12 practical lessons, video walkthroughs, challenge-based progress, and certificate unlock at 12/12.",
+    url: "/",
+    images: [{ url: "/api/og" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Opus Mastery — 12-Lesson Gamified Opus Course",
+    description:
+      "Start Opus Mastery instantly: 12 practical lessons, video walkthroughs, challenge-based progress, and certificate unlock at 12/12.",
+    images: ["/api/og"],
+  },
+};
 
 const highlights = [
   "Build real-world workflows from day one",
