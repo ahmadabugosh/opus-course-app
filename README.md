@@ -55,6 +55,8 @@ Schema is defined in `lib/schema.sql` and includes:
 - `npm run lint` — linting
 - `npm run test` — lightweight schema checks
 - `npm run db:init` — initialize SQLite schema
+- `npm run domain:setup` — apply Cloudflare CNAME + verify propagation
+- `npm run domain:setup:dry` — dry-run custom-domain changes
 
 ## Deployment (Railway)
 
@@ -88,6 +90,16 @@ Dry run before applying changes:
 
 ```bash
 node scripts/configure-cloudflare-domain.mjs --dry-run
+# or one-command dry run (configure + skip verification)
+npm run domain:setup:dry
+```
+
+One-command apply + verify workflow:
+
+```bash
+npm run domain:setup
+# equivalent:
+# node scripts/custom-domain-setup.mjs --wait-seconds=300
 ```
 
 You can also run it without exporting env vars by passing explicit flags:

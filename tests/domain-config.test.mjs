@@ -43,11 +43,26 @@ test('cloudflare helper supports explicit CLI flags for safer one-off DNS change
   assert.match(script, /--proxied=/);
 });
 
+test('custom-domain setup orchestration script exists for one-command apply+verify', () => {
+  const scriptPath = path.join(root, 'scripts/custom-domain-setup.mjs');
+
+  assert.equal(existsSync(scriptPath), true, 'custom-domain-setup.mjs should exist');
+
+  const script = read('scripts/custom-domain-setup.mjs');
+
+  assert.match(script, /configure-cloudflare-domain\.mjs/);
+  assert.match(script, /verify-custom-domain\.mjs/);
+  assert.match(script, /--dry-run/);
+  assert.match(script, /--wait-seconds/);
+  assert.match(script, /NEXT_PUBLIC_APP_URL/);
+});
+
 test('README documents custom domain configuration workflow', () => {
   const readme = read('README.md');
 
   assert.match(readme, /Custom Domain \(Cloudflare DNS\)/);
   assert.match(readme, /scripts\/configure-cloudflare-domain\.mjs/);
+  assert.match(readme, /scripts\/custom-domain-setup\.mjs/);
   assert.match(readme, /CF_API_TOKEN/);
   assert.match(readme, /CF_ZONE_ID/);
   assert.match(readme, /CF_ZONE_NAME/);
