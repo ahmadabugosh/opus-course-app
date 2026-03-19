@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { ProgressProvider } from "@/components/progress-provider";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ProgressProvider>
+          <AnalyticsTracker />
           <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur">
             <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
               <Link href="/" className="text-base font-semibold tracking-tight">

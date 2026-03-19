@@ -378,11 +378,11 @@ ANALYTICS_ENABLED=true
 - [ ] Create completion-celebration.tsx — celebration animation when all 12 lessons completed (confetti, reveal certificate)
 
 ### Phase 8: Analytics & Polish
-- [ ] Create lib/analytics.ts — event tracking helpers (lesson_start, lesson_complete, achievement_earned, certificate_generated)
-- [ ] Create analytics-tracker.tsx — client-side page view tracking
-- [ ] Create /api/analytics/track route — POST event logging
-- [ ] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
-- [ ] Create /api/health route — health check endpoint for Railway
+- [x] Create lib/analytics.ts — event tracking helpers (lesson_start, lesson_complete, achievement_earned, certificate_generated)
+- [x] Create analytics-tracker.tsx — client-side page view tracking
+- [x] Create /api/analytics/track route — POST event logging
+- [x] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
+- [x] Create /api/health route — health check endpoint for Railway
 - [ ] Add loading states, error boundaries, and empty states across all pages
 - [ ] Mobile responsive polish — test and fix all layouts on mobile/tablet
 - [ ] Add SEO metadata to all pages (title, description, OG tags)
