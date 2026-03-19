@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
 // BLOCKED: Requires Cloudflare API credentials + target Railway host before DNS can be applied automatically.
-// TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
+// TODO: revisit once Cloudflare auth credentials (API token or API key/email) and zone access are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
 
 // Supported flags (either --key value or --key=value):
-// --token=... --app-url=... --zone-id=... --zone-name=... --target=... --record-name=... --proxied=true|false --dry-run
+// --token=... --api-key=... --api-email=... --app-url=... --zone-id=... --zone-name=... --target=... --record-name=... --proxied=true|false --dry-run
 
 function getArgValue(name) {
   const prefix = `${name}=`;
@@ -30,10 +30,18 @@ function getArgValue(name) {
 
 const isDryRun = args.has('--dry-run');
 const token = getArgValue('--token') || process.env.CF_API_TOKEN || process.env.CLOUDFLARE_API_TOKEN;
+const apiKey = getArgValue('--api-key') || process.env.CF_API_KEY || process.env.CLOUDFLARE_API_KEY;
+const apiEmail =
+  getArgValue('--api-email') ||
+  process.env.CF_API_EMAIL ||
+  process.env.CLOUDFLARE_API_EMAIL ||
+  process.env.CLOUDFLARE_EMAIL;
 const appUrlRaw = getArgValue('--app-url') || process.env.NEXT_PUBLIC_APP_URL;
 
+const headers = buildCloudflareHeaders({ token, apiKey, apiEmail });
+
 const missing = [];
-if (!token) missing.push('CF_API_TOKEN/CLOUDFLARE_API_TOKEN (or --token)');
+if (!headers) missing.push('CF_API_TOKEN/CLOUDFLARE_API_TOKEN (or --token) OR CF_API_KEY+CF_API_EMAIL/CLOUDFLARE_API_KEY+CLOUDFLARE_EMAIL');
 if (!appUrlRaw) missing.push('NEXT_PUBLIC_APP_URL (or --app-url)');
 
 if (missing.length) {
@@ -84,10 +92,6 @@ if (isSelfReferentialCname(recordName, target)) {
   process.exit(1);
 }
 
-const headers = {
-  Authorization: `Bearer ${token}`,
-  'Content-Type': 'application/json',
-};
 
 async function resolveZoneId() {
   if (zoneId) return zoneId;

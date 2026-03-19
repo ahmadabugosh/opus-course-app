@@ -17,6 +17,11 @@ test('cloudflare custom domain helper script exists and validates required env v
   const script = read('scripts/configure-cloudflare-domain.mjs');
 
   assert.match(script, /CF_API_TOKEN/);
+  assert.match(script, /CLOUDFLARE_API_TOKEN/);
+  assert.match(script, /CF_API_KEY/);
+  assert.match(script, /CLOUDFLARE_API_KEY/);
+  assert.match(script, /CF_API_EMAIL/);
+  assert.match(script, /CLOUDFLARE_EMAIL/);
   assert.match(script, /CF_ZONE_ID/);
   assert.match(script, /CF_ZONE_NAME/);
   assert.match(script, /inferZoneNameFromHostname/);

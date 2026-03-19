@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import dns from 'node:dns/promises';
-import { inferZoneNameFromHostname, normalizeHost } from '../lib/domain.js';
+import { buildCloudflareHeaders, inferZoneNameFromHostname, normalizeHost } from '../lib/domain.js';
 
 const args = process.argv.slice(2);
 
@@ -57,13 +57,9 @@ async function resolveZoneId(zoneId, zoneName, headers, fetchFn) {
   return zone?.id;
 }
 
-export async function verifyWithCloudflareApi({ domain, target, token, zoneId, zoneName, fetchFn = fetch }) {
-  if (!token) return false;
-
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  };
+export async function verifyWithCloudflareApi({ domain, target, token, apiKey, apiEmail, zoneId, zoneName, fetchFn = fetch }) {
+  const headers = buildCloudflareHeaders({ token, apiKey, apiEmail });
+  if (!headers) return false;
 
   const resolvedZoneId = await resolveZoneId(zoneId, zoneName, headers, fetchFn);
   if (!resolvedZoneId) return false;
@@ -88,6 +84,12 @@ export async function run(argv = args, env = process.env, deps = {}) {
   );
   const waitSeconds = toWaitSeconds(getArg(argv, '--wait-seconds', '0'));
   const token = getArg(argv, '--token', env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN);
+  const apiKey = getArg(argv, '--api-key', env.CF_API_KEY || env.CLOUDFLARE_API_KEY);
+  const apiEmail = getArg(
+    argv,
+    '--api-email',
+    env.CF_API_EMAIL || env.CLOUDFLARE_API_EMAIL || env.CLOUDFLARE_EMAIL,
+  );
   const zoneId = getArg(argv, '--zone-id', env.CF_ZONE_ID || env.CLOUDFLARE_ZONE_ID);
   const zoneName = getArg(argv, '--zone-name', env.CF_ZONE_NAME || env.CLOUDFLARE_ZONE_NAME || inferZoneNameFromHostname(domain));
 
@@ -96,7 +98,7 @@ export async function run(argv = args, env = process.env, deps = {}) {
   const sleep = deps.sleep ?? ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
 
   if (!domain || !target) {
-    console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300] [--token=...] [--zone-id=...|--zone-name=...]');
+    console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300] [--token=... | --api-key=... --api-email=...] [--zone-id=...|--zone-name=...]');
     process.exit(1);
   }
 
@@ -116,7 +118,16 @@ export async function run(argv = args, env = process.env, deps = {}) {
     const remainingMs = deadline - Date.now();
 
     if (remainingMs <= 0) {
-      const apiVerified = await verifyWithCloudflareApi({ domain, target, token, zoneId, zoneName, fetchFn });
+      const apiVerified = await verifyWithCloudflareApi({
+        domain,
+        target,
+        token,
+        apiKey,
+        apiEmail,
+        zoneId,
+        zoneName,
+        fetchFn,
+      });
 
       if (apiVerified) {
         console.log(`✅ DNS record verified in Cloudflare API: ${domain} -> ${target} (proxied records may hide public CNAME)`);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -108,4 +108,23 @@ test('isSelfReferentialCname detects self-referential domain targets', () => {
   assert.equal(isSelfReferentialCname('OPUS-COURSE.LEARNOPENCLAW.AI.', 'opus-course.learnopenclaw.ai'), true);
   assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'https://opus-course-production.up.railway.app'), false);
   assert.equal(isSelfReferentialCname('', 'opus-course.learnopenclaw.ai'), false);
+});
+
+test('buildCloudflareHeaders supports bearer tokens and global API key/email auth', () => {
+  assert.deepEqual(buildCloudflareHeaders({ token: 'tok_123' }), {
+    Authorization: 'Bearer tok_123',
+    'Content-Type': 'application/json',
+  });
+
+  assert.deepEqual(
+    buildCloudflareHeaders({ apiKey: 'key_123', apiEmail: 'rose@example.com' }),
+    {
+      'X-Auth-Key': 'key_123',
+      'X-Auth-Email': 'rose@example.com',
+      'Content-Type': 'application/json',
+    },
+  );
+
+  assert.equal(buildCloudflareHeaders({ apiKey: 'key_123' }), null);
+  assert.equal(buildCloudflareHeaders({}), null);
 });

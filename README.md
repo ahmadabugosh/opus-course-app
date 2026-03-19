@@ -113,6 +113,16 @@ node scripts/configure-cloudflare-domain.mjs \
   --record-name="opus-course.learnopenclaw.ai" \
   --proxied=true \
   --dry-run
+
+# or use global key auth if your account doesn't use API tokens
+node scripts/configure-cloudflare-domain.mjs \
+  --api-key="$CF_API_KEY" \
+  --api-email="$CF_API_EMAIL" \
+  --app-url="https://opus-course.learnopenclaw.ai" \
+  --zone-name="learnopenclaw.ai" \
+  --target="<railway-generated-domain>" \
+  --record-name="opus-course.learnopenclaw.ai" \
+  --dry-run
 ```
 
 If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, the script uses `CF_ZONE_NAME` when provided, otherwise it infers a zone from `NEXT_PUBLIC_APP_URL` (e.g. `opus-course.learnopenclaw.ai` → `learnopenclaw.ai`) before resolving the zone via Cloudflare API.
@@ -128,4 +138,4 @@ node scripts/verify-custom-domain.mjs \
 
 The command exits `0` once the CNAME matches. If DNS is still propagating it will poll until `--wait-seconds` is exhausted.
 
-If Cloudflare proxy is enabled (`CF_PROXIED=true`) and public DNS no longer exposes the CNAME, you can pass Cloudflare auth (`--token` plus `--zone-id`/`--zone-name`, or env vars) and the verifier will confirm the CNAME directly via Cloudflare API as a fallback.
+If Cloudflare proxy is enabled (`CF_PROXIED=true`) and public DNS no longer exposes the CNAME, you can pass Cloudflare auth (`--token` **or** `--api-key` + `--api-email`, plus `--zone-id`/`--zone-name`, or env vars) and the verifier will confirm the CNAME directly via Cloudflare API as a fallback.
