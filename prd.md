@@ -328,8 +328,8 @@ ANALYTICS_ENABLED=true
 - [x] Create README.md with project overview and setup instructions
 
 ### Phase 2: Progress System & Lightweight Auth
-- [ ] Create lib/progress.ts — localStorage-based progress tracking (read/write lesson completion status, timestamps, challenge self-marks)
-- [ ] Create a React context (ProgressProvider) that wraps the app, loads progress from localStorage on mount, provides methods: markComplete(lessonId), getProgress(), isComplete(lessonId), getTotalCompleted()
+- [x] Create lib/progress.ts — localStorage-based progress tracking (read/write lesson completion status, timestamps, challenge self-marks)
+- [x] Create a React context (ProgressProvider) that wraps the app, loads progress from localStorage on mount, provides methods: markComplete(lessonId), getProgress(), isComplete(lessonId), getTotalCompleted()
 - [ ] Create lib/auth.ts — lightweight session management (cookie-based), only used when user requests certificate
 - [ ] Create /api/auth/otp-send route — send OTP code via email (triggered only from certificate request flow)
 - [ ] Create /api/auth/otp-verify route — verify OTP, create user record if new, set session cookie, migrate localStorage progress to DB
