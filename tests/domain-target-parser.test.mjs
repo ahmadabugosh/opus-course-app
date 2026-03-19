@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { expandRecordName, inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -82,4 +82,13 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai/path/ignored'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('localhost'), null);
   assert.equal(inferZoneNameFromHostname(''), null);
+});
+
+test('expandRecordName resolves apex/relative/FQDN Cloudflare record names safely', () => {
+  assert.equal(expandRecordName('@', 'learnopenclaw.ai'), 'learnopenclaw.ai');
+  assert.equal(expandRecordName('opus-course', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
+  assert.equal(expandRecordName('opus-course.learnopenclaw.ai', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
+  assert.equal(expandRecordName('https://opus-course.learnopenclaw.ai/path', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
+  assert.equal(expandRecordName('*', 'learnopenclaw.ai'), '*.learnopenclaw.ai');
+  assert.equal(expandRecordName('', 'learnopenclaw.ai'), null);
 });
