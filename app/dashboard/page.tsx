@@ -16,6 +16,17 @@ const lessons = getAllLessons();
 
 export default function DashboardPage() {
   const { getProgress, getTotalCompleted } = useProgress();
+
+  if (lessons.length === 0) {
+    return (
+      <main className="mx-auto w-full max-w-3xl px-4 py-10 text-center">
+        <div className="rounded-2xl border border-border bg-surface p-8">
+          <h1 className="text-2xl font-bold text-white">No lessons available yet</h1>
+          <p className="mt-2 text-sm text-muted">Please add lesson content in lib/lessons.ts and refresh.</p>
+        </div>
+      </main>
+    );
+  }
   const progress = getProgress();
   const totalCompleted = getTotalCompleted();
   const currentLessonId = getDefaultCurrentLessonId(progress);

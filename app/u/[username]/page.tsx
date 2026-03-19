@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -29,6 +30,26 @@ type CertificateRow = {
   certificate_id: string;
   generated_at: string;
 };
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { username } = await params;
+
+  return {
+    title: `@${username} • Opus Mastery Profile`,
+    description: `View @${username}'s Opus Mastery lessons, achievements, and certificate status.`,
+    openGraph: {
+      title: `@${username} • Opus Mastery Profile`,
+      description: `View @${username}'s Opus Mastery lessons, achievements, and certificate status.`,
+      images: [`/u/${username}/badge/image`],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `@${username} • Opus Mastery Profile`,
+      description: `View @${username}'s Opus Mastery lessons, achievements, and certificate status.`,
+      images: [`/u/${username}/badge/image`],
+    },
+  };
+}
 
 export default async function PublicProfilePage({ params }: { params: Promise<Params> }) {
   const { username } = await params;

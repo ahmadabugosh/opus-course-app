@@ -383,9 +383,9 @@ ANALYTICS_ENABLED=true
 - [x] Create /api/analytics/track route — POST event logging
 - [x] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
 - [x] Create /api/health route — health check endpoint for Railway
-- [ ] Add loading states, error boundaries, and empty states across all pages
+- [x] Add loading states, error boundaries, and empty states across all pages
 - [ ] Mobile responsive polish — test and fix all layouts on mobile/tablet
-- [ ] Add SEO metadata to all pages (title, description, OG tags)
+- [x] Add SEO metadata to all pages (title, description, OG tags)
 
 ### Phase 9: Deployment & Launch
 - [ ] Configure railway.toml with build/start commands and health check
