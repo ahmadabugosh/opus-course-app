@@ -7,6 +7,7 @@ type GenerateResponse = {
   certificateId: string;
   completionDate: string;
   downloadUrl: string;
+  profileUrl: string | null;
   stats: {
     completedLessons: number;
     achievementsCount: number;
@@ -19,7 +20,30 @@ export default function CertificatePage() {
   const [result, setResult] = useState<GenerateResponse | null>(null);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
 
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
   const latestDownloadUrl = useMemo(() => result?.downloadUrl ?? null, [result]);
+  const absoluteCertificateUrl = useMemo(() => {
+    if (!result?.downloadUrl || !origin) return null;
+    return `${origin}${result.downloadUrl}`;
+  }, [origin, result?.downloadUrl]);
+
+  const absoluteProfileUrl = useMemo(() => {
+    if (!result?.profileUrl || !origin) return null;
+    return `${origin}${result.profileUrl}`;
+  }, [origin, result?.profileUrl]);
+
+  const shareText = 'I just completed Opus Mastery — 12 hands-on AI workflow automation lessons 🚀';
+
+  const linkedinShareUrl = useMemo(() => {
+    if (!absoluteCertificateUrl) return null;
+    return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(absoluteCertificateUrl)}`;
+  }, [absoluteCertificateUrl]);
+
+  const twitterShareUrl = useMemo(() => {
+    const targetUrl = absoluteProfileUrl || absoluteCertificateUrl;
+    if (!targetUrl) return null;
+    return `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(targetUrl)}`;
+  }, [absoluteCertificateUrl, absoluteProfileUrl]);
 
   async function handleGenerate() {
     setLoading(true);
@@ -111,6 +135,30 @@ export default function CertificatePage() {
             <p className="mt-1">Completed lessons: {result.stats.completedLessons}/12</p>
             <p className="mt-1">Achievements earned: {result.stats.achievementsCount}</p>
             <p className="mt-1">Completion date: {result.completionDate}</p>
+
+            <div className="mt-4 flex flex-wrap gap-3">
+              {linkedinShareUrl ? (
+                <a
+                  href={linkedinShareUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-emerald-300/50 px-3 py-2 font-semibold text-emerald-100 hover:border-emerald-200 hover:text-white"
+                >
+                  Share on LinkedIn
+                </a>
+              ) : null}
+
+              {twitterShareUrl ? (
+                <a
+                  href={twitterShareUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-emerald-300/50 px-3 py-2 font-semibold text-emerald-100 hover:border-emerald-200 hover:text-white"
+                >
+                  Share on Twitter/X
+                </a>
+              ) : null}
+            </div>
           </div>
         ) : null}
       </section>

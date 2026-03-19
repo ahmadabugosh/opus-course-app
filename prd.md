@@ -229,10 +229,10 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Ensure completing a lesson immediately updates the robot stage in the left panel (no page refresh needed)
 
 ### Phase 5: Certificate Cleanup
-- [ ] Remove any EAS/blockchain references from certificate generation (lib/certificate.ts, API routes)
-- [ ] Verify PDF certificate generation works: user name, "Opus Mastery" title, completion date, unique certificate ID, achievements count
-- [ ] Add "Share on LinkedIn" button to certificate page — pre-filled post text with course name and certificate URL
-- [ ] Add "Share on Twitter/X" button to certificate page — pre-filled tweet with course name and profile URL
+- [x] Remove any EAS/blockchain references from certificate generation (lib/certificate.ts, API routes)
+- [x] Verify PDF certificate generation works: user name, "Opus Mastery" title, completion date, unique certificate ID, achievements count
+- [x] Add "Share on LinkedIn" button to certificate page — pre-filled post text with course name and certificate URL
+- [x] Add "Share on Twitter/X" button to certificate page — pre-filled tweet with course name and profile URL
 - [ ] Ensure OTP sign-in flow still works: complete 12 lessons → click "Get Certificate" → enter email → verify OTP → generate PDF
 - [ ] Test certificate download and social sharing end-to-end
 

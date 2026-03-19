@@ -35,11 +35,21 @@ test('certificate email route exists with authenticated POST handler', () => {
   assert.match(route, /certificateId is required/);
 });
 
-test('certificate page includes generation, email, and download UI', () => {
+test('certificate page includes generation, email, download, and social share UI', () => {
   const page = readFile('app/certificate/page.tsx');
 
   assert.match(page, /Get your Opus Mastery certificate/i);
   assert.match(page, /Generate Certificate/i);
   assert.match(page, /Email Certificate/i);
   assert.match(page, /Download Latest PDF/i);
+  assert.match(page, /Share on LinkedIn/i);
+  assert.match(page, /Share on Twitter\/?X/i);
+});
+
+test('certificate implementation has no blockchain or EAS dependencies', () => {
+  const certificateLib = readFile('lib/certificate.ts');
+  const route = readFile('app/api/certificate/generate/route.ts');
+
+  assert.doesNotMatch(certificateLib, /eas|ethereum|attestation|blockchain/i);
+  assert.doesNotMatch(route, /eas|ethereum|attestation|blockchain/i);
 });

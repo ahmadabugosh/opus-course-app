@@ -60,6 +60,7 @@ export async function POST() {
     completionDate: certificate.completionDate,
     stats: certificate.stats,
     downloadUrl: `/api/certificate/generate?certificateId=${certificate.certificateId}`,
+    profileUrl: user.username ? `/u/${user.username}` : null,
   });
 }
 
