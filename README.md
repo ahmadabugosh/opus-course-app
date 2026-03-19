@@ -64,3 +64,17 @@ This repo includes:
 - `nixpacks.toml` for Node build/runtime
 
 Attach a persistent volume and set `DATABASE_PATH=/data/opus-course.db`.
+
+## Custom Domain (Cloudflare DNS)
+
+Use the helper script to upsert the `opus-course.learnopenclaw.ai` CNAME once your Railway public hostname is known.
+
+```bash
+export CF_API_TOKEN=...
+export CF_ZONE_ID=...
+export NEXT_PUBLIC_APP_URL=https://opus-course.learnopenclaw.ai
+export CF_TARGET_CNAME=<railway-generated-domain>
+node scripts/configure-cloudflare-domain.mjs
+```
+
+If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`.
