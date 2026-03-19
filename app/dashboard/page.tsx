@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import LessonContent from '@/components/lesson-content';
 import { LessonVerification } from '@/components/lesson-verification';
 import { RobotAssembly } from '@/components/robot-assembly/robot-assembly';
 import VideoEmbed from '@/components/video-embed';
@@ -39,6 +40,7 @@ export default function DashboardPage() {
   const totalCompleted = getTotalCompleted();
   const defaultLessonId = getDefaultCurrentLessonId(progress);
   const [selectedLessonId, setSelectedLessonId] = useState(defaultLessonId);
+  const [lessonMarkdown, setLessonMarkdown] = useState<string>('');
 
   const selectedLesson = useMemo(
     () => lessons.find((lesson) => lesson.id === selectedLessonId) ?? lessons[0],
@@ -47,17 +49,46 @@ export default function DashboardPage() {
 
   const currentTitle = getLearnerTitle(totalCompleted);
 
-  return (
-    <main className="mx-auto grid w-full max-w-[1280px] gap-6 px-4 py-6 lg:grid-cols-[minmax(320px,38%),1fr]">
-      <aside className="rounded-2xl border border-[#2a2a4a] bg-[#12122a] p-4 lg:sticky lg:top-6 lg:h-[calc(100dvh-3rem)] lg:overflow-y-auto">
-        <h2 className="text-xl font-semibold text-white">🤖 Robot Assembly Hatch</h2>
-        <p className="mt-1 text-sm text-[#9ca3cf]">Build one part per completed lesson. Stage {totalCompleted}/12.</p>
+  // Fetch lesson markdown content when selected lesson changes
+  useEffect(() => {
+    if (!selectedLesson) return;
+    const currentId = selectedLesson.id;
+    let cancelled = false;
 
-        <div className="mt-4">
-          <RobotAssembly stage={totalCompleted} className="w-full" />
+    async function loadContent() {
+      try {
+        const response = await fetch(`/api/lessons/content/${currentId}`);
+        const payload = (await response.json()) as { markdown?: string };
+        if (!cancelled) {
+          setLessonMarkdown(payload.markdown ?? '');
+        }
+      } catch {
+        if (!cancelled) {
+          setLessonMarkdown('');
+        }
+      }
+    }
+
+    setLessonMarkdown('');
+    loadContent();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedLesson]);
+
+  return (
+    <div className="flex h-[calc(100dvh-4rem)] w-full overflow-hidden">
+      {/* Left panel — robot + nav (fixed, no scroll on desktop) */}
+      <aside className="hidden w-[380px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#2a2a4a] bg-[#12122a] p-5 lg:flex">
+        <div>
+          <h2 className="text-xl font-semibold text-white">🤖 Robot Assembly</h2>
+          <p className="mt-1 text-sm text-[#9ca3cf]">Stage {totalCompleted}/12</p>
         </div>
 
-        <div className="mt-4 rounded-xl border border-[#2a2a4a] bg-[#1a1a36] p-3">
+        <RobotAssembly stage={totalCompleted} className="w-full" />
+
+        <div className="rounded-xl border border-[#2a2a4a] bg-[#1a1a36] p-3">
           <div className="flex items-center justify-between text-sm">
             <span className="text-[#d4d4ef]">Progress</span>
             <span className="font-semibold text-white">{totalCompleted}/12</span>
@@ -71,8 +102,8 @@ export default function DashboardPage() {
           <p className="mt-2 text-sm text-[#9ca3cf]">{currentTitle}</p>
         </div>
 
-        <details className="mt-4 rounded-xl border border-[#2a2a4a] bg-[#1a1a36] p-3 lg:open" open>
-          <summary className="cursor-pointer text-sm font-semibold text-white">Lesson navigation</summary>
+        <nav className="flex-1 overflow-y-auto rounded-xl border border-[#2a2a4a] bg-[#1a1a36] p-3">
+          <p className="text-sm font-semibold text-white">Lessons</p>
           <ul className="mt-3 space-y-1">
             {lessons.map((lesson) => {
               const progressEntry = progress.find((entry) => entry.lessonId === lesson.id);
@@ -98,28 +129,84 @@ export default function DashboardPage() {
               );
             })}
           </ul>
-        </details>
+        </nav>
       </aside>
 
-      <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-4 sm:p-6 lg:h-[calc(100dvh-3rem)] lg:overflow-y-auto">
-        <CompletionCelebration totalCompleted={totalCompleted} />
+      {/* Right panel — lesson content (scrollable) */}
+      <section className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-3xl space-y-6">
+          <CompletionCelebration totalCompleted={totalCompleted} />
 
-        <header className="space-y-2">
-          <p className="text-sm uppercase tracking-wide text-indigo-300">Lesson {selectedLesson.id}</p>
-          <h1 className="text-2xl font-bold text-white sm:text-3xl">{selectedLesson.title}</h1>
-          <p className="text-[#cccccc]">{selectedLesson.description}</p>
-        </header>
+          {/* Mobile-only: compact robot + progress */}
+          <div className="rounded-2xl border border-[#2a2a4a] bg-[#12122a] p-4 lg:hidden">
+            <div className="flex items-center gap-4">
+              <div className="w-24 shrink-0">
+                <RobotAssembly stage={totalCompleted} className="w-full" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-white">{currentTitle}</p>
+                <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#2a2a4a]">
+                  <div
+                    className="h-full rounded-full bg-indigo-500 transition-all"
+                    style={{ width: `${(totalCompleted / 12) * 100}%` }}
+                  />
+                </div>
+                <p className="mt-1 text-xs text-[#9ca3cf]">{totalCompleted}/12 lessons</p>
+              </div>
+            </div>
+            <details className="mt-3">
+              <summary className="cursor-pointer text-xs font-semibold text-[#9ca3cf]">Show all lessons</summary>
+              <ul className="mt-2 space-y-1">
+                {lessons.map((lesson) => {
+                  const progressEntry = progress.find((entry) => entry.lessonId === lesson.id);
+                  const status = progressEntry?.status ?? 'not_started';
+                  const isCurrent = selectedLesson.id === lesson.id;
+                  return (
+                    <li key={lesson.id}>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLessonId(lesson.id)}
+                        className={`flex w-full items-start gap-2 rounded-md px-2 py-1 text-left text-xs transition ${
+                          isCurrent ? 'bg-[#2a2a52] text-white' : 'text-[#d4d4ef] hover:bg-[#26264a]'
+                        }`}
+                      >
+                        <span>{getStatusLabel(status, isCurrent)}</span>
+                        <span>{lesson.id}. {lesson.title}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </details>
+          </div>
 
-        <VideoEmbed url={selectedLesson.videoUrl} title={selectedLesson.title} />
+          <header className="space-y-2">
+            <p className="text-sm uppercase tracking-wide text-indigo-300">Lesson {selectedLesson.id}</p>
+            <h1 className="text-2xl font-bold text-white sm:text-3xl">{selectedLesson.title}</h1>
+            <p className="text-[#cccccc]">{selectedLesson.description}</p>
+          </header>
 
-        <article className="rounded-xl border border-[#333355] bg-[#16162b] p-5 text-[#d4d4ef]">
-          <h2 className="text-xl font-semibold text-white">🛠 Challenge</h2>
-          <p className="mt-2">{selectedLesson.challenge.description}</p>
-          <p className="mt-2 text-sm text-[#a8a8d0]">Hint: {selectedLesson.challenge.hint}</p>
-        </article>
+          <VideoEmbed url={selectedLesson.videoUrl} title={selectedLesson.title} />
 
-        <LessonVerification lesson={selectedLesson} />
+          {/* Written lesson guide */}
+          <article className="rounded-xl border border-[#333355] bg-[#16162b] p-5 text-[#d4d4ef]">
+            <h2 className="text-xl font-semibold text-white">📝 Lesson Guide</h2>
+            {lessonMarkdown ? (
+              <LessonContent markdown={lessonMarkdown} />
+            ) : (
+              <p className="mt-2 text-sm text-[#a8a8d0]">Loading lesson content...</p>
+            )}
+          </article>
+
+          <article className="rounded-xl border border-[#333355] bg-[#16162b] p-5 text-[#d4d4ef]">
+            <h2 className="text-xl font-semibold text-white">🛠 Challenge</h2>
+            <p className="mt-2">{selectedLesson.challenge.description}</p>
+            <p className="mt-2 text-sm text-[#a8a8d0]">Hint: {selectedLesson.challenge.hint}</p>
+          </article>
+
+          <LessonVerification lesson={selectedLesson} />
+        </div>
       </section>
-    </main>
+    </div>
   );
 }
