@@ -72,11 +72,11 @@ Attach a persistent volume and set `DATABASE_PATH=/data/opus-course.db`.
 Use the helper script to upsert the `opus-course.learnopenclaw.ai` CNAME once your Railway public hostname is known.
 
 ```bash
-export CF_API_TOKEN=...
+export CF_API_TOKEN=... # alias: CLOUDFLARE_API_TOKEN
 # Prefer explicit zone id (fastest)
-export CF_ZONE_ID=...
+export CF_ZONE_ID=...    # alias: CLOUDFLARE_ZONE_ID
 # Optional fallback if you only know the zone name (example: learnopenclaw.ai)
-# export CF_ZONE_NAME=learnopenclaw.ai
+# export CF_ZONE_NAME=learnopenclaw.ai # alias: CLOUDFLARE_ZONE_NAME
 export NEXT_PUBLIC_APP_URL=https://opus-course.learnopenclaw.ai
 export CF_TARGET_CNAME=<railway-generated-domain>
 # Optional: target a different DNS name than NEXT_PUBLIC_APP_URL hostname

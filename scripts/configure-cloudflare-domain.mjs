@@ -29,11 +29,11 @@ function getArgValue(name) {
 }
 
 const isDryRun = args.has('--dry-run');
-const token = getArgValue('--token') || process.env.CF_API_TOKEN;
+const token = getArgValue('--token') || process.env.CF_API_TOKEN || process.env.CLOUDFLARE_API_TOKEN;
 const appUrlRaw = getArgValue('--app-url') || process.env.NEXT_PUBLIC_APP_URL;
 
 const missing = [];
-if (!token) missing.push('CF_API_TOKEN (or --token)');
+if (!token) missing.push('CF_API_TOKEN/CLOUDFLARE_API_TOKEN (or --token)');
 if (!appUrlRaw) missing.push('NEXT_PUBLIC_APP_URL (or --app-url)');
 
 if (missing.length) {
@@ -42,11 +42,11 @@ if (missing.length) {
   process.exit(1);
 }
 
-let zoneId = getArgValue('--zone-id') || process.env.CF_ZONE_ID;
+let zoneId = getArgValue('--zone-id') || process.env.CF_ZONE_ID || process.env.CLOUDFLARE_ZONE_ID;
 const appUrl = new URL(appUrlRaw);
 const domain = appUrl.hostname;
 const inferredZoneName = inferZoneNameFromHostname(domain);
-const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME || inferredZoneName;
+const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME || process.env.CLOUDFLARE_ZONE_NAME || inferredZoneName;
 const recordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || domain;
 const proxiedArg = getArgValue('--proxied');
 const proxied = proxiedArg ? proxiedArg === 'true' : process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;

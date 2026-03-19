@@ -29,3 +29,11 @@ test('custom-domain setup uses execFileSync to avoid shell interpolation issues'
   assert.match(script, /execFileSync\('node'/);
   assert.doesNotMatch(script, /execSync\(/);
 });
+
+test('configure script supports CLOUDFLARE_* env aliases for easier credential reuse', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /CLOUDFLARE_API_TOKEN/);
+  assert.match(script, /CLOUDFLARE_ZONE_ID/);
+  assert.match(script, /CLOUDFLARE_ZONE_NAME/);
+});
