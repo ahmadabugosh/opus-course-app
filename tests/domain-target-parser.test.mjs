@@ -96,6 +96,7 @@ test('expandRecordName resolves apex/relative/FQDN Cloudflare record names safel
 test('isSelfReferentialCname detects self-referential domain targets', () => {
   assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'opus-course.learnopenclaw.ai'), true);
   assert.equal(isSelfReferentialCname('https://opus-course.learnopenclaw.ai/path', 'opus-course.learnopenclaw.ai'), true);
+  assert.equal(isSelfReferentialCname('OPUS-COURSE.LEARNOPENCLAW.AI.', 'opus-course.learnopenclaw.ai'), true);
   assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'https://opus-course-production.up.railway.app'), false);
   assert.equal(isSelfReferentialCname('', 'opus-course.learnopenclaw.ai'), false);
 });
