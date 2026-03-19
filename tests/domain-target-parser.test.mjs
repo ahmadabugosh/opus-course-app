@@ -58,6 +58,17 @@ test('parseRailwayTargetFromJson resolves nested Railway payloads', () => {
   assert.equal(parseRailwayTargetFromJson(serviceWrapped), 'nested-service-shape.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson prefers railway host when payload also contains custom domain', () => {
+  const raw = JSON.stringify({
+    domains: [
+      { domain: 'https://opus-course.learnopenclaw.ai' },
+      { serviceDomain: 'https://opus-course-production.up.railway.app' },
+    ],
+  });
+
+  assert.equal(parseRailwayTargetFromJson(raw), 'opus-course-production.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson returns null on empty or invalid input', () => {
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
