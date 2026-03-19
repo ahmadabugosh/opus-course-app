@@ -80,3 +80,12 @@ test('configure helper blocks self-referential CNAME records to prevent DNS loop
   assert.match(script, /isSelfReferentialCname/);
   assert.match(script, /Self-referential CNAME detected/);
 });
+
+
+test('configure helper replaces conflicting non-CNAME records before creating CNAME', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /dns_records\?name=/);
+  assert.match(script, /method: 'DELETE'/);
+  assert.match(script, /replaced-conflicting-records/);
+});

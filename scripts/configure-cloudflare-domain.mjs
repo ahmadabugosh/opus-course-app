@@ -113,9 +113,9 @@ async function resolveZoneId() {
   return zoneId;
 }
 
-async function fetchRecordByName(name) {
+async function fetchRecordsByName(name) {
   const resolvedZoneId = await resolveZoneId();
-  const url = `https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records?type=CNAME&name=${encodeURIComponent(name)}`;
+  const url = `https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records?name=${encodeURIComponent(name)}`;
   const response = await fetch(url, { headers });
   const data = await response.json();
 
@@ -123,12 +123,27 @@ async function fetchRecordByName(name) {
     throw new Error(`Cloudflare lookup failed: ${JSON.stringify(data.errors)}`);
   }
 
-  return data.result?.[0] ?? null;
+  return data.result ?? [];
+}
+
+async function deleteRecord(zoneId, recordId) {
+  const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${recordId}`, {
+    method: 'DELETE',
+    headers,
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(`Cloudflare delete failed: ${JSON.stringify(data.errors)}`);
+  }
 }
 
 async function upsertCname(name, content) {
   const resolvedZoneId = await resolveZoneId();
-  const existing = await fetchRecordByName(name);
+  const existingRecords = await fetchRecordsByName(name);
+  const existingCname = existingRecords.find((record) => record.type === 'CNAME');
+  const conflictingRecords = existingRecords.filter((record) => record.type !== 'CNAME');
   const payload = {
     type: 'CNAME',
     name,
@@ -139,17 +154,22 @@ async function upsertCname(name, content) {
 
   if (isDryRun) {
     return {
-      action: existing ? 'would-update' : 'would-create',
+      action: existingCname
+        ? 'would-update'
+        : conflictingRecords.length
+          ? 'would-replace-conflicting-records'
+          : 'would-create',
       record: {
         name,
         content,
         proxied,
       },
+      conflicts: conflictingRecords.map((record) => ({ id: record.id, type: record.type })),
     };
   }
 
-  if (existing) {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records/${existing.id}`, {
+  if (existingCname) {
+    const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records/${existingCname.id}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(payload),
@@ -164,6 +184,10 @@ async function upsertCname(name, content) {
     return { action: 'updated', record: data.result };
   }
 
+  for (const record of conflictingRecords) {
+    await deleteRecord(resolvedZoneId, record.id);
+  }
+
   const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records`, {
     method: 'POST',
     headers,
@@ -175,7 +199,7 @@ async function upsertCname(name, content) {
     throw new Error(`Cloudflare create failed: ${JSON.stringify(data.errors)}`);
   }
 
-  return { action: 'created', record: data.result };
+  return { action: conflictingRecords.length ? 'replaced-conflicting-records' : 'created', record: data.result };
 }
 
 const run = async () => {
