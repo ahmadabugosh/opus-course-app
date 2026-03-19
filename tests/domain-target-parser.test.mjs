@@ -8,6 +8,11 @@ test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => 
   assert.equal(parseRailwayTargetFromJson('{"hostname":"app.up.railway.app"}'), 'app.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson resolves cname/dnsTarget fields from Railway variants', () => {
+  assert.equal(parseRailwayTargetFromJson('{"cname":"cname-shape.up.railway.app"}'), 'cname-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson('{"dnsTarget":"dns-target-shape.up.railway.app"}'), 'dns-target-shape.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson resolves Railway CLI domains array and strips protocol', () => {
   const raw = JSON.stringify({ domains: ['https://glorious-warmth-production-d8d2.up.railway.app'] });
 
@@ -80,6 +85,8 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai/dashboard?x=1'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai/path/ignored'), 'learnopenclaw.ai');
+  assert.equal(inferZoneNameFromHostname('app.learnopenclaw.co.uk'), 'learnopenclaw.co.uk');
+  assert.equal(inferZoneNameFromHostname('api.learnopenclaw.com.au'), 'learnopenclaw.com.au');
   assert.equal(inferZoneNameFromHostname('localhost'), null);
   assert.equal(inferZoneNameFromHostname(''), null);
 });
