@@ -36,3 +36,49 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.robot-assembly-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.35));
+}
+
+.robot-part-layer {
+  opacity: 0;
+  transform: translateY(8px) scale(0.985);
+  transform-origin: 50% 60%;
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.robot-part-layer.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.robot-core-glow {
+  animation: robotCorePulse 2.2s ease-in-out infinite;
+}
+
+.robot-assembly-svg.is-activated {
+  animation: robotHover 2.6s ease-in-out infinite;
+}
+
+@keyframes robotCorePulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes robotHover {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}

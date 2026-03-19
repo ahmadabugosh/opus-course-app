@@ -192,11 +192,11 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Remove the lesson grid, highlights section, and roadmap from the landing page
 
 ### Phase 2: Robot Assembly SVG Components
-- [ ] Create components/robot-assembly/robot-assembly.tsx — main wrapper that takes `stage` prop (0-12) and renders appropriate parts
-- [ ] Create components/robot-assembly/parts/workbench.tsx — Stage 0: empty assembly platform with faint blueprint outline of the full robot shape
-- [ ] Create components/robot-assembly/parts/chassis.tsx — Stage 1: metal base frame/chassis on the workbench
-- [ ] Create components/robot-assembly/parts/processor.tsx — Stage 2: glowing core processor unit in the center of the chassis
-- [ ] Create components/robot-assembly/parts/head.tsx — Stage 3: head with sensor array, eyes glow dimly
+- [x] Create components/robot-assembly/robot-assembly.tsx — main wrapper that takes `stage` prop (0-12) and renders appropriate parts
+- [x] Create components/robot-assembly/parts/workbench.tsx — Stage 0: empty assembly platform with faint blueprint outline of the full robot shape
+- [x] Create components/robot-assembly/parts/chassis.tsx — Stage 1: metal base frame/chassis on the workbench
+- [x] Create components/robot-assembly/parts/processor.tsx — Stage 2: glowing core processor unit in the center of the chassis
+- [x] Create components/robot-assembly/parts/head.tsx — Stage 3: head with sensor array, eyes glow dimly
 - [ ] Create components/robot-assembly/parts/left-arm.tsx — Stage 4: left arm with tool/wrench hand
 - [ ] Create components/robot-assembly/parts/right-arm.tsx — Stage 5: right arm with data connector hand
 - [ ] Create components/robot-assembly/parts/chest-panel.tsx — Stage 6: chest display panel showing a heartbeat/status line
@@ -206,7 +206,7 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [ ] Create components/robot-assembly/parts/armor.tsx — Stage 10: outer armor plating that snaps over the frame
 - [ ] Create components/robot-assembly/parts/jetpack.tsx — Stage 11: jetpack mounted on back (unlit)
 - [ ] Create components/robot-assembly/parts/activation.tsx — Stage 12: full activation overlay — eyes glow bright, jetpack flames ignite, hover animation, celebration particles
-- [ ] Add CSS transitions so new parts fade/slide in smoothly when stage increments
+- [x] Add CSS transitions so new parts fade/slide in smoothly when stage increments
 - [ ] Add CSS keyframe animations for Stage 12: pulsing eyes, flickering flames, gentle hover float, particle burst
 
 ### Phase 3: Split-Screen Dashboard Layout
