@@ -4,6 +4,7 @@ import { LessonSidebar } from '@/components/lesson-sidebar';
 import { ProofSubmitForm } from '@/components/proof-submit-form';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
+import { CompletionCelebration } from '@/components/completion-celebration';
 import { evaluateAchievementBadges } from '@/lib/achievements';
 import {
   getDefaultCurrentLessonId,
@@ -40,6 +41,7 @@ export default function DashboardPage() {
       />
 
       <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-6">
+        <CompletionCelebration totalCompleted={totalCompleted} />
         <header className="space-y-2">
           <p className="text-sm uppercase tracking-wide text-indigo-300">Current lesson</p>
           <h1 className="text-3xl font-bold text-white">

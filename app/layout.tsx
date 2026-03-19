@@ -28,11 +28,13 @@ export const metadata: Metadata = {
     url: appUrl,
     siteName: "Opus Mastery",
     type: "website",
+    images: [{ url: "/api/og" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Opus Mastery",
     description: "Learn Opus with 12 practical lessons and earn your certificate.",
+    images: ["/api/og"],
   },
 };
 

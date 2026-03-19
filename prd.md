@@ -371,11 +371,11 @@ ANALYTICS_ENABLED=true
 - [x] Create certificate/page.tsx — certificate view with download button and email option
 - [x] Create /api/certificate/generate route — POST generate PDF, store in certificates table
 - [x] Create /api/certificate/email route — POST email certificate to user
-- [ ] Create u/[username]/page.tsx — public profile showing progress, achievements, certificate
-- [ ] Create u/[username]/badge/page.tsx — shareable badge page
-- [ ] Create u/[username]/badge/image/route.tsx — dynamic OG image generation (1200x630, shows title + achievements + completion status)
-- [ ] Create /api/og/route.tsx — default OG image for the site
-- [ ] Create completion-celebration.tsx — celebration animation when all 12 lessons completed (confetti, reveal certificate)
+- [x] Create u/[username]/page.tsx — public profile showing progress, achievements, certificate
+- [x] Create u/[username]/badge/page.tsx — shareable badge page
+- [x] Create u/[username]/badge/image/route.tsx — dynamic OG image generation (1200x630, shows title + achievements + completion status)
+- [x] Create /api/og/route.tsx — default OG image for the site
+- [x] Create completion-celebration.tsx — celebration animation when all 12 lessons completed (confetti, reveal certificate)
 
 ### Phase 8: Analytics & Polish
 - [x] Create lib/analytics.ts — event tracking helpers (lesson_start, lesson_complete, achievement_earned, certificate_generated)
