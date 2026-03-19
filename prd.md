@@ -330,12 +330,12 @@ ANALYTICS_ENABLED=true
 ### Phase 2: Progress System & Lightweight Auth
 - [x] Create lib/progress.ts — localStorage-based progress tracking (read/write lesson completion status, timestamps, challenge self-marks)
 - [x] Create a React context (ProgressProvider) that wraps the app, loads progress from localStorage on mount, provides methods: markComplete(lessonId), getProgress(), isComplete(lessonId), getTotalCompleted()
-- [ ] Create lib/auth.ts — lightweight session management (cookie-based), only used when user requests certificate
-- [ ] Create /api/auth/otp-send route — send OTP code via email (triggered only from certificate request flow)
-- [ ] Create /api/auth/otp-verify route — verify OTP, create user record if new, set session cookie, migrate localStorage progress to DB
-- [ ] Create /api/auth/logout route — clear session cookie
-- [ ] Create a sign-in modal component (not a page) — email input + OTP verification, appears when user clicks "Get Certificate" after completing all lessons
-- [ ] No login page, no register page, no GitHub OAuth — keep it minimal. Just OTP when needed.
+- [x] Create lib/auth.ts — lightweight session management (cookie-based), only used when user requests certificate
+- [x] Create /api/auth/otp-send route — send OTP code via email (triggered only from certificate request flow)
+- [x] Create /api/auth/otp-verify route — verify OTP, create user record if new, set session cookie, migrate localStorage progress to DB
+- [x] Create /api/auth/logout route — clear session cookie
+- [x] Create a sign-in modal component (not a page) — email input + OTP verification, appears when user clicks "Get Certificate" after completing all lessons
+- [x] No login page, no register page, no GitHub OAuth — keep it minimal. Just OTP when needed.
 
 ### Phase 3: Lesson Content System
 - [ ] Create lib/lessons.ts — lesson metadata (id, title, description, video URL, challenge description, verification type)

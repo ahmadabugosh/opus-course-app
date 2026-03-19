@@ -4,7 +4,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -33,12 +32,13 @@ type ProgressContextValue = {
 const ProgressContext = createContext<ProgressContextValue | undefined>(undefined);
 
 export function ProgressProvider({ children }: { children: ReactNode }) {
-  const [progress, setProgress] = useState<ProgressState>(() => getDefaultProgress());
+  const [progress, setProgress] = useState<ProgressState>(() => {
+    if (typeof window === 'undefined') {
+      return getDefaultProgress();
+    }
 
-  useEffect(() => {
-    const loaded = loadProgress(window.localStorage, PROGRESS_STORAGE_KEY);
-    setProgress(loaded);
-  }, []);
+    return loadProgress(window.localStorage, PROGRESS_STORAGE_KEY);
+  });
 
   const markComplete = useCallback((lessonId: number) => {
     setProgress((current) => {
