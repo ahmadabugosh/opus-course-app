@@ -36,6 +36,8 @@ test('verify script helpers normalize/match targets and support Cloudflare API f
 
   assert.equal(mod.matchesExpectedTarget({ kind: 'CNAME', records: ['Example.Railway.App.'] }, 'example.railway.app'), true);
   assert.equal(mod.matchesExpectedTarget({ kind: 'A', records: ['1.1.1.1'] }, 'example.railway.app'), false);
+  assert.equal(mod.matchesFlattenedTarget({ kind: 'A', records: ['1.1.1.1', '2.2.2.2'] }, { kind: 'A', records: ['2.2.2.2'] }), true);
+  assert.equal(mod.matchesFlattenedTarget({ kind: 'A', records: ['1.1.1.1'] }, { kind: 'A', records: ['9.9.9.9'] }), false);
 
   const apiOk = await mod.verifyWithCloudflareApi({
     domain: 'opus-course.learnopenclaw.ai',

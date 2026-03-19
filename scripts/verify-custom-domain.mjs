@@ -34,6 +34,13 @@ export function matchesExpectedTarget(result, target) {
   return result.kind === 'CNAME' && result.records.map(normalize).includes(expected);
 }
 
+export function matchesFlattenedTarget(domainResult, targetResult) {
+  if (domainResult.kind !== 'A' || targetResult.kind !== 'A') return false;
+
+  const domainIps = new Set(domainResult.records.map(normalize));
+  return targetResult.records.map(normalize).some((ip) => domainIps.has(ip));
+}
+
 async function resolveTarget(domain) {
   try {
     const records = await dns.resolveCname(domain);
@@ -112,6 +119,14 @@ export async function run(argv = args, env = process.env, deps = {}) {
     if (matches) {
       console.log(`✅ DNS verified: ${domain} -> ${target}`);
       return;
+    }
+
+    if (result.kind === 'A') {
+      const targetResult = await dnsResolver(target);
+      if (matchesFlattenedTarget(result, targetResult)) {
+        console.log(`✅ DNS verified via flattened A records: ${domain} -> ${target}`);
+        return;
+      }
     }
 
     const rendered = result.records.join(', ') || '(none)';
