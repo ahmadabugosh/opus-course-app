@@ -63,6 +63,21 @@ a {
   animation: robotHover 2.6s ease-in-out infinite;
 }
 
+.robot-eyes-activated {
+  animation: robotEyePulse 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.robot-flame-flicker {
+  animation: robotFlameFlicker 220ms ease-in-out infinite alternate;
+  transform-origin: 50% 100%;
+}
+
+.robot-particle-burst {
+  animation: robotParticleBurst 1.4s ease-out infinite;
+  transform-origin: center;
+}
+
 @keyframes robotCorePulse {
   0%,
   100% {
@@ -80,5 +95,43 @@ a {
   }
   50% {
     transform: translateY(-4px);
+  }
+}
+
+@keyframes robotEyePulse {
+  0%,
+  100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 2px rgba(147, 197, 253, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(147, 197, 253, 0.8));
+  }
+}
+
+@keyframes robotFlameFlicker {
+  0% {
+    transform: scaleY(0.9) translateY(0);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scaleY(1.08) translateY(1px);
+    opacity: 1;
+  }
+}
+
+@keyframes robotParticleBurst {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.85);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(1.05);
   }
 }

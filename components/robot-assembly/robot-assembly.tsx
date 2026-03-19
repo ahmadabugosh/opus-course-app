@@ -1,9 +1,18 @@
 import type { ReactNode } from "react";
 
 import { clampRobotStage } from "@/lib/robot-assembly-stage";
+import { Activation } from "./parts/activation";
+import { Antenna } from "./parts/antenna";
+import { Armor } from "./parts/armor";
 import { Chassis } from "./parts/chassis";
+import { ChestPanel } from "./parts/chest-panel";
 import { Head } from "./parts/head";
+import { Jetpack } from "./parts/jetpack";
+import { LeftArm } from "./parts/left-arm";
+import { LeftLeg } from "./parts/left-leg";
 import { Processor } from "./parts/processor";
+import { RightArm } from "./parts/right-arm";
+import { RightLeg } from "./parts/right-leg";
 import { Workbench } from "./parts/workbench";
 
 type RobotAssemblyProps = {
@@ -46,6 +55,33 @@ export function RobotAssembly({ stage, className }: RobotAssemblyProps) {
         </PartLayer>
         <PartLayer visible={safeStage >= 3}>
           <Head />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 4}>
+          <LeftArm />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 5}>
+          <RightArm />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 6}>
+          <ChestPanel />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 7}>
+          <LeftLeg />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 8}>
+          <RightLeg />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 9}>
+          <Antenna />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 10}>
+          <Armor />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 11}>
+          <Jetpack />
+        </PartLayer>
+        <PartLayer visible={safeStage >= 12}>
+          <Activation />
         </PartLayer>
       </svg>
     </div>

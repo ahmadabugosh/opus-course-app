@@ -197,17 +197,17 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Create components/robot-assembly/parts/chassis.tsx — Stage 1: metal base frame/chassis on the workbench
 - [x] Create components/robot-assembly/parts/processor.tsx — Stage 2: glowing core processor unit in the center of the chassis
 - [x] Create components/robot-assembly/parts/head.tsx — Stage 3: head with sensor array, eyes glow dimly
-- [ ] Create components/robot-assembly/parts/left-arm.tsx — Stage 4: left arm with tool/wrench hand
-- [ ] Create components/robot-assembly/parts/right-arm.tsx — Stage 5: right arm with data connector hand
-- [ ] Create components/robot-assembly/parts/chest-panel.tsx — Stage 6: chest display panel showing a heartbeat/status line
-- [ ] Create components/robot-assembly/parts/left-leg.tsx — Stage 7: left leg with stabilizer foot
-- [ ] Create components/robot-assembly/parts/right-leg.tsx — Stage 8: right leg with thruster port
-- [ ] Create components/robot-assembly/parts/antenna.tsx — Stage 9: back-mounted antenna array and communication dish
-- [ ] Create components/robot-assembly/parts/armor.tsx — Stage 10: outer armor plating that snaps over the frame
-- [ ] Create components/robot-assembly/parts/jetpack.tsx — Stage 11: jetpack mounted on back (unlit)
-- [ ] Create components/robot-assembly/parts/activation.tsx — Stage 12: full activation overlay — eyes glow bright, jetpack flames ignite, hover animation, celebration particles
+- [x] Create components/robot-assembly/parts/left-arm.tsx — Stage 4: left arm with tool/wrench hand
+- [x] Create components/robot-assembly/parts/right-arm.tsx — Stage 5: right arm with data connector hand
+- [x] Create components/robot-assembly/parts/chest-panel.tsx — Stage 6: chest display panel showing a heartbeat/status line
+- [x] Create components/robot-assembly/parts/left-leg.tsx — Stage 7: left leg with stabilizer foot
+- [x] Create components/robot-assembly/parts/right-leg.tsx — Stage 8: right leg with thruster port
+- [x] Create components/robot-assembly/parts/antenna.tsx — Stage 9: back-mounted antenna array and communication dish
+- [x] Create components/robot-assembly/parts/armor.tsx — Stage 10: outer armor plating that snaps over the frame
+- [x] Create components/robot-assembly/parts/jetpack.tsx — Stage 11: jetpack mounted on back (unlit)
+- [x] Create components/robot-assembly/parts/activation.tsx — Stage 12: full activation overlay — eyes glow bright, jetpack flames ignite, hover animation, celebration particles
 - [x] Add CSS transitions so new parts fade/slide in smoothly when stage increments
-- [ ] Add CSS keyframe animations for Stage 12: pulsing eyes, flickering flames, gentle hover float, particle burst
+- [x] Add CSS keyframe animations for Stage 12: pulsing eyes, flickering flames, gentle hover float, particle burst
 
 ### Phase 3: Split-Screen Dashboard Layout
 - [ ] Restructure app/dashboard/page.tsx to split-screen layout: left panel (robot + nav) and right panel (lesson content)
