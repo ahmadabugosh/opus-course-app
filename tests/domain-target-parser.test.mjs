@@ -130,6 +130,7 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('app.learnopenclaw.net.uk'), 'learnopenclaw.net.uk');
   assert.equal(inferZoneNameFromHostname('app.learnopenclaw.sch.uk'), 'learnopenclaw.sch.uk');
   assert.equal(inferZoneNameFromHostname('api.learnopenclaw.com.au'), 'learnopenclaw.com.au');
+  assert.equal(inferZoneNameFromHostname('api.learnopenclaw.net.au'), 'learnopenclaw.net.au');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.or.jp'), 'learnopenclaw.or.jp');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.ne.jp'), 'learnopenclaw.ne.jp');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.go.jp'), 'learnopenclaw.go.jp');
@@ -137,12 +138,15 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('api.learnopenclaw.edu.au'), 'learnopenclaw.edu.au');
   assert.equal(inferZoneNameFromHostname('api.learnopenclaw.gov.in'), 'learnopenclaw.gov.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.in'), 'learnopenclaw.co.in');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.ac.in'), 'learnopenclaw.ac.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.gov.in'), 'learnopenclaw.gov.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.org.in'), 'learnopenclaw.org.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.net.in'), 'learnopenclaw.net.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.sg'), 'learnopenclaw.com.sg');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.za'), 'learnopenclaw.co.za');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.org.za'), 'learnopenclaw.org.za');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.net.za'), 'learnopenclaw.net.za');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.gov.za'), 'learnopenclaw.gov.za');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.il'), 'learnopenclaw.co.il');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.tr'), 'learnopenclaw.com.tr');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.id'), 'learnopenclaw.co.id');
