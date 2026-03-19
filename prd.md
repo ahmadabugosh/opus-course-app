@@ -394,7 +394,7 @@ ANALYTICS_ENABLED=true
 - [x] Deploy to Railway and verify health check
 - [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS
 - [x] Set all environment variables in Railway
-- [ ] Test full flow: register → lessons → complete → certificate
+- [x] Test full flow: register → lessons → complete → certificate
 - [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
 
 ---
