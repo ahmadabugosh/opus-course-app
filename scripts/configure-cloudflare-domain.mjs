@@ -6,25 +6,49 @@
 import { execSync } from 'node:child_process';
 import { parseRailwayTargetFromJson } from '../lib/domain.js';
 
-const args = new Set(process.argv.slice(2));
-const isDryRun = args.has('--dry-run');
-const required = ['CF_API_TOKEN', 'NEXT_PUBLIC_APP_URL'];
+const argList = process.argv.slice(2);
+const args = new Set(argList);
 
-const missing = required.filter((key) => !process.env[key]);
+// Supported flags (either --key value or --key=value):
+// --token=... --app-url=... --zone-id=... --zone-name=... --target=... --record-name=... --proxied=true|false --dry-run
+
+function getArgValue(name) {
+  const prefix = `${name}=`;
+  const direct = argList.find((arg) => arg.startsWith(prefix));
+
+  if (direct) {
+    return direct.slice(prefix.length);
+  }
+
+  const idx = argList.findIndex((arg) => arg === name);
+  if (idx !== -1) {
+    return argList[idx + 1];
+  }
+
+  return undefined;
+}
+
+const isDryRun = args.has('--dry-run');
+const token = getArgValue('--token') || process.env.CF_API_TOKEN;
+const appUrlRaw = getArgValue('--app-url') || process.env.NEXT_PUBLIC_APP_URL;
+
+const missing = [];
+if (!token) missing.push('CF_API_TOKEN (or --token)');
+if (!appUrlRaw) missing.push('NEXT_PUBLIC_APP_URL (or --app-url)');
 
 if (missing.length) {
-  console.error(`Missing required environment variables: ${missing.join(', ')}`);
+  console.error(`Missing required configuration: ${missing.join(', ')}`);
   console.error('Expected NEXT_PUBLIC_APP_URL like https://opus-course.learnopenclaw.ai');
   process.exit(1);
 }
 
-const token = process.env.CF_API_TOKEN;
-let zoneId = process.env.CF_ZONE_ID;
-const zoneName = process.env.CF_ZONE_NAME;
-const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL);
+let zoneId = getArgValue('--zone-id') || process.env.CF_ZONE_ID;
+const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME;
+const appUrl = new URL(appUrlRaw);
 const domain = appUrl.hostname;
-const recordName = process.env.CF_RECORD_NAME || domain;
-const proxied = process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
+const recordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || domain;
+const proxiedArg = getArgValue('--proxied');
+const proxied = proxiedArg ? proxiedArg === 'true' : process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
 
 function getRailwayTargetFromCli() {
   try {
@@ -37,7 +61,11 @@ function getRailwayTargetFromCli() {
   }
 }
 
-const target = process.env.CF_TARGET_CNAME || process.env.RAILWAY_PUBLIC_DOMAIN || getRailwayTargetFromCli();
+const target =
+  getArgValue('--target') ||
+  process.env.CF_TARGET_CNAME ||
+  process.env.RAILWAY_PUBLIC_DOMAIN ||
+  getRailwayTargetFromCli();
 
 if (!target) {
   console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN, or run in a linked Railway project so `railway domain --json` can resolve it.');

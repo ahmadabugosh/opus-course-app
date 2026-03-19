@@ -90,4 +90,17 @@ Dry run before applying changes:
 node scripts/configure-cloudflare-domain.mjs --dry-run
 ```
 
+You can also run it without exporting env vars by passing explicit flags:
+
+```bash
+node scripts/configure-cloudflare-domain.mjs \
+  --token="$CF_API_TOKEN" \
+  --app-url="https://opus-course.learnopenclaw.ai" \
+  --zone-name="learnopenclaw.ai" \
+  --target="<railway-generated-domain>" \
+  --record-name="opus-course.learnopenclaw.ai" \
+  --proxied=true \
+  --dry-run
+```
+
 If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, set `CF_ZONE_NAME` and the script will resolve the zone automatically.

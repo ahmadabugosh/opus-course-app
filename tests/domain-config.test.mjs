@@ -32,6 +32,16 @@ test('cloudflare helper supports dry-run mode, configurable proxy behavior, and 
   assert.match(script, /railway domain --json/);
 });
 
+test('cloudflare helper supports explicit CLI flags for safer one-off DNS changes', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /--zone-id=/);
+  assert.match(script, /--zone-name=/);
+  assert.match(script, /--target=/);
+  assert.match(script, /--record-name=/);
+  assert.match(script, /--proxied=/);
+});
+
 test('README documents custom domain configuration workflow', () => {
   const readme = read('README.md');
 
