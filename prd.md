@@ -319,13 +319,13 @@ ANALYTICS_ENABLED=true
 ## Tasks
 
 ### Phase 1: Project Bootstrap
-- [ ] Initialize Next.js project with Tailwind CSS, TypeScript, App Router
-- [ ] Set up project structure (app, components, lib, content directories)
-- [ ] Configure Railway deployment (railway.toml, nixpacks.toml, persistent volume for SQLite)
-- [ ] Set up .env.example with all required variables
-- [ ] Create SQLite database initialization script (users, progress, achievements, certificates, analytics tables)
-- [ ] Create lib/db.ts with database connection and query helpers
-- [ ] Create README.md with project overview and setup instructions
+- [x] Initialize Next.js project with Tailwind CSS, TypeScript, App Router
+- [x] Set up project structure (app, components, lib, content directories)
+- [x] Configure Railway deployment (railway.toml, nixpacks.toml, persistent volume for SQLite)
+- [x] Set up .env.example with all required variables
+- [x] Create SQLite database initialization script (users, progress, achievements, certificates, analytics tables)
+- [x] Create lib/db.ts with database connection and query helpers
+- [x] Create README.md with project overview and setup instructions
 
 ### Phase 2: Progress System & Lightweight Auth
 - [ ] Create lib/progress.ts — localStorage-based progress tracking (read/write lesson completion status, timestamps, challenge self-marks)
