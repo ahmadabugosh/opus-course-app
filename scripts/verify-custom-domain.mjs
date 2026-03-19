@@ -1,32 +1,35 @@
 #!/usr/bin/env node
 
 import dns from 'node:dns/promises';
+import { normalizeHost } from '../lib/domain.js';
 
 const args = process.argv.slice(2);
 
-function getArg(name, fallback) {
+export function getArg(argv, name, fallback) {
   const prefix = `${name}=`;
-  const inline = args.find((arg) => arg.startsWith(prefix));
+  const inline = argv.find((arg) => arg.startsWith(prefix));
   if (inline) return inline.slice(prefix.length);
-  const idx = args.indexOf(name);
-  if (idx !== -1) return args[idx + 1];
+  const idx = argv.indexOf(name);
+  if (idx !== -1) return argv[idx + 1];
   return fallback;
 }
 
-const domain = getArg('--domain', process.env.CUSTOM_DOMAIN || process.env.NEXT_PUBLIC_APP_URL?.replace(/^https?:\/\//, ''));
-const target = getArg('--target', process.env.CF_TARGET_CNAME || process.env.RAILWAY_PUBLIC_DOMAIN);
-const waitSeconds = Number(getArg('--wait-seconds', '0'));
+export function resolveDomainInput(value) {
+  const normalized = normalizeHost(value);
+  return normalized || undefined;
+}
 
-if (!domain || !target) {
-  console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300]');
-  process.exit(1);
+export function toWaitSeconds(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || parsed < 0) return 0;
+  return parsed;
 }
 
 function normalize(value) {
   return value.toLowerCase().replace(/\.$/, '');
 }
 
-async function resolveTarget() {
+async function resolveTarget(domain) {
   try {
     const records = await dns.resolveCname(domain);
     return { kind: 'CNAME', records: records.map(normalize) };
@@ -36,13 +39,26 @@ async function resolveTarget() {
   }
 }
 
-async function run() {
-  const deadline = Date.now() + Math.max(0, waitSeconds) * 1000;
+export async function run(argv = args, env = process.env) {
+  const domain = resolveDomainInput(
+    getArg(argv, '--domain', env.CUSTOM_DOMAIN || env.NEXT_PUBLIC_APP_URL),
+  );
+  const target = resolveDomainInput(
+    getArg(argv, '--target', env.CF_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN),
+  );
+  const waitSeconds = toWaitSeconds(getArg(argv, '--wait-seconds', '0'));
+
+  if (!domain || !target) {
+    console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300]');
+    process.exit(1);
+  }
+
+  const deadline = Date.now() + waitSeconds * 1000;
   const expected = normalize(target);
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const result = await resolveTarget();
+    const result = await resolveTarget(domain);
     const matches = result.kind === 'CNAME' && result.records.includes(expected);
 
     if (matches) {
@@ -64,7 +80,9 @@ async function run() {
   }
 }
 
-run().catch((error) => {
-  console.error(`❌ Unable to verify DNS: ${error.message}`);
-  process.exit(1);
-});
+if (import.meta.url === `file://${process.argv[1]}`) {
+  run().catch((error) => {
+    console.error(`❌ Unable to verify DNS: ${error.message}`);
+    process.exit(1);
+  });
+}

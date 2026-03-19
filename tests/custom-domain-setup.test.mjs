@@ -5,6 +5,7 @@ import path from 'node:path';
 
 import { normalizeHost } from '../lib/domain.js';
 import { resolveDomain } from '../scripts/custom-domain-setup.mjs';
+import { resolveDomainInput, toWaitSeconds } from '../scripts/verify-custom-domain.mjs';
 
 const root = process.cwd();
 
@@ -21,6 +22,19 @@ test('resolveDomain handles full URLs and host/path inputs', () => {
 
 test('normalizeHost is exported for domain setup helpers', () => {
   assert.equal(normalizeHost('https://example.com/path'), 'example.com');
+});
+
+test('verify helper normalizes domain inputs from URL or host/path forms', () => {
+  assert.equal(resolveDomainInput('https://opus-course.learnopenclaw.ai/dashboard'), 'opus-course.learnopenclaw.ai');
+  assert.equal(resolveDomainInput('opus-course.learnopenclaw.ai/path/ignored'), 'opus-course.learnopenclaw.ai');
+  assert.equal(resolveDomainInput('opus-course.learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
+  assert.equal(resolveDomainInput(''), undefined);
+});
+
+test('verify helper sanitizes wait-seconds values', () => {
+  assert.equal(toWaitSeconds('300'), 300);
+  assert.equal(toWaitSeconds('-10'), 0);
+  assert.equal(toWaitSeconds('abc'), 0);
 });
 
 test('custom-domain setup uses execFileSync to avoid shell interpolation issues', () => {
