@@ -338,11 +338,11 @@ ANALYTICS_ENABLED=true
 - [x] No login page, no register page, no GitHub OAuth — keep it minimal. Just OTP when needed.
 
 ### Phase 3: Lesson Content System
-- [ ] Create lib/lessons.ts — lesson metadata (id, title, description, video URL, challenge description, verification type)
-- [ ] Write content/lesson-01.md through content/lesson-12.md — full written content for all 12 lessons (use the curriculum from opus-course-curriculum.md)
-- [ ] Create lesson-content.tsx component — markdown renderer with syntax highlighting, code blocks, info/warning callouts, and image support
-- [ ] Create video-embed.tsx component — responsive YouTube/video embed
-- [ ] Create code-block.tsx component — syntax highlighted code with copy button
+- [x] Create lib/lessons.ts — lesson metadata (id, title, description, video URL, challenge description, verification type)
+- [x] Write content/lesson-01.md through content/lesson-12.md — full written content for all 12 lessons (use the curriculum from opus-course-curriculum.md)
+- [x] Create lesson-content.tsx component — markdown renderer with syntax highlighting, code blocks, info/warning callouts, and image support
+- [x] Create video-embed.tsx component — responsive YouTube/video embed
+- [x] Create code-block.tsx component — syntax highlighted code with copy button
 
 ### Phase 4: Dashboard & Lesson Views
 - [ ] Create dashboard/page.tsx — main authenticated view with sidebar + current lesson
