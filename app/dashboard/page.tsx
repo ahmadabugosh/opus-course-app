@@ -51,7 +51,7 @@ export default function DashboardPage() {
         earnedBadges={earnedBadges}
       />
 
-      <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-6">
+      <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-4 sm:p-6">
         <CompletionCelebration totalCompleted={totalCompleted} />
         <header className="space-y-2">
           <p className="text-sm uppercase tracking-wide text-indigo-300">Current lesson</p>

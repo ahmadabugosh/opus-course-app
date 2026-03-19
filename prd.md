@@ -384,7 +384,7 @@ ANALYTICS_ENABLED=true
 - [x] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
 - [x] Create /api/health route — health check endpoint for Railway
 - [x] Add loading states, error boundaries, and empty states across all pages
-- [ ] Mobile responsive polish — test and fix all layouts on mobile/tablet
+- [x] Mobile responsive polish — test and fix all layouts on mobile/tablet
 - [x] Add SEO metadata to all pages (title, description, OG tags)
 
 ### Phase 9: Deployment & Launch

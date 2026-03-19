@@ -50,7 +50,7 @@ export default function LessonPage({ params }: LessonPageProps) {
         earnedBadges={earnedBadges}
       />
 
-      <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-6">
+      <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-4 sm:p-6">
         <header className="space-y-2">
           <p className="text-sm uppercase tracking-wide text-indigo-300">Lesson {lesson.id}</p>
           <h1 className="text-3xl font-bold text-white">{lesson.title}</h1>
