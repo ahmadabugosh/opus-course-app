@@ -31,6 +31,11 @@ export function run(argv = process.argv.slice(2), env = process.env) {
   const domain = getArg(argv, '--domain', resolveDomain(appUrl));
   const target = getArg(argv, '--target', env.CF_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN);
   const waitSeconds = getArg(argv, '--wait-seconds', env.DOMAIN_VERIFY_WAIT_SECONDS || '300');
+  const token = getArg(argv, '--token', env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN);
+  const apiKey = getArg(argv, '--api-key', env.CF_API_KEY || env.CLOUDFLARE_API_KEY);
+  const apiEmail = getArg(argv, '--api-email', env.CF_API_EMAIL || env.CLOUDFLARE_API_EMAIL || env.CLOUDFLARE_EMAIL);
+  const resolvedZoneId = getArg(argv, '--zone-id', env.CF_ZONE_ID || env.CLOUDFLARE_ZONE_ID);
+  const resolvedZoneName = getArg(argv, '--zone-name', env.CF_ZONE_NAME || env.CLOUDFLARE_ZONE_NAME);
 
   if (!appUrl) {
     console.error('Missing NEXT_PUBLIC_APP_URL (or --app-url).');
@@ -41,6 +46,8 @@ export function run(argv = process.argv.slice(2), env = process.env) {
 
   const flagMap = [
     '--token',
+    '--api-key',
+    '--api-email',
     '--app-url',
     '--zone-id',
     '--zone-name',
@@ -76,6 +83,25 @@ export function run(argv = process.argv.slice(2), env = process.env) {
   }
 
   const verifyArgs = ['scripts/verify-custom-domain.mjs', `--domain=${domain}`, `--target=${target}`, `--wait-seconds=${waitSeconds}`];
+
+  if (token) {
+    verifyArgs.push(`--token=${token}`);
+  }
+
+  if (apiKey) {
+    verifyArgs.push(`--api-key=${apiKey}`);
+  }
+
+  if (apiEmail) {
+    verifyArgs.push(`--api-email=${apiEmail}`);
+  }
+
+  if (resolvedZoneId) {
+    verifyArgs.push(`--zone-id=${resolvedZoneId}`);
+  } else if (resolvedZoneName) {
+    verifyArgs.push(`--zone-name=${resolvedZoneName}`);
+  }
+
   console.log(`\n▶ node ${verifyArgs.join(' ')}`);
   execFileSync('node', verifyArgs, { stdio: 'inherit' });
 

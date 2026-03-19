@@ -52,3 +52,14 @@ test('configure script supports CLOUDFLARE_* env aliases for easier credential r
   assert.match(script, /CLOUDFLARE_ZONE_ID/);
   assert.match(script, /CLOUDFLARE_ZONE_NAME/);
 });
+
+test('custom-domain setup forwards Cloudflare auth flags to configure and verify commands', () => {
+  const script = read('scripts/custom-domain-setup.mjs');
+
+  assert.match(script, /'--api-key'/);
+  assert.match(script, /'--api-email'/);
+  assert.match(script, /'--token'/);
+  assert.match(script, /verifyArgs\.push\(`--token=\$\{token\}`\)/);
+  assert.match(script, /verifyArgs\.push\(`--api-key=\$\{apiKey\}`\)/);
+  assert.match(script, /verifyArgs\.push\(`--api-email=\$\{apiEmail\}`\)/);
+});
