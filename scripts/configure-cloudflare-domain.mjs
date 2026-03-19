@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 // BLOCKED: Requires Cloudflare API credentials + target Railway host before DNS can be applied automatically.
-// TODO: revisit once CF_API_TOKEN and CF_ZONE_ID are available in deployment secrets.
+// TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
 
 const args = new Set(process.argv.slice(2));
 const isDryRun = args.has('--dry-run');
-const required = ['CF_API_TOKEN', 'CF_ZONE_ID', 'NEXT_PUBLIC_APP_URL'];
+const required = ['CF_API_TOKEN', 'NEXT_PUBLIC_APP_URL'];
 
 const missing = required.filter((key) => !process.env[key]);
 
@@ -18,7 +18,8 @@ if (missing.length) {
 }
 
 const token = process.env.CF_API_TOKEN;
-const zoneId = process.env.CF_ZONE_ID;
+let zoneId = process.env.CF_ZONE_ID;
+const zoneName = process.env.CF_ZONE_NAME;
 const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL);
 const domain = appUrl.hostname;
 const recordName = process.env.CF_RECORD_NAME || domain;
@@ -49,8 +50,33 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
+async function resolveZoneId() {
+  if (zoneId) return zoneId;
+
+  if (!zoneName) {
+    throw new Error('Missing Cloudflare zone. Set CF_ZONE_ID directly or provide CF_ZONE_NAME to resolve it automatically.');
+  }
+
+  const response = await fetch(`https://api.cloudflare.com/client/v4/zones?name=${encodeURIComponent(zoneName)}&status=active`, { headers });
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(`Cloudflare zone lookup failed: ${JSON.stringify(data.errors)}`);
+  }
+
+  const zone = data.result?.find((item) => item.name === zoneName) ?? data.result?.[0];
+
+  if (!zone?.id) {
+    throw new Error(`No active Cloudflare zone found for ${zoneName}.`);
+  }
+
+  zoneId = zone.id;
+  return zoneId;
+}
+
 async function fetchRecordByName(name) {
-  const url = `https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records?type=CNAME&name=${encodeURIComponent(name)}`;
+  const resolvedZoneId = await resolveZoneId();
+  const url = `https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records?type=CNAME&name=${encodeURIComponent(name)}`;
   const response = await fetch(url, { headers });
   const data = await response.json();
 
@@ -62,6 +88,7 @@ async function fetchRecordByName(name) {
 }
 
 async function upsertCname(name, content) {
+  const resolvedZoneId = await resolveZoneId();
   const existing = await fetchRecordByName(name);
   const payload = {
     type: 'CNAME',
@@ -83,7 +110,7 @@ async function upsertCname(name, content) {
   }
 
   if (existing) {
-    const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${existing.id}`, {
+    const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records/${existing.id}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify(payload),
@@ -98,7 +125,7 @@ async function upsertCname(name, content) {
     return { action: 'updated', record: data.result };
   }
 
-  const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records`, {
+  const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records`, {
     method: 'POST',
     headers,
     body: JSON.stringify(payload),

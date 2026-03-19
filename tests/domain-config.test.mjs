@@ -18,6 +18,7 @@ test('cloudflare custom domain helper script exists and validates required env v
 
   assert.match(script, /CF_API_TOKEN/);
   assert.match(script, /CF_ZONE_ID/);
+  assert.match(script, /CF_ZONE_NAME/);
   assert.match(script, /NEXT_PUBLIC_APP_URL/);
   assert.match(script, /BLOCKED: Requires Cloudflare API credentials/);
 });
@@ -38,4 +39,5 @@ test('README documents custom domain configuration workflow', () => {
   assert.match(readme, /scripts\/configure-cloudflare-domain\.mjs/);
   assert.match(readme, /CF_API_TOKEN/);
   assert.match(readme, /CF_ZONE_ID/);
+  assert.match(readme, /CF_ZONE_NAME/);
 });

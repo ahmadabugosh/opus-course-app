@@ -71,7 +71,10 @@ Use the helper script to upsert the `opus-course.learnopenclaw.ai` CNAME once yo
 
 ```bash
 export CF_API_TOKEN=...
+# Prefer explicit zone id (fastest)
 export CF_ZONE_ID=...
+# Optional fallback if you only know the zone name (example: learnopenclaw.ai)
+# export CF_ZONE_NAME=learnopenclaw.ai
 export NEXT_PUBLIC_APP_URL=https://opus-course.learnopenclaw.ai
 export CF_TARGET_CNAME=<railway-generated-domain>
 # Optional: target a different DNS name than NEXT_PUBLIC_APP_URL hostname
@@ -87,4 +90,4 @@ Dry run before applying changes:
 node scripts/configure-cloudflare-domain.mjs --dry-run
 ```
 
-If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project).
+If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, set `CF_ZONE_NAME` and the script will resolve the zone automatically.
