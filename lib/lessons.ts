@@ -1,9 +1,11 @@
-export type LessonVerificationType = 'url' | 'screenshot' | 'url_or_screenshot';
+export type LessonVerificationType = 'text_output' | 'url' | 'json_output' | 'mixed';
 
 export type LessonChallenge = {
   title: string;
   description: string;
   verificationType: LessonVerificationType;
+  verificationPrompt: string;
+  verificationMinLength: number;
   hint: string;
 };
 
@@ -27,7 +29,9 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Text Summarizer Workflow',
       description: 'Build a text summarizer workflow and show successful preview output.',
-      verificationType: 'url_or_screenshot',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the workflow preview output (the summarized text result) from your run.',
+      verificationMinLength: 60,
       hint: 'Use one workflow input, one Opus Agent task, and one workflow output.',
     },
     contentPath: 'content/lesson-01.md',
@@ -41,8 +45,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: '3-Step Document Processor',
       description: 'Create a 3-task chain that extracts facts, summarizes, and outputs action items.',
-      verificationType: 'screenshot',
-      hint: 'Show all three connected tasks on the canvas in one screenshot.',
+      verificationType: 'url',
+      verificationPrompt: 'Paste the workflow ID or URL from the builder showing 3+ connected tasks.',
+      verificationMinLength: 24,
+      hint: 'Show all three connected tasks on the canvas in one workflow.',
     },
     contentPath: 'content/lesson-02.md',
   },
@@ -55,8 +61,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Customer Feedback Analyzer',
       description: 'Create sentiment, extraction, and response generation in one workflow.',
-      verificationType: 'screenshot',
-      hint: 'Make sure the output shows sentiment plus a drafted response.',
+      verificationType: 'json_output',
+      verificationPrompt: 'Paste the JSON output showing a sentiment analysis result for sample feedback.',
+      verificationMinLength: 80,
+      hint: 'Make sure the output includes sentiment plus supporting fields.',
     },
     contentPath: 'content/lesson-03.md',
   },
@@ -69,8 +77,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Support Ticket Router',
       description: 'Route incoming tickets to high, medium, or low priority branches.',
-      verificationType: 'screenshot',
-      hint: 'Show the decision node and 3 branch paths.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the decision branch output showing a ticket routed to the correct priority.',
+      verificationMinLength: 70,
+      hint: 'Show the decision node and branch outcome in your output text.',
     },
     contentPath: 'content/lesson-04.md',
   },
@@ -83,8 +93,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Multi-language Content Generator',
       description: 'Generate and review multilingual marketing copy using multiple models.',
-      verificationType: 'screenshot',
-      hint: 'Show output from at least two models in your evidence.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the model configuration output showing your custom agent setup.',
+      verificationMinLength: 60,
+      hint: 'Include model name, instructions, and key generation settings.',
     },
     contentPath: 'content/lesson-05.md',
   },
@@ -97,8 +109,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Content Approval Pipeline',
       description: 'Build a workflow with AI drafting plus a required human review step.',
-      verificationType: 'screenshot',
-      hint: 'Include the review step configuration in your screenshot.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the human review step output or approval log from the run.',
+      verificationMinLength: 60,
+      hint: 'Include reviewer status and the approved/rejected action.',
     },
     contentPath: 'content/lesson-06.md',
   },
@@ -111,8 +125,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Invoice Processor',
       description: 'Extract and structure invoice data from a PDF.',
-      verificationType: 'screenshot',
-      hint: 'Capture the structured vendor, amount, and date fields in your proof.',
+      verificationType: 'json_output',
+      verificationPrompt: 'Paste the structured JSON extracted from the invoice PDF.',
+      verificationMinLength: 90,
+      hint: 'Capture vendor, amount, date, and invoice number fields.',
     },
     contentPath: 'content/lesson-07.md',
   },
@@ -125,8 +141,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Lead Enrichment Workflow',
       description: 'Enrich lead records with an external API and output a score.',
-      verificationType: 'screenshot',
-      hint: 'Show both integration configuration and resulting output data.',
+      verificationType: 'json_output',
+      verificationPrompt: 'Paste the integration response showing enriched lead data.',
+      verificationMinLength: 80,
+      hint: 'Include both original fields and enriched attributes in the response.',
     },
     contentPath: 'content/lesson-08.md',
   },
@@ -139,8 +157,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Content Repurposer',
       description: 'Use one main workflow plus sub-workflows for multi-channel outputs.',
-      verificationType: 'screenshot',
-      hint: 'Show both the parent workflow and at least one child workflow.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the sub-workflow execution log showing parent → child flow.',
+      verificationMinLength: 75,
+      hint: 'Include parent workflow ID and child workflow execution references.',
     },
     contentPath: 'content/lesson-09.md',
   },
@@ -153,8 +173,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Financial Report Generator',
       description: 'Use Opus Code to process sales data and produce report outputs.',
-      verificationType: 'screenshot',
-      hint: 'Include the code task and computed output in your screenshot.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the Python code task output from Opus Code.',
+      verificationMinLength: 70,
+      hint: 'Include a snippet of output proving the code execution completed.',
     },
     contentPath: 'content/lesson-10.md',
   },
@@ -167,8 +189,10 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'Production Workflow Rollout',
       description: 'Activate one workflow and run at least 3 production jobs.',
-      verificationType: 'screenshot',
-      hint: 'Capture the jobs page showing at least 3 successful runs.',
+      verificationType: 'text_output',
+      verificationPrompt: 'Paste the Jobs page output showing 3+ completed job IDs.',
+      verificationMinLength: 50,
+      hint: 'Make sure at least three successful job identifiers are visible.',
     },
     contentPath: 'content/lesson-11.md',
   },
@@ -181,8 +205,11 @@ export const LESSONS: LessonMeta[] = [
     challenge: {
       title: 'End-to-End Automation Build',
       description: 'Deliver a production-ready workflow with architecture explanation.',
-      verificationType: 'url_or_screenshot',
-      hint: 'Submit your workflow URL plus a short architecture description.',
+      verificationType: 'mixed',
+      verificationPrompt:
+        'Paste the full workflow URL and add a 2–3 sentence architecture description of the automation.',
+      verificationMinLength: 120,
+      hint: 'Share both the final workflow URL and your architecture summary.',
     },
     contentPath: 'content/lesson-12.md',
   },

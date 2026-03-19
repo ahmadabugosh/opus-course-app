@@ -1,7 +1,7 @@
 "use client";
 
 import { LessonSidebar } from '@/components/lesson-sidebar';
-import { ProofSubmitForm } from '@/components/proof-submit-form';
+import { LessonVerification } from '@/components/lesson-verification';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
 import { evaluateAchievementBadges } from '@/lib/achievements-core';
@@ -66,7 +66,7 @@ export default function LessonPage({ params }: LessonPageProps) {
           <p className="mt-2 text-sm text-[#a8a8d0]">Hint: {lesson.challenge.hint}</p>
         </article>
 
-        <ProofSubmitForm lessonId={lesson.id} />
+        <LessonVerification lesson={lesson} />
       </section>
     </main>
   );

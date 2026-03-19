@@ -210,23 +210,23 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Add CSS keyframe animations for Stage 12: pulsing eyes, flickering flames, gentle hover float, particle burst
 
 ### Phase 3: Split-Screen Dashboard Layout
-- [ ] Restructure app/dashboard/page.tsx to split-screen layout: left panel (robot + nav) and right panel (lesson content)
-- [ ] Left panel (35-40% width): sticky/fixed, contains robot SVG, progress bar, title, and lesson list
-- [ ] Right panel (60-65% width): scrollable lesson content area
-- [ ] Integrate RobotAssembly component into left panel, stage driven by getTotalCompleted()
-- [ ] Move lesson sidebar navigation into the left panel below the robot
-- [ ] Show progress bar and current title ("Workflow Builder", etc.) between robot and lesson list
-- [ ] Mobile layout: stack vertically — compact robot on top, lesson list collapsible, content below
-- [ ] Clicking a lesson in the left sidebar navigates to that lesson's content in the right panel (use Next.js routing or client-side state)
+- [x] Restructure app/dashboard/page.tsx to split-screen layout: left panel (robot + nav) and right panel (lesson content)
+- [x] Left panel (35-40% width): sticky/fixed, contains robot SVG, progress bar, title, and lesson list
+- [x] Right panel (60-65% width): scrollable lesson content area
+- [x] Integrate RobotAssembly component into left panel, stage driven by getTotalCompleted()
+- [x] Move lesson sidebar navigation into the left panel below the robot
+- [x] Show progress bar and current title ("Workflow Builder", etc.) between robot and lesson list
+- [x] Mobile layout: stack vertically — compact robot on top, lesson list collapsible, content below
+- [x] Clicking a lesson in the left sidebar navigates to that lesson's content in the right panel (use Next.js routing or client-side state)
 
 ### Phase 4: Proof Verification System
-- [ ] Update LessonMeta type in lib/lessons.ts — add `verificationPrompt` (string), `verificationMinLength` (number), and update verificationType to include 'text_output' | 'json_output' | 'mixed'
-- [ ] Update all 12 lesson definitions in lib/lessons.ts with specific verification prompts and minimum lengths (see proof table in PRD above)
-- [ ] Create components/lesson-verification.tsx — new proof submission component replacing ProofSubmitForm: shows lesson-specific instruction, textarea for pasting proof, validates minimum length, shows success animation on completion
-- [ ] Replace ProofSubmitForm usage in dashboard and lesson pages with LessonVerification component
-- [ ] Update localStorage progress to store proof text alongside completion timestamp
-- [ ] Add green checkmark animation on successful verification submission
-- [ ] Ensure completing a lesson immediately updates the robot stage in the left panel (no page refresh needed)
+- [x] Update LessonMeta type in lib/lessons.ts — add `verificationPrompt` (string), `verificationMinLength` (number), and update verificationType to include 'text_output' | 'json_output' | 'mixed'
+- [x] Update all 12 lesson definitions in lib/lessons.ts with specific verification prompts and minimum lengths (see proof table in PRD above)
+- [x] Create components/lesson-verification.tsx — new proof submission component replacing ProofSubmitForm: shows lesson-specific instruction, textarea for pasting proof, validates minimum length, shows success animation on completion
+- [x] Replace ProofSubmitForm usage in dashboard and lesson pages with LessonVerification component
+- [x] Update localStorage progress to store proof text alongside completion timestamp
+- [x] Add green checkmark animation on successful verification submission
+- [x] Ensure completing a lesson immediately updates the robot stage in the left panel (no page refresh needed)
 
 ### Phase 5: Certificate Cleanup
 - [ ] Remove any EAS/blockchain references from certificate generation (lib/certificate.ts, API routes)

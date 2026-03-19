@@ -78,6 +78,10 @@ a {
   transform-origin: center;
 }
 
+.robot-checkmark-pop {
+  animation: robotCheckmarkPop 420ms ease-out;
+}
+
 @keyframes robotCorePulse {
   0%,
   100% {
@@ -133,5 +137,16 @@ a {
   100% {
     opacity: 0;
     transform: translateY(-10px) scale(1.05);
+  }
+}
+
+@keyframes robotCheckmarkPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

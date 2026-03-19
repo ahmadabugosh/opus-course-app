@@ -9,6 +9,7 @@ export type LessonProgress = {
   startedAt: string | null;
   completedAt: string | null;
   challengeMarked: boolean;
+  proofText: string | null;
 };
 
 export type ProgressState = {
@@ -32,6 +33,7 @@ export function getDefaultProgress(lessonCount = LESSON_COUNT): ProgressState {
       startedAt: null,
       completedAt: null,
       challengeMarked: false,
+      proofText: null,
     };
   }
 
@@ -65,6 +67,7 @@ function normalizeProgress(raw: unknown, lessonCount = LESSON_COUNT): ProgressSt
       startedAt: typeof lesson?.startedAt === 'string' ? lesson.startedAt : null,
       completedAt: typeof lesson?.completedAt === 'string' ? lesson.completedAt : null,
       challengeMarked: Boolean(lesson?.challengeMarked),
+      proofText: typeof lesson?.proofText === 'string' ? lesson.proofText : null,
     };
   }
 
@@ -117,6 +120,7 @@ export function markLessonComplete(
   progress: ProgressState,
   lessonId: number,
   completedAt = nowIso(),
+  proofText?: string,
 ): ProgressState {
   const existing = progress.lessons[lessonId] ?? {
     lessonId,
@@ -124,6 +128,7 @@ export function markLessonComplete(
     startedAt: null,
     completedAt: null,
     challengeMarked: false,
+    proofText: null,
   };
 
   return {
@@ -136,6 +141,7 @@ export function markLessonComplete(
         challengeMarked: true,
         startedAt: existing.startedAt ?? completedAt,
         completedAt,
+        proofText: proofText?.trim() ? proofText.trim() : existing.proofText ?? null,
       },
     },
     updatedAt: nowIso(),

@@ -23,7 +23,7 @@ import {
 } from '@/lib/progress';
 
 type ProgressContextValue = {
-  markComplete: (lessonId: number) => void;
+  markComplete: (lessonId: number, proofText?: string) => void;
   getProgress: () => LessonProgress[];
   isComplete: (lessonId: number) => boolean;
   getTotalCompleted: () => number;
@@ -40,9 +40,9 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
     return loadProgress(window.localStorage, PROGRESS_STORAGE_KEY);
   });
 
-  const markComplete = useCallback((lessonId: number) => {
+  const markComplete = useCallback((lessonId: number, proofText?: string) => {
     setProgress((current) => {
-      const updated = markLessonComplete(current, lessonId);
+      const updated = markLessonComplete(current, lessonId, undefined, proofText);
       saveProgress(updated, window.localStorage, PROGRESS_STORAGE_KEY);
       return updated;
     });

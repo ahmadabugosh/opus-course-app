@@ -33,10 +33,11 @@ test('getDefaultProgress creates 12 lessons and no completion', () => {
 
 test('markLessonComplete updates lesson status and totals', () => {
   const progress = getDefaultProgress();
-  const updated = markLessonComplete(progress, 3, '2026-03-19T00:00:00.000Z');
+  const updated = markLessonComplete(progress, 3, '2026-03-19T00:00:00.000Z', '{"sentiment":"positive"}');
 
   assert.equal(updated.lessons[3].status, 'completed');
   assert.equal(updated.lessons[3].challengeMarked, true);
+  assert.equal(updated.lessons[3].proofText, '{"sentiment":"positive"}');
   assert.equal(updated.lessons[3].completedAt, '2026-03-19T00:00:00.000Z');
   assert.equal(getTotalCompleted(updated), 1);
   assert.equal(isLessonComplete(updated, 3), true);
@@ -51,6 +52,7 @@ test('saveProgress and loadProgress round-trip with storage', () => {
 
   assert.equal(loaded.lessons[1].status, 'completed');
   assert.equal(loaded.lessons[1].challengeMarked, true);
+  assert.equal(loaded.lessons[1].proofText, null);
   assert.equal(getTotalCompleted(loaded), 1);
 });
 

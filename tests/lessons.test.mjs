@@ -24,6 +24,10 @@ test('each lesson has required metadata fields', () => {
     assert.equal(typeof lesson.videoUrl, 'string');
     assert.equal(typeof lesson.challenge.title, 'string');
     assert.equal(typeof lesson.challenge.description, 'string');
+    assert.ok(['text_output', 'url', 'json_output', 'mixed'].includes(lesson.challenge.verificationType));
+    assert.equal(typeof lesson.challenge.verificationPrompt, 'string');
+    assert.equal(typeof lesson.challenge.verificationMinLength, 'number');
+    assert.ok(lesson.challenge.verificationMinLength >= 20);
     assert.match(lesson.contentPath, /^content\/lesson-\d{2}\.md$/);
   }
 });
