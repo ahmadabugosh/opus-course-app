@@ -60,10 +60,11 @@ if (!domain) {
 
 const inferredZoneName = inferZoneNameFromHostname(domain);
 const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME || process.env.CLOUDFLARE_ZONE_NAME || inferredZoneName;
-const rawRecordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || domain;
+const rawRecordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || process.env.CLOUDFLARE_RECORD_NAME || domain;
 const recordName = expandRecordName(rawRecordName, zoneName) || domain;
 const proxiedArg = getArgValue('--proxied');
-const proxied = proxiedArg ? proxiedArg === 'true' : process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
+const proxiedEnv = process.env.CF_PROXIED ?? process.env.CLOUDFLARE_PROXIED;
+const proxied = proxiedArg ? proxiedArg === 'true' : proxiedEnv ? proxiedEnv === 'true' : true;
 
 function getRailwayTargetFromCli() {
   try {
