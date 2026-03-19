@@ -4,6 +4,7 @@ import { LessonSidebar } from '@/components/lesson-sidebar';
 import { ProofSubmitForm } from '@/components/proof-submit-form';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
+import { evaluateAchievementBadges } from '@/lib/achievements';
 import { getLearnerTitle } from '@/lib/course-progression';
 import { getAllLessons, getLessonById } from '@/lib/lessons';
 
@@ -22,6 +23,13 @@ export default function LessonPage({ params }: LessonPageProps) {
   const { getProgress, getTotalCompleted } = useProgress();
   const progress = getProgress();
   const totalCompleted = getTotalCompleted();
+  const earnedBadges = evaluateAchievementBadges(
+    progress.map((lessonProgress) => ({
+      lesson_id: lessonProgress.lessonId,
+      started_at: lessonProgress.startedAt,
+      completed_at: lessonProgress.completedAt,
+    })),
+  );
 
   if (!lesson) {
     return (
@@ -39,6 +47,7 @@ export default function LessonPage({ params }: LessonPageProps) {
         currentLessonId={lesson.id}
         title={getLearnerTitle(totalCompleted)}
         totalCompleted={totalCompleted}
+        earnedBadges={earnedBadges}
       />
 
       <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-6">

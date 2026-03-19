@@ -4,6 +4,7 @@ import { LessonSidebar } from '@/components/lesson-sidebar';
 import { ProofSubmitForm } from '@/components/proof-submit-form';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
+import { evaluateAchievementBadges } from '@/lib/achievements';
 import {
   getDefaultCurrentLessonId,
   getLearnerTitle,
@@ -19,6 +20,13 @@ export default function DashboardPage() {
   const currentLessonId = getDefaultCurrentLessonId(progress);
   const currentLesson = lessons.find((lesson) => lesson.id === currentLessonId) ?? lessons[0];
   const currentTitle = getLearnerTitle(totalCompleted);
+  const earnedBadges = evaluateAchievementBadges(
+    progress.map((lesson) => ({
+      lesson_id: lesson.lessonId,
+      started_at: lesson.startedAt,
+      completed_at: lesson.completedAt,
+    })),
+  );
 
   return (
     <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[340px,1fr]">
@@ -28,6 +36,7 @@ export default function DashboardPage() {
         currentLessonId={currentLesson.id}
         title={currentTitle}
         totalCompleted={totalCompleted}
+        earnedBadges={earnedBadges}
       />
 
       <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-6">

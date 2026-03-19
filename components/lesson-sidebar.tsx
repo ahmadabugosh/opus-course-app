@@ -4,7 +4,9 @@ import Link from 'next/link';
 
 import type { LessonMeta } from '@/lib/lessons';
 
+import { AchievementBadge } from '@/components/achievement-badge';
 import { ProgressBar } from '@/components/progress-bar';
+import { ACHIEVEMENTS, type BadgeId } from '@/lib/achievements';
 
 type SidebarLesson = {
   lessonId: number;
@@ -17,6 +19,7 @@ type LessonSidebarProps = {
   currentLessonId: number;
   title: string;
   totalCompleted: number;
+  earnedBadges: BadgeId[];
 };
 
 function getStatusIcon(status: SidebarLesson['status'], isCurrent: boolean) {
@@ -31,6 +34,7 @@ export function LessonSidebar({
   currentLessonId,
   title,
   totalCompleted,
+  earnedBadges,
 }: LessonSidebarProps) {
   return (
     <aside className="w-full rounded-2xl border border-[#333355] bg-[#1e1e3a] p-5 lg:sticky lg:top-6 lg:h-fit">
@@ -67,6 +71,19 @@ export function LessonSidebar({
       <div className="mt-6 rounded-xl border border-[#333355] bg-[#16162b] p-3 text-sm text-[#cccccc]">
         <h3 className="font-semibold text-white">🏆 Current Rank</h3>
         <p className="mt-1">{title}</p>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-[#333355] bg-[#16162b] p-3">
+        <h3 className="text-sm font-semibold text-white">🏆 Achievements</h3>
+        <div className="mt-2 grid gap-2">
+          {ACHIEVEMENTS.map((achievement) => (
+            <AchievementBadge
+              key={achievement.badgeId}
+              achievement={achievement}
+              earned={earnedBadges.includes(achievement.badgeId)}
+            />
+          ))}
+        </div>
       </div>
     </aside>
   );

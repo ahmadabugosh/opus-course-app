@@ -15,6 +15,14 @@ export type ProgressForAchievement = {
   completed_at: string | null;
 };
 
+export type AchievementDefinition = {
+  badgeId: BadgeId;
+  name: string;
+  description: string;
+  icon: string;
+  check: (progress: ProgressForAchievement[]) => boolean;
+};
+
 function hasCompleted(progress: ProgressForAchievement[], lessonId: number) {
   return progress.some((row) => row.lesson_id === lessonId && Boolean(row.completed_at));
 }
@@ -50,40 +58,68 @@ function calculateConsecutiveDayStreak(progress: ProgressForAchievement[]) {
   return best;
 }
 
+export const ACHIEVEMENTS: AchievementDefinition[] = [
+  {
+    badgeId: 'speed-builder',
+    name: 'Speed Builder',
+    description: 'Complete any lesson within 1 hour of starting it.',
+    icon: '⚡',
+    check: (progress) =>
+      progress.some((row) => {
+        if (!row.completed_at || !row.started_at) return false;
+
+        const started = new Date(row.started_at).getTime();
+        const completed = new Date(row.completed_at).getTime();
+
+        return Number.isFinite(started) && Number.isFinite(completed) && completed - started <= 60 * 60 * 1000;
+      }),
+  },
+  {
+    badgeId: 'streak-master',
+    name: 'Streak Master',
+    description: 'Complete 3 lessons across 3 consecutive days.',
+    icon: '🔥',
+    check: (progress) => calculateConsecutiveDayStreak(progress) >= 3,
+  },
+  {
+    badgeId: 'agent-whisperer',
+    name: 'Agent Whisperer',
+    description: 'Complete all agent-focused lessons (3, 4, and 5).',
+    icon: '🧠',
+    check: (progress) => [3, 4, 5].every((lessonId) => hasCompleted(progress, lessonId)),
+  },
+  {
+    badgeId: 'human-touch',
+    name: 'Human Touch',
+    description: 'Complete the Human-in-the-Loop lesson (Lesson 6).',
+    icon: '🤝',
+    check: (progress) => hasCompleted(progress, 6),
+  },
+  {
+    badgeId: 'integrator',
+    name: 'Integrator',
+    description: 'Complete the Integrations lesson (Lesson 8).',
+    icon: '🔌',
+    check: (progress) => hasCompleted(progress, 8),
+  },
+  {
+    badgeId: 'code-warrior',
+    name: 'Code Warrior',
+    description: 'Complete the Opus Code lesson (Lesson 10).',
+    icon: '🐍',
+    check: (progress) => hasCompleted(progress, 10),
+  },
+  {
+    badgeId: 'opus-master',
+    name: 'Opus Master',
+    description: 'Complete all 12 lessons in Opus Mastery.',
+    icon: '🎓',
+    check: (progress) => progress.filter((row) => Boolean(row.completed_at)).length >= 12,
+  },
+];
+
 export function evaluateAchievementBadges(progress: ProgressForAchievement[]): BadgeId[] {
-  const badges = new Set<BadgeId>();
-
-  for (const row of progress) {
-    if (!row.completed_at) continue;
-    if (!row.started_at) continue;
-
-    const started = new Date(row.started_at).getTime();
-    const completed = new Date(row.completed_at).getTime();
-
-    if (Number.isFinite(started) && Number.isFinite(completed) && completed - started <= 60 * 60 * 1000) {
-      badges.add('speed-builder');
-      break;
-    }
-  }
-
-  if (calculateConsecutiveDayStreak(progress) >= 3) {
-    badges.add('streak-master');
-  }
-
-  if ([3, 4, 5].every((lessonId) => hasCompleted(progress, lessonId))) {
-    badges.add('agent-whisperer');
-  }
-
-  if (hasCompleted(progress, 6)) badges.add('human-touch');
-  if (hasCompleted(progress, 8)) badges.add('integrator');
-  if (hasCompleted(progress, 10)) badges.add('code-warrior');
-
-  const completedCount = progress.filter((row) => Boolean(row.completed_at)).length;
-  if (completedCount >= 12) {
-    badges.add('opus-master');
-  }
-
-  return [...badges];
+  return ACHIEVEMENTS.filter((achievement) => achievement.check(progress)).map((achievement) => achievement.badgeId);
 }
 
 export function syncAchievementsForUser(userId: number): BadgeId[] {

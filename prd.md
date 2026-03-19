@@ -360,11 +360,11 @@ ANALYTICS_ENABLED=true
 - [x] Style with Tailwind — professional dark theme with accent colors (match Opus brand: dark + blue/purple accents), responsive for mobile/tablet/desktop
 
 ### Phase 6: Achievements System
-- [ ] Create lib/achievements.ts — achievement definitions (badge_id, name, description, icon, check function)
-- [ ] Implement achievement checking — triggered after each lesson completion (speed builder, streak master, agent whisperer, etc.)
-- [ ] Create achievement-badge.tsx component — badge display with earned/unearned states, tooltip with description
-- [ ] Create /api/achievements route — GET user's earned achievements
-- [ ] Add achievements section to dashboard sidebar
+- [x] Create lib/achievements.ts — achievement definitions (badge_id, name, description, icon, check function)
+- [x] Implement achievement checking — triggered after each lesson completion (speed builder, streak master, agent whisperer, etc.)
+- [x] Create achievement-badge.tsx component — badge display with earned/unearned states, tooltip with description
+- [x] Create /api/achievements route — GET user's earned achievements
+- [x] Add achievements section to dashboard sidebar
 
 ### Phase 7: Certificate & Profile
 - [ ] Create lib/certificate.ts — PDF certificate generation (user name, course title, date, certificate ID, achievements count)
