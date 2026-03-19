@@ -38,10 +38,11 @@ export default function LessonPage({ params }: LessonPageProps) {
   useEffect(() => {
     if (!lesson) return;
 
+    const currentLessonId = lesson.id;
     let cancelled = false;
 
     async function loadContent() {
-      const response = await fetch(`/api/lessons/content/${lesson.id}`);
+      const response = await fetch(`/api/lessons/content/${currentLessonId}`);
       const payload = (await response.json()) as { markdown?: string };
 
       if (!cancelled) {

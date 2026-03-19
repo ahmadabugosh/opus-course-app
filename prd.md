@@ -240,11 +240,11 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Update lesson content pages (app/lessons/[lessonId]/page.tsx) to use new LessonVerification component and fit within split-screen right panel
 - [x] Ensure all lesson markdown content renders correctly in the new layout
 - [x] Video embeds work properly within the right panel
-- [ ] Test full flow: landing → start → complete lessons 1-12 → watch robot assemble → request certificate → download PDF → share
-- [ ] Mobile responsive testing — all layouts work on small screens
-- [ ] Ensure dark theme consistency across all pages (landing, dashboard, lessons, certificate, profile)
+- [x] Test full flow: landing → start → complete lessons 1-12 → watch robot assemble → request certificate → download PDF → share
+- [x] Mobile responsive testing — all layouts work on small screens
+- [x] Ensure dark theme consistency across all pages (landing, dashboard, lessons, certificate, profile)
 - [x] Clean up any unused components (old ProofSubmitForm, old landing page sections)
-- [ ] Commit all changes and deploy to Railway
+- [x] Commit all changes and deploy to Railway
 
 ---
 
