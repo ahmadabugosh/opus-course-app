@@ -104,3 +104,14 @@ node scripts/configure-cloudflare-domain.mjs \
 ```
 
 If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, the script uses `CF_ZONE_NAME` when provided, otherwise it infers a zone from `NEXT_PUBLIC_APP_URL` (e.g. `opus-course.learnopenclaw.ai` → `learnopenclaw.ai`) before resolving the zone via Cloudflare API.
+
+After applying DNS, verify propagation points to Railway:
+
+```bash
+node scripts/verify-custom-domain.mjs \
+  --domain="opus-course.learnopenclaw.ai" \
+  --target="<railway-generated-domain>" \
+  --wait-seconds=300
+```
+
+The command exits `0` once the CNAME matches. If DNS is still propagating it will poll until `--wait-seconds` is exhausted.
