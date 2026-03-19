@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isEquivalentCnameRecord, isSelfReferentialCname, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isEquivalentCnameRecord, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -119,6 +119,12 @@ test('parseRailwayTargetFromJson returns null on empty or invalid input', () => 
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
   assert.equal(parseRailwayTargetFromJson('not json'), null);
+});
+
+test('normalizeHost handles scheme/host formatting variants safely', () => {
+  assert.equal(normalizeHost('HTTPS://Opus-Course.LearnOpenClaw.ai/path?q=1'), 'opus-course.learnopenclaw.ai');
+  assert.equal(normalizeHost('  Opus-Course.LEARNOPENCLAW.AI.  '), 'opus-course.learnopenclaw.ai');
+  assert.equal(normalizeHost(''), null);
 });
 
 test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () => {
