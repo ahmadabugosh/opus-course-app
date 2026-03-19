@@ -54,7 +54,7 @@ export default function RootLayout({
           <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur">
             <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
               <Link href="/" className="text-base font-semibold tracking-tight">
-                🎓 Opus Mastery
+                ⚡ Opus Mastery
               </Link>
               <nav className="flex items-center gap-3 text-sm text-muted">
                 <Link href="/dashboard" className="hover:text-foreground transition-colors">

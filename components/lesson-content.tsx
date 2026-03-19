@@ -58,7 +58,7 @@ export default function LessonContent({ markdown }: LessonContentProps) {
   const blocks = body.split('\n\n');
 
   return (
-    <article className="prose prose-invert max-w-none space-y-4">
+    <article className="prose prose-invert max-w-none space-y-3 text-sm">
       {blocks.map((block, index) => {
         const callout = renderCallout(block.trim(), index);
         if (callout) {
@@ -74,7 +74,7 @@ export default function LessonContent({ markdown }: LessonContentProps) {
 
         if (block.startsWith('# ')) {
           return (
-            <h1 key={`h1-${index}`} className="text-3xl font-bold text-white">
+            <h1 key={`h1-${index}`} className="text-lg font-bold text-white">
               {block.replace(/^#\s/, '')}
             </h1>
           );
@@ -82,9 +82,17 @@ export default function LessonContent({ markdown }: LessonContentProps) {
 
         if (block.startsWith('## ')) {
           return (
-            <h2 key={`h2-${index}`} className="text-2xl font-semibold text-white">
+            <h2 key={`h2-${index}`} className="text-base font-semibold text-white">
               {block.replace(/^##\s/, '')}
             </h2>
+          );
+        }
+
+        if (block.startsWith('### ')) {
+          return (
+            <h3 key={`h3-${index}`} className="text-sm font-semibold text-white">
+              {block.replace(/^###\s/, '')}
+            </h3>
           );
         }
 
@@ -95,7 +103,7 @@ export default function LessonContent({ markdown }: LessonContentProps) {
             .map((line) => line.replace(/^-\s/, '').trim());
 
           return (
-            <ul key={`ul-${index}`} className="list-disc space-y-2 pl-6 text-gray-200">
+            <ul key={`ul-${index}`} className="list-disc space-y-1.5 pl-5 text-sm text-gray-300">
               {items.map((item, i) => (
                 <li key={`${item}-${i}`}>{parseInline(item)}</li>
               ))}
@@ -119,7 +127,7 @@ export default function LessonContent({ markdown }: LessonContentProps) {
         }
 
         return (
-          <p key={`p-${index}`} className="leading-7 text-gray-200">
+          <p key={`p-${index}`} className="text-sm leading-6 text-gray-300">
             {parseInline(block.replace(/\n/g, ' '))}
           </p>
         );
