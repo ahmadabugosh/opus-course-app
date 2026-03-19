@@ -130,6 +130,8 @@ test('expandRecordName resolves apex/relative/FQDN Cloudflare record names safel
   assert.equal(expandRecordName('opus-course.learnopenclaw.ai', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
   assert.equal(expandRecordName('https://opus-course.learnopenclaw.ai/path', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
   assert.equal(expandRecordName('*', 'learnopenclaw.ai'), '*.learnopenclaw.ai');
+  assert.equal(expandRecordName('*.learnopenclaw.ai', 'learnopenclaw.ai'), '*.learnopenclaw.ai');
+  assert.equal(expandRecordName('*.LEARNOPENCLAW.AI.', 'learnopenclaw.ai'), '*.learnopenclaw.ai');
   assert.equal(expandRecordName('', 'learnopenclaw.ai'), null);
 });
 
