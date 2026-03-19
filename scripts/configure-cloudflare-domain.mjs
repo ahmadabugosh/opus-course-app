@@ -4,6 +4,7 @@
 // TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
+import { parseRailwayTargetFromJson } from '../lib/domain.js';
 
 const args = new Set(process.argv.slice(2));
 const isDryRun = args.has('--dry-run');
@@ -30,9 +31,7 @@ function getRailwayTargetFromCli() {
     const raw = execSync('railway domain --json', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
     if (!raw) return null;
 
-    const parsed = JSON.parse(raw);
-
-    return parsed.target || parsed.domain || parsed.hostname || null;
+    return parseRailwayTargetFromJson(raw);
   } catch {
     return null;
   }
