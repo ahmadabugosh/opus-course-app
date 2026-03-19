@@ -392,7 +392,7 @@ ANALYTICS_ENABLED=true
 - [x] Configure nixpacks.toml for Node.js build
 - [x] Set up Railway persistent volume for SQLite at /data
 - [x] Deploy to Railway and verify health check
-- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS *(blocked: awaiting Cloudflare API token + zone access. `scripts/configure-cloudflare-domain.mjs` now supports either `CF_ZONE_ID` or `CF_ZONE_NAME`, with target fallback `CF_TARGET_CNAME` → `RAILWAY_PUBLIC_DOMAIN` → `railway domain --json` (including current Railway `domains[]` JSON shape); also supports `--dry-run`, `CF_RECORD_NAME`, and `CF_PROXIED` for safer rollout once credentials are available)*
+- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS *(blocked: awaiting Cloudflare API token + zone access. `scripts/configure-cloudflare-domain.mjs` now supports either `CF_ZONE_ID` or `CF_ZONE_NAME`, with target fallback `CF_TARGET_CNAME` → `RAILWAY_PUBLIC_DOMAIN` → `railway domain --json` (including current Railway `domains[]` JSON shapes for both string and object entries); also supports `--dry-run`, `CF_RECORD_NAME`, and `CF_PROXIED` for safer rollout once credentials are available)*
 - [x] Set all environment variables in Railway
 - [x] Test full flow: register → lessons → complete → certificate
 - [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes

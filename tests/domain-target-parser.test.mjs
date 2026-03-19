@@ -14,6 +14,19 @@ test('parseRailwayTargetFromJson resolves Railway CLI domains array and strips p
   assert.equal(parseRailwayTargetFromJson(raw), 'glorious-warmth-production-d8d2.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson resolves Railway CLI domains array objects', () => {
+  const raw = JSON.stringify({
+    domains: [
+      {
+        id: 'domain_123',
+        serviceDomain: 'https://opus-course-production.up.railway.app',
+      },
+    ],
+  });
+
+  assert.equal(parseRailwayTargetFromJson(raw), 'opus-course-production.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson returns null on empty or invalid input', () => {
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
