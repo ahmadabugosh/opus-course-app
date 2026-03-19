@@ -388,8 +388,8 @@ ANALYTICS_ENABLED=true
 - [x] Add SEO metadata to all pages (title, description, OG tags)
 
 ### Phase 9: Deployment & Launch
-- [ ] Configure railway.toml with build/start commands and health check
-- [ ] Configure nixpacks.toml for Node.js build
+- [x] Configure railway.toml with build/start commands and health check
+- [x] Configure nixpacks.toml for Node.js build
 - [ ] Set up Railway persistent volume for SQLite at /data
 - [ ] Deploy to Railway and verify health check
 - [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS
