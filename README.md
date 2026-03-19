@@ -74,7 +74,17 @@ export CF_API_TOKEN=...
 export CF_ZONE_ID=...
 export NEXT_PUBLIC_APP_URL=https://opus-course.learnopenclaw.ai
 export CF_TARGET_CNAME=<railway-generated-domain>
+# Optional: target a different DNS name than NEXT_PUBLIC_APP_URL hostname
+# export CF_RECORD_NAME=www.opus-course.learnopenclaw.ai
+# Optional: disable Cloudflare proxy (DNS-only)
+# export CF_PROXIED=false
 node scripts/configure-cloudflare-domain.mjs
+```
+
+Dry run before applying changes:
+
+```bash
+node scripts/configure-cloudflare-domain.mjs --dry-run
 ```
 
 If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`.

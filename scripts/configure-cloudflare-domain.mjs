@@ -3,6 +3,8 @@
 // BLOCKED: Requires Cloudflare API credentials + target Railway host before DNS can be applied automatically.
 // TODO: revisit once CF_API_TOKEN and CF_ZONE_ID are available in deployment secrets.
 
+const args = new Set(process.argv.slice(2));
+const isDryRun = args.has('--dry-run');
 const required = ['CF_API_TOKEN', 'CF_ZONE_ID', 'NEXT_PUBLIC_APP_URL'];
 
 const missing = required.filter((key) => !process.env[key]);
@@ -17,7 +19,9 @@ const token = process.env.CF_API_TOKEN;
 const zoneId = process.env.CF_ZONE_ID;
 const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL);
 const domain = appUrl.hostname;
+const recordName = process.env.CF_RECORD_NAME || domain;
 const target = process.env.CF_TARGET_CNAME || process.env.RAILWAY_PUBLIC_DOMAIN;
+const proxied = process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
 
 if (!target) {
   console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN.');
@@ -47,9 +51,20 @@ async function upsertCname(name, content) {
     type: 'CNAME',
     name,
     content,
-    proxied: true,
+    proxied,
     ttl: 1,
   };
+
+  if (isDryRun) {
+    return {
+      action: existing ? 'would-update' : 'would-create',
+      record: {
+        name,
+        content,
+        proxied,
+      },
+    };
+  }
 
   if (existing) {
     const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/dns_records/${existing.id}`, {
@@ -82,8 +97,9 @@ async function upsertCname(name, content) {
 }
 
 const run = async () => {
-  const result = await upsertCname(domain, target);
-  console.log(`Custom domain ${result.action}: ${domain} -> ${target}`);
+  const result = await upsertCname(recordName, target);
+  const dryRunPrefix = isDryRun ? '[dry-run] ' : '';
+  console.log(`${dryRunPrefix}Custom domain ${result.action}: ${recordName} -> ${target}`);
 };
 
 run().catch((error) => {
