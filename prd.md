@@ -237,13 +237,13 @@ Each lesson requires specific proof of completion — not just a self-check. The
 - [x] Test certificate download and social sharing end-to-end
 
 ### Phase 6: Integration & Polish
-- [ ] Update lesson content pages (app/lessons/[lessonId]/page.tsx) to use new LessonVerification component and fit within split-screen right panel
-- [ ] Ensure all lesson markdown content renders correctly in the new layout
-- [ ] Video embeds work properly within the right panel
+- [x] Update lesson content pages (app/lessons/[lessonId]/page.tsx) to use new LessonVerification component and fit within split-screen right panel
+- [x] Ensure all lesson markdown content renders correctly in the new layout
+- [x] Video embeds work properly within the right panel
 - [ ] Test full flow: landing → start → complete lessons 1-12 → watch robot assemble → request certificate → download PDF → share
 - [ ] Mobile responsive testing — all layouts work on small screens
 - [ ] Ensure dark theme consistency across all pages (landing, dashboard, lessons, certificate, profile)
-- [ ] Clean up any unused components (old ProofSubmitForm, old landing page sections)
+- [x] Clean up any unused components (old ProofSubmitForm, old landing page sections)
 - [ ] Commit all changes and deploy to Railway
 
 ---

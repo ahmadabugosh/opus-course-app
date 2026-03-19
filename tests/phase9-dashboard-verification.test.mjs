@@ -33,3 +33,13 @@ test('lesson verification component replaces legacy proof submit form in dashboa
   assert.match(dashboard, /LessonVerification/);
   assert.match(lessonPage, /LessonVerification/);
 });
+
+test('lesson page uses split-screen robot hatch layout and no legacy proof component file remains', () => {
+  const lessonPage = readFile('app/lessons/[lessonId]/page.tsx');
+
+  assert.match(lessonPage, /RobotAssembly/);
+  assert.match(lessonPage, /lg:grid-cols-\[minmax\(320px,38%\),1fr\]/);
+  assert.match(lessonPage, /lg:h-\[calc\(100dvh-3rem\)\] lg:overflow-y-auto/);
+
+  assert.equal(fs.existsSync(path.join(root, 'components/proof-submit-form.tsx')), false);
+});
