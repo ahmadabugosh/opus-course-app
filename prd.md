@@ -391,9 +391,9 @@ ANALYTICS_ENABLED=true
 - [x] Configure railway.toml with build/start commands and health check
 - [x] Configure nixpacks.toml for Node.js build
 - [x] Set up Railway persistent volume for SQLite at /data
-- [ ] Deploy to Railway and verify health check
+- [x] Deploy to Railway and verify health check
 - [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS
-- [ ] Set all environment variables in Railway
+- [x] Set all environment variables in Railway
 - [ ] Test full flow: register → lessons → complete → certificate
 - [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
 
