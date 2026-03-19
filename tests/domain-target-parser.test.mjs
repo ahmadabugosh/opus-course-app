@@ -116,7 +116,10 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai/dashboard?x=1'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai/path/ignored'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('app.learnopenclaw.co.uk'), 'learnopenclaw.co.uk');
+  assert.equal(inferZoneNameFromHostname('app.learnopenclaw.net.uk'), 'learnopenclaw.net.uk');
+  assert.equal(inferZoneNameFromHostname('app.learnopenclaw.sch.uk'), 'learnopenclaw.sch.uk');
   assert.equal(inferZoneNameFromHostname('api.learnopenclaw.com.au'), 'learnopenclaw.com.au');
+  assert.equal(inferZoneNameFromHostname('api.learnopenclaw.edu.au'), 'learnopenclaw.edu.au');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.in'), 'learnopenclaw.co.in');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.sg'), 'learnopenclaw.com.sg');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.za'), 'learnopenclaw.co.za');
