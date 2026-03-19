@@ -87,4 +87,4 @@ Dry run before applying changes:
 node scripts/configure-cloudflare-domain.mjs --dry-run
 ```
 
-If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`.
+If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project).

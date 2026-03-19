@@ -22,12 +22,13 @@ test('cloudflare custom domain helper script exists and validates required env v
   assert.match(script, /BLOCKED: Requires Cloudflare API credentials/);
 });
 
-test('cloudflare helper supports dry-run mode and configurable proxy behavior', () => {
+test('cloudflare helper supports dry-run mode, configurable proxy behavior, and Railway domain fallback', () => {
   const script = read('scripts/configure-cloudflare-domain.mjs');
 
   assert.match(script, /--dry-run/);
   assert.match(script, /CF_PROXIED/);
   assert.match(script, /CF_RECORD_NAME/);
+  assert.match(script, /railway domain --json/);
 });
 
 test('README documents custom domain configuration workflow', () => {

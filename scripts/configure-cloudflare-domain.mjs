@@ -3,6 +3,8 @@
 // BLOCKED: Requires Cloudflare API credentials + target Railway host before DNS can be applied automatically.
 // TODO: revisit once CF_API_TOKEN and CF_ZONE_ID are available in deployment secrets.
 
+import { execSync } from 'node:child_process';
+
 const args = new Set(process.argv.slice(2));
 const isDryRun = args.has('--dry-run');
 const required = ['CF_API_TOKEN', 'CF_ZONE_ID', 'NEXT_PUBLIC_APP_URL'];
@@ -20,11 +22,25 @@ const zoneId = process.env.CF_ZONE_ID;
 const appUrl = new URL(process.env.NEXT_PUBLIC_APP_URL);
 const domain = appUrl.hostname;
 const recordName = process.env.CF_RECORD_NAME || domain;
-const target = process.env.CF_TARGET_CNAME || process.env.RAILWAY_PUBLIC_DOMAIN;
 const proxied = process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
 
+function getRailwayTargetFromCli() {
+  try {
+    const raw = execSync('railway domain --json', { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+
+    return parsed.target || parsed.domain || parsed.hostname || null;
+  } catch {
+    return null;
+  }
+}
+
+const target = process.env.CF_TARGET_CNAME || process.env.RAILWAY_PUBLIC_DOMAIN || getRailwayTargetFromCli();
+
 if (!target) {
-  console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN.');
+  console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN, or run in a linked Railway project so `railway domain --json` can resolve it.');
   process.exit(1);
 }
 
