@@ -4,7 +4,7 @@
 // TODO: revisit once Cloudflare auth credentials (API token or API key/email) and zone access are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isEquivalentCnameRecord, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
@@ -158,19 +158,30 @@ async function upsertCname(name, content) {
     ttl: 1,
   };
 
+  const alreadyMatches = isEquivalentCnameRecord(existingCname, { name, content, proxied });
+
   if (isDryRun) {
     return {
-      action: existingCname
-        ? 'would-update'
-        : conflictingRecords.length
-          ? 'would-replace-conflicting-records'
-          : 'would-create',
+      action: alreadyMatches
+        ? 'would-skip-unchanged'
+        : existingCname
+          ? 'would-update'
+          : conflictingRecords.length
+            ? 'would-replace-conflicting-records'
+            : 'would-create',
       record: {
         name,
         content,
         proxied,
       },
       conflicts: conflictingRecords.map((record) => ({ id: record.id, type: record.type })),
+    };
+  }
+
+  if (alreadyMatches) {
+    return {
+      action: 'skipped-unchanged',
+      record: existingCname,
     };
   }
 

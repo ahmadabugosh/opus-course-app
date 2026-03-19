@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isEquivalentCnameRecord, isSelfReferentialCname, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -165,6 +165,55 @@ test('resolveCnameTarget normalizes host-like values and rejects IP literals', (
   assert.equal(resolveCnameTarget('opus-course-prod.up.railway.app.'), 'opus-course-prod.up.railway.app');
   assert.equal(resolveCnameTarget('34.117.12.5'), null);
   assert.equal(resolveCnameTarget('2606:4700:4700::1111'), null);
+});
+
+test('isEquivalentCnameRecord matches normalized host + target + proxied state', () => {
+  const desired = {
+    name: 'opus-course.learnopenclaw.ai',
+    content: 'opus-course-production.up.railway.app',
+    proxied: true,
+  };
+
+  assert.equal(
+    isEquivalentCnameRecord(
+      {
+        type: 'CNAME',
+        name: 'OPUS-COURSE.LEARNOPENCLAW.AI.',
+        content: 'https://Opus-Course-Production.UP.RAILWAY.APP/path',
+        proxied: true,
+      },
+      desired,
+    ),
+    true,
+  );
+
+  assert.equal(
+    isEquivalentCnameRecord(
+      {
+        type: 'CNAME',
+        name: 'opus-course.learnopenclaw.ai',
+        content: 'another-target.up.railway.app',
+        proxied: true,
+      },
+      desired,
+    ),
+    false,
+  );
+
+  assert.equal(
+    isEquivalentCnameRecord(
+      {
+        type: 'CNAME',
+        name: 'opus-course.learnopenclaw.ai',
+        content: 'opus-course-production.up.railway.app',
+        proxied: false,
+      },
+      desired,
+    ),
+    false,
+  );
+
+  assert.equal(isEquivalentCnameRecord({ type: 'A', name: 'opus-course.learnopenclaw.ai', content: '34.117.12.5' }, desired), false);
 });
 
 test('buildCloudflareHeaders supports bearer tokens and global API key/email auth', () => {

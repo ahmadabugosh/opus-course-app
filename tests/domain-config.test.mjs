@@ -95,3 +95,11 @@ test('configure helper replaces conflicting non-CNAME records before creating CN
   assert.match(script, /method: 'DELETE'/);
   assert.match(script, /replaced-conflicting-records/);
 });
+
+test('configure helper skips Cloudflare writes when matching CNAME already exists', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /isEquivalentCnameRecord/);
+  assert.match(script, /skipped-unchanged/);
+  assert.match(script, /would-skip-unchanged/);
+});
