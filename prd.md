@@ -1,461 +1,285 @@
-# PRD: Opus Mastery — Gamified Course Platform 🎓
+# PRD: Opus Course App v2 — Robot Assembly Hatch + UI Overhaul
 
 ## Overview
 
-A gamified learning platform where users master Opus (AI workflow automation) by completing 12 progressive lessons. Each lesson has written content, video tutorials, and a hands-on challenge verified within Opus. Built as a Next.js app on Railway — same architecture as the Hatch Quest app (hatch.learnopenclaw.ai).
+Major UI overhaul of the existing Opus Mastery course app. Three core changes:
+1. **Minimal landing page** — single viewport, Opus-branded, no scrolling
+2. **Robot assembly hatch mechanism** — 13-stage SVG robot that builds up as lessons complete
+3. **Split-screen layout** — robot hatch on left, lesson content on right (like hatch.learnopenclaw.ai)
+4. **Proof verification per lesson** — specific commands/outputs students must paste to prove completion
+5. **Certificate cleanup** — remove EAS, keep PDF generation + social sharing
 
-**Live URL target:** opus-course.learnopenclaw.ai (or similar)
-**Reference app:** https://hatch.learnopenclaw.ai
-
----
-
-## The Experience
-
-### User Flow
-
-1. User lands on homepage → sees course overview with 12-lesson roadmap
-2. Clicks any lesson → immediately starts learning (NO signup required)
-3. All 12 lessons are freely accessible — written guides + video embeds + challenges
-4. Progress tracked in localStorage (no account needed)
-5. User self-marks challenges as complete (honor system)
-6. Progress bar fills as lessons complete
-7. At 12/12: Prompt to sign in (email OTP) to generate certificate
-8. Certificate generated → Shareable badge → Public profile page
-
-**Key principle:** Zero friction to learn. Only gate = certificate generation (requires email for identity).
-
-### UI Layout
-
-```
-┌──────────────────────────────────────────────────────────────┐
-│  LEFT SIDEBAR (30%)            │  MAIN CONTENT (70%)         │
-│                                │                              │
-│   🎓 Opus Mastery              │  Lesson 3: The Opus Agent    │
-│                                │                              │
-│   ████████████░░░ 3/12         │  📺 [Tutorial Video]         │
-│   "Workflow Architect"         │  "Master the Opus Agent"     │
-│                                │                              │
-│   ✅ 1. First Workflow         │  📝 Lesson Content:          │
-│   ✅ 2. The Builder            │  What is the Opus Agent?     │
-│   → 3. Opus Agent             │  The Opus Agent is your AI   │
-│   ○ 4. Decision Agents        │  workhorse for reasoning,    │
-│   ○ 5. Custom Agents          │  extraction, and generation  │
-│   ○ 6. Human-in-the-Loop      │  ...                         │
-│   ○ 7. Data Tasks             │                              │
-│   ○ 8. Integrations           │  🛠️ Challenge:               │
-│   ○ 9. Sub-Workflows          │  Build a customer feedback   │
-│   ○ 10. Opus Code             │  analyzer workflow with 3    │
-│   ○ 11. Production            │  agents that classifies,     │
-│   ○ 12. Capstone              │  extracts, and responds.     │
-│                                │                              │
-│   ┌──────────────────────┐    │  ┌──────────────────────┐    │
-│   │ 🏆 Achievements      │    │  │ Submit: Paste your   │    │
-│   │ • First Workflow ✅   │    │  │ workflow URL or       │    │
-│   │ • Speed Builder ✅    │    │  │ screenshot            │    │
-│   │ • Agent Master ○     │    │  │ [__________] [✓]     │    │
-│   └──────────────────────┘    │  └──────────────────────┘    │
-└──────────────────────────────────────────────────────────────┘
-```
-
-**Mobile:** Sidebar collapses to top nav, content stacks vertically.
+**Live app:** https://glorious-warmth-production-d8d2.up.railway.app
+**Repo:** /root/projects/opus-course-app
+**Reference:** https://hatch.learnopenclaw.ai (split-screen layout pattern)
+**Brand reference:** https://www.opus.com/ (visual style)
 
 ---
 
-## The 12 Lessons
+## 1. Landing Page Redesign
 
-| # | Lesson | Challenge | Verification |
-|---|--------|-----------|-------------|
-| 1 | Your First Workflow | Build a text summarizer workflow | Workflow URL or screenshot of successful preview |
-| 2 | Mastering the Builder | Multi-step document processor (3 chained agents) | Screenshot of builder with 3+ connected tasks |
-| 3 | The Opus Agent | Customer feedback analyzer | Screenshot of workflow output showing sentiment + response |
-| 4 | Decision Agents | Support ticket router with 3 branches | Screenshot of decision branches in builder |
-| 5 | Custom Agents | Multi-language content generator | Screenshot showing multi-model output |
-| 6 | Human-in-the-Loop | Content approval pipeline with review | Screenshot of human review step |
-| 7 | Data Tasks | Invoice processor (PDF → structured data) | Screenshot of extracted invoice data |
-| 8 | Integrations | Lead enrichment with external service | Screenshot of integration config + output |
-| 9 | Sub-Workflows | Content repurposer using Execute Workflow | Screenshot of main + sub-workflow |
-| 10 | Opus Code | Financial report with Python code task | Screenshot of Opus Code task + output |
-| 11 | Going to Production | Activate a workflow + run 3 jobs | Screenshot of Jobs page with 3+ completed jobs |
-| 12 | Capstone Project | Full end-to-end automation | Workflow URL + architecture description |
+### Requirements
+- **Single viewport** — no scrolling, everything fits in one screen
+- **Opus-branded** — dark background (#0A0A1A), clean minimal style inspired by opus.com
+- **Content:**
+  - Opus Mastery logo/wordmark at top
+  - Tagline: "Master AI Workflow Automation in 12 Hands-On Lessons" (or similar)
+  - Brief 1-2 sentence description
+  - Single prominent "Start Learning" button (links to /dashboard)
+  - Subtle footer with "Powered by OpenClaw" or similar
+- **No lesson grid, no roadmap, no highlights section** — just the essentials
+- **Responsive** — works on mobile without scrolling too
 
----
-
-## Progression System
-
-### Titles (Earned by Lesson Count)
-
-| Lessons | Title |
-|---|---|
-| 0 | Newcomer |
-| 1-2 | Workflow Rookie |
-| 3-4 | Workflow Builder |
-| 5-6 | Automation Specialist |
-| 7-8 | Integration Expert |
-| 9-10 | Workflow Architect |
-| 11 | Production Engineer |
-| 12 | Opus Master 🏆 |
-
-### Achievements (Bonus Badges)
-
-| Badge | Condition |
-|---|---|
-| ⚡ Speed Builder | Complete a lesson within 1 hour of starting |
-| 🔥 Streak Master | Complete 3 lessons in 3 consecutive days |
-| 🧠 Agent Whisperer | Complete all 3 agent lessons (3, 4, 5) |
-| 🤝 Human Touch | Complete the Human-in-the-Loop lesson |
-| 🔌 Integrator | Complete the Integrations lesson |
-| 🐍 Code Warrior | Complete the Opus Code lesson |
-| 🎓 Opus Master | Complete all 12 lessons |
+### Design Notes
+- Think opus.com homepage energy — bold, dark, spacious, confident
+- Large typography for the tagline
+- Maybe a subtle animated gradient or glow effect on the CTA button
+- The robot SVG could appear as a subtle background element or preview
 
 ---
 
-## Completion Reward
+## 2. Robot Assembly Hatch Mechanism
 
-### Certificate
-- PDF certificate with:
-  - User's name
-  - "Opus Mastery — Complete Course"
-  - Completion date
-  - Unique certificate ID
-  - Course stats (lessons completed, achievements earned)
+### Concept
+A robot/AI machine is assembled piece by piece as the user completes lessons. 13 stages total (0 = empty workbench, 1-12 = one part added per lesson). At stage 12, the fully assembled robot activates with a jetpack and "launches."
 
-### Shareable Badge
-- OG image for social sharing (1200x630)
-- Shows: title, achievements count, completion date
-- Public profile URL: `opus-course.learnopenclaw.ai/u/[username]`
+### The 13 Stages
 
-### Public Profile Page
-- Username, title, achievements
-- Lessons completed timeline
-- Certificate download link
-- "Start your Opus journey →" CTA for referrals
+| Stage | Lessons Done | Visual |
+|-------|-------------|--------|
+| 0 | 0 | Empty workbench / assembly platform with faint blueprint outline |
+| 1 | 1 | Base chassis / frame appears on the workbench |
+| 2 | 2 | Core processor unit installed (glowing center piece) |
+| 3 | 3 | Head/sensor array attached (eyes light up dimly) |
+| 4 | 4 | Left arm assembled with tool hand |
+| 5 | 5 | Right arm assembled with data connector hand |
+| 6 | 6 | Chest panel with status display (shows heartbeat line) |
+| 7 | 7 | Left leg with stabilizer |
+| 8 | 8 | Right leg with thruster port |
+| 9 | 9 | Antenna array + communication dish on back |
+| 10 | 10 | Armor plating / outer shell snaps on |
+| 11 | 11 | Jetpack mounted on back (not yet lit) |
+| 12 | 12 | 🚀 FULL ACTIVATION — eyes glow bright, jetpack ignites, robot hovers/launches, celebration particles |
+
+### Implementation
+- **All SVG** — inline React SVG components, no external images
+- **Single component:** `<RobotAssembly stage={0-12} />` 
+- **Each stage adds elements** on top of previous (additive, not replacement)
+- **Color scheme:** Dark metal (#2A2A4A), glowing blue accents (#6366F1), green status lights (#10B981), orange jetpack flame (#F59E0B)
+- **Stage 12 animation:** CSS keyframe animation — eyes pulse, jetpack flames flicker, robot gently hovers up and down, particle effects
+- **The blueprint outline at stage 0** hints at the full robot shape, motivating completion
+- **Smooth transitions** between stages (CSS transition on opacity/transform when new parts appear)
+
+### Component Structure
+```
+components/
+  robot-assembly/
+    robot-assembly.tsx        # Main component, takes stage prop
+    parts/
+      workbench.tsx           # Stage 0 base
+      chassis.tsx             # Stage 1
+      processor.tsx           # Stage 2
+      head.tsx                # Stage 3
+      left-arm.tsx            # Stage 4
+      right-arm.tsx           # Stage 5
+      chest-panel.tsx         # Stage 6
+      left-leg.tsx            # Stage 7
+      right-leg.tsx           # Stage 8
+      antenna.tsx             # Stage 9
+      armor.tsx               # Stage 10
+      jetpack.tsx             # Stage 11
+      activation.tsx          # Stage 12 animation overlay
+```
 
 ---
 
-## Technical Architecture
+## 3. Split-Screen Dashboard Layout
 
-### Stack (Matching Hatch Quest Pattern)
-
-| Component | Technology |
-|---|---|
-| **Framework** | Next.js 14+ (App Router) |
-| **Styling** | Tailwind CSS |
-| **Auth** | Email OTP only — triggered ONLY when requesting certificate (no signup wall) |
-| **Progress** | localStorage (anonymous progress) + SQLite (after OTP sign-in for certificate) |
-| **Database** | SQLite via `better-sqlite3` (Railway persistent volume at `/data/opus-course.db`) |
-| **Hosting** | Railway |
-| **Certificate** | PDF generation (same pattern as Hatch) |
-| **Analytics** | Simple event tracking (lesson starts, completions, time spent) |
-| **Domain** | Custom domain via Cloudflare DNS |
-
-### Auth Philosophy
-- **No signup wall.** All content is free and immediately accessible.
-- Progress is stored in localStorage — works without any account.
-- When user completes all 12 lessons and wants a certificate, THEN prompt for email OTP.
-- OTP creates a user record, migrates localStorage progress to DB, generates certificate.
-- Optional: user can sign in earlier to sync progress across devices, but never required.
-
-### Database Schema
-
-```sql
--- Users
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT UNIQUE NOT NULL,
-    username TEXT UNIQUE,
-    display_name TEXT,
-    github_id TEXT UNIQUE,
-    password_hash TEXT,
-    otp_code TEXT,
-    otp_expires_at TEXT,
-    created_at TEXT DEFAULT (datetime('now')),
-    updated_at TEXT DEFAULT (datetime('now'))
-);
-
--- Lesson progress
-CREATE TABLE progress (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    lesson_id INTEGER NOT NULL, -- 1-12
-    status TEXT DEFAULT 'locked', -- locked, available, in_progress, completed
-    started_at TEXT,
-    completed_at TEXT,
-    proof_url TEXT, -- screenshot or workflow URL
-    proof_verified INTEGER DEFAULT 0,
-    UNIQUE(user_id, lesson_id)
-);
-
--- Achievements
-CREATE TABLE achievements (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    badge_id TEXT NOT NULL, -- speed-builder, streak-master, etc.
-    earned_at TEXT DEFAULT (datetime('now')),
-    UNIQUE(user_id, badge_id)
-);
-
--- Certificates
-CREATE TABLE certificates (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    certificate_id TEXT UNIQUE NOT NULL, -- UUID
-    generated_at TEXT DEFAULT (datetime('now')),
-    pdf_path TEXT
-);
-
--- Analytics events
-CREATE TABLE analytics (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    event TEXT NOT NULL, -- lesson_start, lesson_complete, achievement_earned, etc.
-    data TEXT, -- JSON metadata
-    created_at TEXT DEFAULT (datetime('now'))
-);
+### Structure (Desktop)
+```
+┌─────────────────────────────────────────────────────────┐
+│  OPUS MASTERY                              [lesson nav] │
+├──────────────────────┬──────────────────────────────────┤
+│                      │                                  │
+│   🤖 ROBOT ASSEMBLY  │  LESSON CONTENT                  │
+│                      │                                  │
+│   [SVG robot at      │  Lesson 3: The Opus Agent        │
+│    current stage]    │                                  │
+│                      │  📝 Written guide content         │
+│   ████████░░░ 3/12   │  📺 Video embed                  │
+│   "Workflow Builder" │  🛠️ Challenge                    │
+│                      │  ✅ Proof submission              │
+│   Lesson List:       │                                  │
+│   ✅ 1. First Flow   │                                  │
+│   ✅ 2. Builder      │                                  │
+│   → 3. Opus Agent   │                                  │
+│   ○ 4. Decisions    │                                  │
+│   ...               │                                  │
+│                      │                                  │
+└──────────────────────┴──────────────────────────────────┘
 ```
 
-### File Structure
+- **Left panel (35-40%):** Robot SVG + progress bar + lesson list
+- **Right panel (60-65%):** Active lesson content, scrollable
+- **Mobile:** Stacks vertically — robot on top (compact), content below
+- **Left panel is fixed/sticky**, right panel scrolls
 
-```
-opus-course-app/
-├── app/
-│   ├── page.tsx                    # Homepage / landing
-│   ├── layout.tsx                  # Root layout
-│   ├── globals.css                 # Tailwind + custom styles
-│   ├── dashboard/page.tsx          # Main dashboard (sidebar + lesson list)
-│   ├── lessons/
-│   │   └── [lessonId]/page.tsx     # Individual lesson view
-│   ├── certificate/page.tsx        # Certificate view + download
-│   ├── u/
-│   │   └── [username]/
-│   │       ├── page.tsx            # Public profile
-│   │       └── badge/
-│   │           ├── page.tsx        # Badge page
-│   │           └── image/route.tsx # OG image generation
-│   └── api/
-│       ├── auth/
-│       │   ├── otp-send/route.ts
-│       │   ├── otp-verify/route.ts
-│       │   └── logout/route.ts
-│       ├── lessons/
-│       │   ├── progress/route.ts   # GET progress, POST update
-│       │   └── verify/route.ts     # POST proof submission
-│       ├── achievements/route.ts   # GET user achievements
-│       ├── certificate/
-│       │   ├── generate/route.ts   # POST generate certificate
-│       │   └── email/route.ts      # POST email certificate
-│       ├── analytics/
-│       │   ├── track/route.ts      # POST event
-│       │   └── summary/route.ts    # GET analytics
-│       ├── og/route.tsx            # OG image generation
-│       └── health/route.ts         # Health check
-├── components/
-│   ├── otp-modal.tsx               # OTP sign-in modal (for certificate request)
-│   ├── lesson-sidebar.tsx          # Left sidebar with progress
-│   ├── lesson-content.tsx          # Main lesson content renderer
-│   ├── progress-bar.tsx            # Visual progress indicator
-│   ├── proof-submit-form.tsx       # Challenge submission form
-│   ├── achievement-badge.tsx       # Achievement display
-│   ├── video-embed.tsx             # YouTube/video embed
-│   ├── code-block.tsx              # Syntax highlighted code
-│   ├── completion-celebration.tsx  # Final completion animation
-│   └── analytics-tracker.tsx       # Client-side analytics
-├── lib/
-│   ├── db.ts                       # SQLite connection + queries
-│   ├── auth.ts                     # Auth helpers (session, OTP)
-│   ├── lessons.ts                  # Lesson content + metadata
-│   ├── achievements.ts             # Achievement checking logic
-│   ├── certificate.ts              # PDF generation
-│   └── analytics.ts                # Analytics helpers
-├── content/
-│   ├── lesson-01.md                # Lesson 1 content (markdown)
-│   ├── lesson-02.md
-│   ├── lesson-03.md
-│   ├── lesson-04.md
-│   ├── lesson-05.md
-│   ├── lesson-06.md
-│   ├── lesson-07.md
-│   ├── lesson-08.md
-│   ├── lesson-09.md
-│   ├── lesson-10.md
-│   ├── lesson-11.md
-│   └── lesson-12.md
-├── public/
-│   ├── images/                     # Lesson images, screenshots
-│   └── fonts/                      # Custom fonts
-├── .env.example
-├── railway.toml
-├── nixpacks.toml
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── next.config.ts
-├── prd.md
-└── README.md
-```
+### Navigation
+- Clicking a lesson in the left sidebar loads it in the right panel
+- Current lesson highlighted in sidebar
+- Completed lessons show ✅, current shows →, future shows ○
 
-### Environment Variables
+---
 
-```
-# Auth (only needed for certificate OTP flow)
-SESSION_SECRET=             # Random 64-char string
+## 4. Proof Verification System
 
-# Email (OTP)
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-FROM_EMAIL=
+### Requirements
+Each lesson requires specific proof of completion — not just a self-check. The student must paste a specific command output, URL, or verification code that demonstrates they actually did the work.
 
-# App
-NEXT_PUBLIC_APP_URL=        # https://opus-course.learnopenclaw.ai
-DATABASE_PATH=/data/opus-course.db
+### Verification Types
 
-# Optional
-ANALYTICS_ENABLED=true
-```
+| Lesson | Proof Required |
+|--------|---------------|
+| 1 | Paste the workflow preview output (the summarized text) |
+| 2 | Paste the workflow ID or URL from the builder showing 3+ connected tasks |
+| 3 | Paste the JSON output showing sentiment analysis result |
+| 4 | Paste the decision branch output showing ticket routed to correct priority |
+| 5 | Paste the model configuration showing custom agent setup |
+| 6 | Paste the human review step output or approval log |
+| 7 | Paste the structured JSON extracted from the invoice PDF |
+| 8 | Paste the integration response showing enriched lead data |
+| 9 | Paste the sub-workflow execution log showing parent→child flow |
+| 10 | Paste the Python code task output from Opus Code |
+| 11 | Paste the Jobs page output showing 3+ completed job IDs |
+| 12 | Paste the full workflow URL + describe the architecture in 2-3 sentences |
+
+### UI Component
+- Replace current `ProofSubmitForm` with new `LessonVerification` component
+- Show the specific proof instruction for each lesson
+- Text area for pasting proof (not just URL input)
+- Basic validation: non-empty, minimum length
+- On valid submission → marks lesson complete → robot gains new part
+- Visual feedback: green checkmark animation on successful verification
+
+### Data Model Update
+- Add `verificationType` field to lesson metadata: `'text_output' | 'url' | 'json_output' | 'mixed'`
+- Add `verificationPrompt` field: the specific instruction shown to the user
+- Add `verificationMinLength` field: minimum paste length to accept
+- Store proof text in localStorage alongside completion status
+
+---
+
+## 5. Certificate System Cleanup
+
+### Changes
+- **Remove EAS (Ethereum Attestation Service)** — no blockchain, just PDF
+- **Keep:** PDF certificate generation with user name, course title, date, unique ID
+- **Keep:** Social sharing (OG image, shareable profile URL, badge page)
+- **Keep:** OTP email sign-in to generate certificate (only gate)
+- **Add:** "Share on LinkedIn" / "Share on Twitter" buttons with pre-filled text
+- **Certificate is free** — no payment gate, just complete all 12 lessons
 
 ---
 
 ## Tasks
 
-### Phase 1: Project Bootstrap ✅
-- [x] Initialize Next.js project with Tailwind CSS, TypeScript, App Router
-- [x] Set up project structure (app, components, lib, content directories)
-- [x] Configure Railway deployment (railway.toml, nixpacks.toml, persistent volume for SQLite)
-- [x] Set up .env.example with all required variables
-- [x] Create SQLite database initialization script (users, progress, achievements, certificates, analytics tables)
-- [x] Create lib/db.ts with database connection and query helpers
-- [x] Create README.md with project overview and setup instructions
+### Phase 1: Landing Page Redesign
+- [x] Redesign app/page.tsx as a single-viewport landing page (no scrolling)
+- [x] Dark background (#0A0A1A), large centered tagline, single "Start Learning" CTA button
+- [x] Add subtle animated glow/gradient effect on the CTA button
+- [x] Add "Powered by OpenClaw" footer text
+- [x] Ensure fully responsive — fits single viewport on mobile and desktop
+- [x] Remove the lesson grid, highlights section, and roadmap from the landing page
 
-### Phase 2: Progress System & Lightweight Auth ✅
-- [x] Create lib/progress.ts — localStorage-based progress tracking (read/write lesson completion status, timestamps, challenge self-marks)
-- [x] Create a React context (ProgressProvider) that wraps the app, loads progress from localStorage on mount, provides methods: markComplete(lessonId), getProgress(), isComplete(lessonId), getTotalCompleted()
-- [x] Create lib/auth.ts — lightweight session management (cookie-based), only used when user requests certificate
-- [x] Create /api/auth/otp-send route — send OTP code via email (triggered only from certificate request flow)
-- [x] Create /api/auth/otp-verify route — verify OTP, create user record if new, set session cookie, migrate localStorage progress to DB
-- [x] Create /api/auth/logout route — clear session cookie
-- [x] Create a sign-in modal component (not a page) — email input + OTP verification, appears when user clicks "Get Certificate" after completing all lessons
-- [x] No login page, no register page, no GitHub OAuth — keep it minimal. Just OTP when needed.
+### Phase 2: Robot Assembly SVG Components
+- [ ] Create components/robot-assembly/robot-assembly.tsx — main wrapper that takes `stage` prop (0-12) and renders appropriate parts
+- [ ] Create components/robot-assembly/parts/workbench.tsx — Stage 0: empty assembly platform with faint blueprint outline of the full robot shape
+- [ ] Create components/robot-assembly/parts/chassis.tsx — Stage 1: metal base frame/chassis on the workbench
+- [ ] Create components/robot-assembly/parts/processor.tsx — Stage 2: glowing core processor unit in the center of the chassis
+- [ ] Create components/robot-assembly/parts/head.tsx — Stage 3: head with sensor array, eyes glow dimly
+- [ ] Create components/robot-assembly/parts/left-arm.tsx — Stage 4: left arm with tool/wrench hand
+- [ ] Create components/robot-assembly/parts/right-arm.tsx — Stage 5: right arm with data connector hand
+- [ ] Create components/robot-assembly/parts/chest-panel.tsx — Stage 6: chest display panel showing a heartbeat/status line
+- [ ] Create components/robot-assembly/parts/left-leg.tsx — Stage 7: left leg with stabilizer foot
+- [ ] Create components/robot-assembly/parts/right-leg.tsx — Stage 8: right leg with thruster port
+- [ ] Create components/robot-assembly/parts/antenna.tsx — Stage 9: back-mounted antenna array and communication dish
+- [ ] Create components/robot-assembly/parts/armor.tsx — Stage 10: outer armor plating that snaps over the frame
+- [ ] Create components/robot-assembly/parts/jetpack.tsx — Stage 11: jetpack mounted on back (unlit)
+- [ ] Create components/robot-assembly/parts/activation.tsx — Stage 12: full activation overlay — eyes glow bright, jetpack flames ignite, hover animation, celebration particles
+- [ ] Add CSS transitions so new parts fade/slide in smoothly when stage increments
+- [ ] Add CSS keyframe animations for Stage 12: pulsing eyes, flickering flames, gentle hover float, particle burst
 
-### Phase 3: Lesson Content System ✅
-- [x] Create lib/lessons.ts — lesson metadata (id, title, description, video URL, challenge description, verification type)
-- [x] Write content/lesson-01.md through content/lesson-12.md — full written content for all 12 lessons (use the curriculum from opus-course-curriculum.md)
-- [x] Create lesson-content.tsx component — markdown renderer with syntax highlighting, code blocks, info/warning callouts, and image support
-- [x] Create video-embed.tsx component — responsive YouTube/video embed
-- [x] Create code-block.tsx component — syntax highlighted code with copy button
+### Phase 3: Split-Screen Dashboard Layout
+- [ ] Restructure app/dashboard/page.tsx to split-screen layout: left panel (robot + nav) and right panel (lesson content)
+- [ ] Left panel (35-40% width): sticky/fixed, contains robot SVG, progress bar, title, and lesson list
+- [ ] Right panel (60-65% width): scrollable lesson content area
+- [ ] Integrate RobotAssembly component into left panel, stage driven by getTotalCompleted()
+- [ ] Move lesson sidebar navigation into the left panel below the robot
+- [ ] Show progress bar and current title ("Workflow Builder", etc.) between robot and lesson list
+- [ ] Mobile layout: stack vertically — compact robot on top, lesson list collapsible, content below
+- [ ] Clicking a lesson in the left sidebar navigates to that lesson's content in the right panel (use Next.js routing or client-side state)
 
-### Phase 4: Dashboard & Lesson Views ✅
-- [x] Create dashboard/page.tsx — main authenticated view with sidebar + current lesson
-- [x] Create lesson-sidebar.tsx — left sidebar showing all 12 lessons with status icons (locked/available/in-progress/completed), progress bar, current title
-- [x] Create lessons/[lessonId]/page.tsx — individual lesson page with content + video + challenge
-- [x] Create progress-bar.tsx — visual progress ring/bar showing X/12 complete with current title
-- [x] Create proof-submit-form.tsx — challenge submission form (URL input + file upload for screenshots + submit button)
-- [x] Create /api/lessons/progress route — GET user's progress across all lessons, POST to update lesson status
-- [x] Create /api/lessons/verify route — POST proof submission (saves proof URL, marks lesson complete, checks achievement triggers)
-- [x] All lessons are freely accessible (no unlock gating) — user can browse any lesson in any order, but progress bar only fills when they self-mark a challenge as complete
+### Phase 4: Proof Verification System
+- [ ] Update LessonMeta type in lib/lessons.ts — add `verificationPrompt` (string), `verificationMinLength` (number), and update verificationType to include 'text_output' | 'json_output' | 'mixed'
+- [ ] Update all 12 lesson definitions in lib/lessons.ts with specific verification prompts and minimum lengths (see proof table in PRD above)
+- [ ] Create components/lesson-verification.tsx — new proof submission component replacing ProofSubmitForm: shows lesson-specific instruction, textarea for pasting proof, validates minimum length, shows success animation on completion
+- [ ] Replace ProofSubmitForm usage in dashboard and lesson pages with LessonVerification component
+- [ ] Update localStorage progress to store proof text alongside completion timestamp
+- [ ] Add green checkmark animation on successful verification submission
+- [ ] Ensure completing a lesson immediately updates the robot stage in the left panel (no page refresh needed)
 
-### Phase 5: Homepage & Landing ✅
-- [x] Create app/page.tsx — public landing page with: hero section (course title + description + CTA), 12-lesson roadmap visual, what you'll learn section, call-to-action to sign up
-- [x] Create app/layout.tsx — root layout with metadata, OG tags, navigation header, footer
-- [x] Style with Tailwind — professional dark theme with accent colors (match Opus brand: dark + blue/purple accents), responsive for mobile/tablet/desktop
+### Phase 5: Certificate Cleanup
+- [ ] Remove any EAS/blockchain references from certificate generation (lib/certificate.ts, API routes)
+- [ ] Verify PDF certificate generation works: user name, "Opus Mastery" title, completion date, unique certificate ID, achievements count
+- [ ] Add "Share on LinkedIn" button to certificate page — pre-filled post text with course name and certificate URL
+- [ ] Add "Share on Twitter/X" button to certificate page — pre-filled tweet with course name and profile URL
+- [ ] Ensure OTP sign-in flow still works: complete 12 lessons → click "Get Certificate" → enter email → verify OTP → generate PDF
+- [ ] Test certificate download and social sharing end-to-end
 
-### Phase 6: Achievements System ✅
-- [x] Create lib/achievements.ts — achievement definitions (badge_id, name, description, icon, check function)
-- [x] Implement achievement checking — triggered after each lesson completion (speed builder, streak master, agent whisperer, etc.)
-- [x] Create achievement-badge.tsx component — badge display with earned/unearned states, tooltip with description
-- [x] Create /api/achievements route — GET user's earned achievements
-- [x] Add achievements section to dashboard sidebar
-
-### Phase 7: Certificate & Profile ✅
-- [x] Create lib/certificate.ts — PDF certificate generation (user name, course title, date, certificate ID, achievements count)
-- [x] Create certificate/page.tsx — certificate view with download button and email option
-- [x] Create /api/certificate/generate route — POST generate PDF, store in certificates table
-- [x] Create /api/certificate/email route — POST email certificate to user
-- [x] Create u/[username]/page.tsx — public profile showing progress, achievements, certificate
-- [x] Create u/[username]/badge/page.tsx — shareable badge page
-- [x] Create u/[username]/badge/image/route.tsx — dynamic OG image generation (1200x630, shows title + achievements + completion status)
-- [x] Create /api/og/route.tsx — default OG image for the site
-- [x] Create completion-celebration.tsx — celebration animation when all 12 lessons completed (confetti, reveal certificate)
-
-### Phase 8: Analytics & Polish ✅
-- [x] Create lib/analytics.ts — event tracking helpers (lesson_start, lesson_complete, achievement_earned, certificate_generated)
-- [x] Create analytics-tracker.tsx — client-side page view tracking
-- [x] Create /api/analytics/track route — POST event logging
-- [x] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
-- [x] Create /api/health route — health check endpoint for Railway
-- [x] Add loading states, error boundaries, and empty states across all pages
-- [x] Mobile responsive polish — test and fix all layouts on mobile/tablet
-- [x] Add SEO metadata to all pages (title, description, OG tags)
-
-### Phase 9: Deployment & Launch
-- [x] Configure railway.toml with build/start commands and health check
-- [x] Configure nixpacks.toml for Node.js build
-- [x] Set up Railway persistent volume for SQLite at /data
-- [x] Deploy to Railway and verify health check
-- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS — ⚠️ BLOCKED: Missing Cloudflare API credentials. Skip and notify.
-- [x] Set all environment variables in Railway
-- [ ] Test full flow: browse lessons → complete challenges → request certificate → generate
-- [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
+### Phase 6: Integration & Polish
+- [ ] Update lesson content pages (app/lessons/[lessonId]/page.tsx) to use new LessonVerification component and fit within split-screen right panel
+- [ ] Ensure all lesson markdown content renders correctly in the new layout
+- [ ] Video embeds work properly within the right panel
+- [ ] Test full flow: landing → start → complete lessons 1-12 → watch robot assemble → request certificate → download PDF → share
+- [ ] Mobile responsive testing — all layouts work on small screens
+- [ ] Ensure dark theme consistency across all pages (landing, dashboard, lessons, certificate, profile)
+- [ ] Clean up any unused components (old ProofSubmitForm, old landing page sections)
+- [ ] Commit all changes and deploy to Railway
 
 ---
 
-## Design Guidelines
+## Design Tokens
 
-### Color Palette
-- **Background:** Dark (#0F0F1A or similar)
-- **Cards/Surfaces:** Slightly lighter dark (#1E1E3A)
-- **Primary accent:** Blue-purple (#6366F1 — matching Opus brand)
-- **Success:** Green (#10B981)
-- **Text:** White (#FFFFFF) and light gray (#CCCCCC)
-- **Borders:** Subtle dark (#333355)
+```css
+/* Backgrounds */
+--bg-deep: #0A0A1A;
+--bg-surface: #12122A;
+--bg-panel: #1A1A36;
 
-### Typography
-- **Headings:** Inter or Cal Sans (bold)
-- **Body:** Inter (regular)
-- **Code:** JetBrains Mono or Fira Code
+/* Robot colors */
+--robot-metal: #2A2A4A;
+--robot-metal-light: #3A3A5A;
+--robot-glow: #6366F1;
+--robot-glow-dim: rgba(99, 102, 241, 0.3);
+--robot-status: #10B981;
+--robot-flame: #F59E0B;
+--robot-flame-hot: #EF4444;
 
-### Inspiration
-- Hatch Quest app (hatch.learnopenclaw.ai) — gamification, progress, celebrations
-- Opus.com — dark professional theme, enterprise feel
-- Linear.app — clean, minimal, dark UI
-
----
-
-## Lesson Content Notes
-
-Each lesson markdown file (content/lesson-XX.md) should include:
-
-```markdown
----
-title: "Lesson Title"
-description: "One-line description"
-duration: "20 minutes"
-videoUrl: "https://youtube.com/watch?v=..."
-challenge:
-  title: "Challenge Name"
-  description: "What to build"
-  verificationType: "url" | "screenshot"
-  hint: "Helpful hint"
----
-
-# Lesson Title
-
-## What You'll Learn
-...
-
-## Key Concepts
-...
-
-## Step-by-Step Guide
-...
-
-## Challenge
-...
-
-## Tips & Best Practices
-...
+/* UI */
+--primary: #6366F1;
+--success: #10B981;
+--text: #FFFFFF;
+--text-muted: #9CA3CF;
+--border: #2A2A4A;
 ```
 
 ---
 
-*Modeled after the Hatch Quest app (hatch.learnopenclaw.ai). Same tech stack, same gamification pattern, different content.*
+## Important Notes
+
+- The existing backend (API routes, auth, database) stays mostly intact — this is primarily a frontend overhaul
+- localStorage-based progress system remains — no account needed to track progress
+- All 12 lessons remain freely accessible
+- Certificate generation remains the only gated feature (requires email OTP)
+- The robot SVG must be entirely inline (no external image dependencies) for reliability and performance
+- Keep the existing video embed, code block, and markdown rendering components — just integrate them into the new layout

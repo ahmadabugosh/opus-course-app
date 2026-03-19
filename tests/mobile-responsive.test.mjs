@@ -29,8 +29,10 @@ test('dashboard and lesson pages use mobile-friendly content spacing and typogra
   assert.match(lessonPage, /text-2xl font-bold text-white sm:text-3xl/);
 });
 
-test('landing page roadmap header stacks on mobile and aligns inline on larger screens', () => {
+test('landing page uses single viewport layout with mobile-safe typography and spacing', () => {
   const landingPage = readFile('app/page.tsx');
 
-  assert.match(landingPage, /flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between/);
+  assert.match(landingPage, /min-h-\[100dvh\]/);
+  assert.match(landingPage, /text-3xl[^\"]*sm:text-5xl[^\"]*lg:text-6xl/);
+  assert.match(landingPage, /px-5 py-6 sm:px-8 sm:py-8/);
 });

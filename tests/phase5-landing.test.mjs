@@ -9,13 +9,17 @@ function readFile(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8');
 }
 
-test('landing page includes hero, roadmap, and learning outcomes sections', () => {
+test('landing page is single-viewport minimal hero with one CTA and powered-by footer', () => {
   const page = readFile('app/page.tsx');
 
   assert.match(page, /Opus Mastery/i);
-  assert.match(page, /12-Lesson Roadmap/i);
-  assert.match(page, /What You(?:\u2019|'|&apos;)ll Learn/i);
-  assert.match(page, /Start Learning Free/i);
+  assert.match(page, /Master AI Workflow Automation in 12 Hands-On Lessons/i);
+  assert.match(page, /Start Learning/i);
+  assert.match(page, /Powered by OpenClaw/i);
+
+  assert.doesNotMatch(page, /12-Lesson Roadmap/i);
+  assert.doesNotMatch(page, /What You(?:\u2019|'|&apos;)ll Learn/i);
+  assert.doesNotMatch(page, /Start Learning Free/i);
 });
 
 test('root layout includes course metadata, navigation, and footer', () => {
