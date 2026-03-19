@@ -51,7 +51,7 @@ export default function LessonPage({ params }: LessonPageProps) {
         <VideoEmbed url={lesson.videoUrl} title={lesson.title} />
 
         <article className="rounded-xl border border-[#333355] bg-[#16162b] p-5 text-[#d4d4ef]">
-          <h2 className="text-xl font-semibold text-white">What you'll build</h2>
+          <h2 className="text-xl font-semibold text-white">What you&apos;ll build</h2>
           <p className="mt-2">{lesson.challenge.description}</p>
           <p className="mt-2 text-sm text-[#a8a8d0]">Verification type: {lesson.challenge.verificationType}</p>
           <p className="mt-2 text-sm text-[#a8a8d0]">Hint: {lesson.challenge.hint}</p>

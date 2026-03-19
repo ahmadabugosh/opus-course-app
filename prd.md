@@ -350,9 +350,9 @@ ANALYTICS_ENABLED=true
 - [x] Create lessons/[lessonId]/page.tsx — individual lesson page with content + video + challenge
 - [x] Create progress-bar.tsx — visual progress ring/bar showing X/12 complete with current title
 - [x] Create proof-submit-form.tsx — challenge submission form (URL input + file upload for screenshots + submit button)
-- [ ] Create /api/lessons/progress route — GET user's progress across all lessons, POST to update lesson status
-- [ ] Create /api/lessons/verify route — POST proof submission (saves proof URL, marks lesson complete, checks achievement triggers)
-- [ ] All lessons are freely accessible (no unlock gating) — user can browse any lesson in any order, but progress bar only fills when they self-mark a challenge as complete
+- [x] Create /api/lessons/progress route — GET user's progress across all lessons, POST to update lesson status
+- [x] Create /api/lessons/verify route — POST proof submission (saves proof URL, marks lesson complete, checks achievement triggers)
+- [x] All lessons are freely accessible (no unlock gating) — user can browse any lesson in any order, but progress bar only fills when they self-mark a challenge as complete
 
 ### Phase 5: Homepage & Landing
 - [ ] Create app/page.tsx — public landing page with: hero section (course title + description + CTA), 12-lesson roadmap visual, what you'll learn section, call-to-action to sign up
