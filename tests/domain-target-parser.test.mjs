@@ -11,6 +11,9 @@ test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => 
 test('parseRailwayTargetFromJson resolves cname/dnsTarget fields from Railway variants', () => {
   assert.equal(parseRailwayTargetFromJson('{"cname":"cname-shape.up.railway.app"}'), 'cname-shape.up.railway.app');
   assert.equal(parseRailwayTargetFromJson('{"dnsTarget":"dns-target-shape.up.railway.app"}'), 'dns-target-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson('{"cnameTarget":"cname-target-shape.up.railway.app"}'), 'cname-target-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson('{"dns_name":"dns-name-shape.up.railway.app"}'), 'dns-name-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson('{"publicDomain":"public-domain-shape.up.railway.app"}'), 'public-domain-shape.up.railway.app');
 });
 
 test('parseRailwayTargetFromJson resolves Railway CLI domains array and strips protocol', () => {
