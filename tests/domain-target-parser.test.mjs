@@ -158,9 +158,14 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.mx'), 'learnopenclaw.com.mx');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.ar'), 'learnopenclaw.com.ar');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.th'), 'learnopenclaw.co.th');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.ac.th'), 'learnopenclaw.ac.th');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.go.th'), 'learnopenclaw.go.th');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.or.th'), 'learnopenclaw.or.th');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.hk'), 'learnopenclaw.com.hk');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.org.hk'), 'learnopenclaw.org.hk');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.net.hk'), 'learnopenclaw.net.hk');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.gov.hk'), 'learnopenclaw.gov.hk');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.edu.hk'), 'learnopenclaw.edu.hk');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.ph'), 'learnopenclaw.com.ph');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.org.ph'), 'learnopenclaw.org.ph');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.net.ph'), 'learnopenclaw.net.ph');
