@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -152,6 +152,13 @@ test('isSelfReferentialCname detects self-referential domain targets', () => {
   assert.equal(isSelfReferentialCname('OPUS-COURSE.LEARNOPENCLAW.AI.', 'opus-course.learnopenclaw.ai'), true);
   assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'https://opus-course-production.up.railway.app'), false);
   assert.equal(isSelfReferentialCname('', 'opus-course.learnopenclaw.ai'), false);
+});
+
+test('resolveCnameTarget normalizes host-like values and rejects IP literals', () => {
+  assert.equal(resolveCnameTarget('https://Opus-Course-Prod.UP.RAILWAY.APP/path'), 'opus-course-prod.up.railway.app');
+  assert.equal(resolveCnameTarget('opus-course-prod.up.railway.app.'), 'opus-course-prod.up.railway.app');
+  assert.equal(resolveCnameTarget('34.117.12.5'), null);
+  assert.equal(resolveCnameTarget('2606:4700:4700::1111'), null);
 });
 
 test('buildCloudflareHeaders supports bearer tokens and global API key/email auth', () => {

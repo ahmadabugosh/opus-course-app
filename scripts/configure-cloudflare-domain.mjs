@@ -4,7 +4,7 @@
 // TODO: revisit once Cloudflare auth credentials (API token or API key/email) and zone access are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { buildCloudflareHeaders, expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson, resolveCnameTarget } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
@@ -76,14 +76,16 @@ function getRailwayTargetFromCli() {
   }
 }
 
-const target =
+const targetCandidate =
   getArgValue('--target') ||
   process.env.CF_TARGET_CNAME ||
   process.env.RAILWAY_PUBLIC_DOMAIN ||
   getRailwayTargetFromCli();
 
+const target = resolveCnameTarget(targetCandidate);
+
 if (!target) {
-  console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN, or run in a linked Railway project so `railway domain --json` can resolve it.');
+  console.error('Missing or invalid target host. Set CF_TARGET_CNAME/RAILWAY_PUBLIC_DOMAIN (hostname only) or run in a linked Railway project so `railway domain --json` can resolve a valid Railway hostname.');
   process.exit(1);
 }
 

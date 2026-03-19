@@ -36,6 +36,7 @@ test('cloudflare helper supports dry-run mode, configurable proxy behavior, and 
   assert.match(script, /CF_PROXIED/);
   assert.match(script, /CF_RECORD_NAME/);
   assert.match(script, /railway domain --json/);
+  assert.match(script, /resolveCnameTarget/);
 });
 
 test('cloudflare helper supports explicit CLI flags for safer one-off DNS changes', () => {
