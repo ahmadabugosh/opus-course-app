@@ -367,10 +367,10 @@ ANALYTICS_ENABLED=true
 - [x] Add achievements section to dashboard sidebar
 
 ### Phase 7: Certificate & Profile
-- [ ] Create lib/certificate.ts — PDF certificate generation (user name, course title, date, certificate ID, achievements count)
-- [ ] Create certificate/page.tsx — certificate view with download button and email option
-- [ ] Create /api/certificate/generate route — POST generate PDF, store in certificates table
-- [ ] Create /api/certificate/email route — POST email certificate to user
+- [x] Create lib/certificate.ts — PDF certificate generation (user name, course title, date, certificate ID, achievements count)
+- [x] Create certificate/page.tsx — certificate view with download button and email option
+- [x] Create /api/certificate/generate route — POST generate PDF, store in certificates table
+- [x] Create /api/certificate/email route — POST email certificate to user
 - [ ] Create u/[username]/page.tsx — public profile showing progress, achievements, certificate
 - [ ] Create u/[username]/badge/page.tsx — shareable badge page
 - [ ] Create u/[username]/badge/image/route.tsx — dynamic OG image generation (1200x630, shows title + achievements + completion status)
