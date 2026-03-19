@@ -384,7 +384,7 @@ ANALYTICS_ENABLED=true
 - [x] Create /api/analytics/summary route — GET aggregate stats (total users, completion rates, popular lessons)
 - [x] Create /api/health route — health check endpoint for Railway
 - [x] Add loading states, error boundaries, and empty states across all pages
-- [ ] Mobile responsive polish — test and fix all layouts on mobile/tablet
+- [x] Mobile responsive polish — test and fix all layouts on mobile/tablet
 - [x] Add SEO metadata to all pages (title, description, OG tags)
 
 ### Phase 9: Deployment & Launch
@@ -392,7 +392,7 @@ ANALYTICS_ENABLED=true
 - [x] Configure nixpacks.toml for Node.js build
 - [ ] Set up Railway persistent volume for SQLite at /data
 - [ ] Deploy to Railway and verify health check
-- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS
+- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS — ⚠️ BLOCKED: Missing Cloudflare API credentials. Skip and notify.
 - [ ] Set all environment variables in Railway
 - [ ] Test full flow: browse lessons → complete challenges → request certificate → generate
 - [ ] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes

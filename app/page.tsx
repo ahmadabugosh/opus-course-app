@@ -64,7 +64,7 @@ export default function Home() {
       </section>
 
       <section>
-        <div className="mb-6 flex items-center justify-between gap-3">
+        <div className="mb-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-semibold tracking-tight">12-Lesson Roadmap</h2>
           <span className="text-sm text-muted">Self-paced • Zero signup wall</span>
         </div>

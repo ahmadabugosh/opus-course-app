@@ -55,7 +55,7 @@ export default function DashboardPage() {
         <CompletionCelebration totalCompleted={totalCompleted} />
         <header className="space-y-2">
           <p className="text-sm uppercase tracking-wide text-indigo-300">Current lesson</p>
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-2xl font-bold text-white sm:text-3xl">
             Lesson {currentLesson.id}: {currentLesson.title}
           </h1>
           <p className="text-[#cccccc]">{currentLesson.description}</p>

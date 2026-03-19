@@ -80,8 +80,8 @@ export function LessonSidebar({
           <ProgressBar completed={totalCompleted} title={title} />
         </div>
 
-        <div className="mt-4 overflow-x-auto pb-1">
-          <div className="flex min-w-max gap-2">
+        <div className="mt-4 overflow-x-auto pb-1 md:overflow-visible">
+          <div className="flex min-w-max gap-2 md:min-w-0 md:flex-wrap">
             {lessons.map((lesson) => {
               const isCurrent = currentLessonId === lesson.id;
               const progressEntry = progress.find((entry) => entry.lessonId === lesson.id);
