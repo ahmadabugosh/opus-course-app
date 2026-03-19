@@ -89,6 +89,17 @@ test('parseRailwayTargetFromJson prefers railway host when payload also contains
   assert.equal(parseRailwayTargetFromJson(raw), 'opus-course-production.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson only prioritizes real Railway suffix hosts', () => {
+  const raw = JSON.stringify({
+    domains: [
+      { domain: 'https://trap-railway.app.example.com' },
+      { domain: 'https://actual-service.up.railway.app' },
+    ],
+  });
+
+  assert.equal(parseRailwayTargetFromJson(raw), 'actual-service.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson ignores IP-only candidates and keeps hostnames', () => {
   const mixed = JSON.stringify({
     target: '34.117.12.5',
