@@ -4,7 +4,7 @@
 // TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { inferZoneNameFromHostname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
@@ -43,8 +43,13 @@ if (missing.length) {
 }
 
 let zoneId = getArgValue('--zone-id') || process.env.CF_ZONE_ID || process.env.CLOUDFLARE_ZONE_ID;
-const appUrl = new URL(appUrlRaw);
-const domain = appUrl.hostname;
+const domain = normalizeHost(appUrlRaw);
+
+if (!domain) {
+  console.error(`Invalid NEXT_PUBLIC_APP_URL/--app-url value: ${appUrlRaw}`);
+  process.exit(1);
+}
+
 const inferredZoneName = inferZoneNameFromHostname(domain);
 const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME || process.env.CLOUDFLARE_ZONE_NAME || inferredZoneName;
 const recordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || domain;

@@ -67,3 +67,9 @@ test('README documents custom domain configuration workflow', () => {
   assert.match(readme, /CF_ZONE_ID/);
   assert.match(readme, /CF_ZONE_NAME/);
 });
+
+test('configure helper accepts NEXT_PUBLIC_APP_URL as full URL or host/path', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /normalizeHost\(appUrlRaw\)/);
+});
