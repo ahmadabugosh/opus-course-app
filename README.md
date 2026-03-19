@@ -103,4 +103,4 @@ node scripts/configure-cloudflare-domain.mjs \
   --dry-run
 ```
 
-If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, set `CF_ZONE_NAME` and the script will resolve the zone automatically.
+If `CF_TARGET_CNAME` is omitted, the script falls back to `RAILWAY_PUBLIC_DOMAIN`, then attempts `railway domain --json` (when run in a linked Railway project). If `CF_ZONE_ID` is omitted, the script uses `CF_ZONE_NAME` when provided, otherwise it infers a zone from `NEXT_PUBLIC_APP_URL` (e.g. `opus-course.learnopenclaw.ai` → `learnopenclaw.ai`) before resolving the zone via Cloudflare API.

@@ -4,7 +4,7 @@
 // TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { parseRailwayTargetFromJson } from '../lib/domain.js';
+import { inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
@@ -43,9 +43,10 @@ if (missing.length) {
 }
 
 let zoneId = getArgValue('--zone-id') || process.env.CF_ZONE_ID;
-const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME;
 const appUrl = new URL(appUrlRaw);
 const domain = appUrl.hostname;
+const inferredZoneName = inferZoneNameFromHostname(domain);
+const zoneName = getArgValue('--zone-name') || process.env.CF_ZONE_NAME || inferredZoneName;
 const recordName = getArgValue('--record-name') || process.env.CF_RECORD_NAME || domain;
 const proxiedArg = getArgValue('--proxied');
 const proxied = proxiedArg ? proxiedArg === 'true' : process.env.CF_PROXIED ? process.env.CF_PROXIED === 'true' : true;
@@ -81,7 +82,7 @@ async function resolveZoneId() {
   if (zoneId) return zoneId;
 
   if (!zoneName) {
-    throw new Error('Missing Cloudflare zone. Set CF_ZONE_ID directly or provide CF_ZONE_NAME to resolve it automatically.');
+    throw new Error('Missing Cloudflare zone. Set CF_ZONE_ID directly or provide CF_ZONE_NAME. (Auto-inference from NEXT_PUBLIC_APP_URL failed.)');
   }
 
   const response = await fetch(`https://api.cloudflare.com/client/v4/zones?name=${encodeURIComponent(zoneName)}&status=active`, { headers });

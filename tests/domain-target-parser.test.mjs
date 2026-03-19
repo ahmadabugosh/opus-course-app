@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseRailwayTargetFromJson } from '../lib/domain.js';
+import { inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -41,4 +41,11 @@ test('parseRailwayTargetFromJson returns null on empty or invalid input', () => 
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
   assert.equal(parseRailwayTargetFromJson('not json'), null);
+});
+
+test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () => {
+  assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai'), 'learnopenclaw.ai');
+  assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai'), 'learnopenclaw.ai');
+  assert.equal(inferZoneNameFromHostname('localhost'), null);
+  assert.equal(inferZoneNameFromHostname(''), null);
 });

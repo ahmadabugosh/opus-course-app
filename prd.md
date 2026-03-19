@@ -392,7 +392,7 @@ ANALYTICS_ENABLED=true
 - [x] Configure nixpacks.toml for Node.js build
 - [x] Set up Railway persistent volume for SQLite at /data
 - [x] Deploy to Railway and verify health check
-- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS *(blocked: awaiting Cloudflare API token + zone access. `scripts/configure-cloudflare-domain.mjs` supports either `CF_ZONE_ID` or `CF_ZONE_NAME`, target fallback `CF_TARGET_CNAME` → `RAILWAY_PUBLIC_DOMAIN` → `railway domain --json` (including Railway top-level, `domains[]` string/object, and array JSON output shapes), and both env vars + CLI flags (`--token`, `--app-url`, `--zone-id`, `--zone-name`, `--target`, `--record-name`, `--proxied`, `--dry-run`) for safer rollout once credentials are available)*
+- [ ] Configure custom domain (opus-course.learnopenclaw.ai) via Cloudflare DNS *(blocked: awaiting Cloudflare API token + zone access. `scripts/configure-cloudflare-domain.mjs` supports either `CF_ZONE_ID` or `CF_ZONE_NAME` (or automatic zone inference from `NEXT_PUBLIC_APP_URL` host, e.g. `opus-course.learnopenclaw.ai` → `learnopenclaw.ai`), target fallback `CF_TARGET_CNAME` → `RAILWAY_PUBLIC_DOMAIN` → `railway domain --json` (including Railway top-level, `domains[]` string/object, and array JSON output shapes), and both env vars + CLI flags (`--token`, `--app-url`, `--zone-id`, `--zone-name`, `--target`, `--record-name`, `--proxied`, `--dry-run`) for safer rollout once credentials are available)*
 - [x] Set all environment variables in Railway
 - [x] Test full flow: register → lessons → complete → certificate
 - [x] Final cleanup — remove unused code, add comments, ensure TypeScript strict mode passes
