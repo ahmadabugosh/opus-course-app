@@ -4,7 +4,7 @@
 // TODO: revisit once CF_API_TOKEN and either CF_ZONE_ID or CF_ZONE_NAME are available in deployment secrets.
 
 import { execSync } from 'node:child_process';
-import { expandRecordName, inferZoneNameFromHostname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 const argList = process.argv.slice(2);
 const args = new Set(argList);
@@ -76,6 +76,11 @@ const target =
 
 if (!target) {
   console.error('Missing target host. Set CF_TARGET_CNAME or RAILWAY_PUBLIC_DOMAIN, or run in a linked Railway project so `railway domain --json` can resolve it.');
+  process.exit(1);
+}
+
+if (isSelfReferentialCname(recordName, target)) {
+  console.error(`Self-referential CNAME detected: ${recordName} -> ${target}. Resolve a Railway service domain (*.railway.app) before applying DNS.`);
   process.exit(1);
 }
 

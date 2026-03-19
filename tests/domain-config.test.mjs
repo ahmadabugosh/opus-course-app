@@ -73,3 +73,10 @@ test('configure helper accepts NEXT_PUBLIC_APP_URL as full URL or host/path', ()
 
   assert.match(script, /normalizeHost\(appUrlRaw\)/);
 });
+
+test('configure helper blocks self-referential CNAME records to prevent DNS loops', () => {
+  const script = read('scripts/configure-cloudflare-domain.mjs');
+
+  assert.match(script, /isSelfReferentialCname/);
+  assert.match(script, /Self-referential CNAME detected/);
+});

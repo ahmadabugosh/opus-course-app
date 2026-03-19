@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { expandRecordName, inferZoneNameFromHostname, parseRailwayTargetFromJson } from '../lib/domain.js';
+import { expandRecordName, inferZoneNameFromHostname, isSelfReferentialCname, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 test('parseRailwayTargetFromJson resolves target/domain/hostname fields', () => {
   assert.equal(parseRailwayTargetFromJson('{"target":"app.up.railway.app"}'), 'app.up.railway.app');
@@ -91,4 +91,11 @@ test('expandRecordName resolves apex/relative/FQDN Cloudflare record names safel
   assert.equal(expandRecordName('https://opus-course.learnopenclaw.ai/path', 'learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
   assert.equal(expandRecordName('*', 'learnopenclaw.ai'), '*.learnopenclaw.ai');
   assert.equal(expandRecordName('', 'learnopenclaw.ai'), null);
+});
+
+test('isSelfReferentialCname detects self-referential domain targets', () => {
+  assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'opus-course.learnopenclaw.ai'), true);
+  assert.equal(isSelfReferentialCname('https://opus-course.learnopenclaw.ai/path', 'opus-course.learnopenclaw.ai'), true);
+  assert.equal(isSelfReferentialCname('opus-course.learnopenclaw.ai', 'https://opus-course-production.up.railway.app'), false);
+  assert.equal(isSelfReferentialCname('', 'opus-course.learnopenclaw.ai'), false);
 });
