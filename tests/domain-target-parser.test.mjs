@@ -37,6 +37,27 @@ test('parseRailwayTargetFromJson supports top-level array payloads', () => {
   assert.equal(parseRailwayTargetFromJson(raw), 'array-shape.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson resolves nested Railway payloads', () => {
+  const dataWrapped = JSON.stringify({
+    data: {
+      domains: [
+        {
+          domain: 'https://nested-data-shape.up.railway.app',
+        },
+      ],
+    },
+  });
+
+  const serviceWrapped = JSON.stringify({
+    service: {
+      domains: ['https://nested-service-shape.up.railway.app'],
+    },
+  });
+
+  assert.equal(parseRailwayTargetFromJson(dataWrapped), 'nested-data-shape.up.railway.app');
+  assert.equal(parseRailwayTargetFromJson(serviceWrapped), 'nested-service-shape.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson returns null on empty or invalid input', () => {
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
