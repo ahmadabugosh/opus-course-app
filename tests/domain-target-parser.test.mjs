@@ -206,11 +206,13 @@ test('isSelfReferentialCname detects self-referential domain targets', () => {
   assert.equal(isSelfReferentialCname('', 'opus-course.learnopenclaw.ai'), false);
 });
 
-test('resolveCnameTarget normalizes host-like values and rejects IP literals', () => {
+test('resolveCnameTarget normalizes host-like values and rejects non-FQDN/IP literals', () => {
   assert.equal(resolveCnameTarget('https://Opus-Course-Prod.UP.RAILWAY.APP/path'), 'opus-course-prod.up.railway.app');
   assert.equal(resolveCnameTarget('opus-course-prod.up.railway.app.'), 'opus-course-prod.up.railway.app');
   assert.equal(resolveCnameTarget('34.117.12.5'), null);
   assert.equal(resolveCnameTarget('2606:4700:4700::1111'), null);
+  assert.equal(resolveCnameTarget('localhost'), null);
+  assert.equal(resolveCnameTarget('railway-internal'), null);
 });
 
 test('isEquivalentCnameRecord matches normalized host + target + proxied state', () => {
