@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { normalizeHost } from '../lib/domain.js';
-import { resolveDomain } from '../scripts/custom-domain-setup.mjs';
+import { resolveDomain, resolveVerificationTarget } from '../scripts/custom-domain-setup.mjs';
 import { resolveDomainInput, toWaitSeconds } from '../scripts/verify-custom-domain.mjs';
 
 const root = process.cwd();
@@ -18,6 +18,17 @@ test('resolveDomain handles full URLs and host/path inputs', () => {
   assert.equal(resolveDomain('opus-course.learnopenclaw.ai/path/ignored'), 'opus-course.learnopenclaw.ai');
   assert.equal(resolveDomain('opus-course.learnopenclaw.ai'), 'opus-course.learnopenclaw.ai');
   assert.equal(resolveDomain(''), undefined);
+});
+
+test('resolveVerificationTarget prefers explicit target and falls back to Railway JSON parsing', () => {
+  assert.equal(resolveVerificationTarget('explicit.up.railway.app', ''), 'explicit.up.railway.app');
+
+  const railwayJson = JSON.stringify({
+    domains: [{ serviceDomain: 'https://fallback-target.up.railway.app' }],
+  });
+
+  assert.equal(resolveVerificationTarget(undefined, railwayJson), 'fallback-target.up.railway.app');
+  assert.equal(resolveVerificationTarget(undefined, ''), undefined);
 });
 
 test('normalizeHost is exported for domain setup helpers', () => {

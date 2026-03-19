@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { normalizeHost } from '../lib/domain.js';
+import { normalizeHost, parseRailwayTargetFromJson } from '../lib/domain.js';
 
 export function getArg(args, name, fallback) {
   const prefix = `${name}=`;
@@ -22,6 +22,24 @@ export function resolveDomain(appUrl) {
     return new URL(appUrl).hostname;
   } catch {
     return undefined;
+  }
+}
+
+export function resolveVerificationTarget(explicitTarget, railwayDomainJson) {
+  if (explicitTarget) return explicitTarget;
+
+  const inferredTarget = parseRailwayTargetFromJson(railwayDomainJson);
+  return inferredTarget || undefined;
+}
+
+function getRailwayDomainJson() {
+  try {
+    return execFileSync('railway', ['domain', '--json'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+  } catch {
+    return '';
   }
 }
 
@@ -77,12 +95,14 @@ export function run(argv = process.argv.slice(2), env = process.env) {
     return;
   }
 
-  if (!domain || !target) {
-    console.log('\nℹ️ Skipping DNS verification: provide --domain and --target (or env vars) to run verification automatically.');
+  const verificationTarget = resolveVerificationTarget(target, getRailwayDomainJson());
+
+  if (!domain || !verificationTarget) {
+    console.log('\nℹ️ Skipping DNS verification: provide --domain/--target or run in a linked Railway project so target can be inferred.');
     return;
   }
 
-  const verifyArgs = ['scripts/verify-custom-domain.mjs', `--domain=${domain}`, `--target=${target}`, `--wait-seconds=${waitSeconds}`];
+  const verifyArgs = ['scripts/verify-custom-domain.mjs', `--domain=${domain}`, `--target=${verificationTarget}`, `--wait-seconds=${waitSeconds}`];
 
   if (token) {
     verifyArgs.push(`--token=${token}`);
