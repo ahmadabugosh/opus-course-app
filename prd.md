@@ -355,9 +355,9 @@ ANALYTICS_ENABLED=true
 - [x] All lessons are freely accessible (no unlock gating) — user can browse any lesson in any order, but progress bar only fills when they self-mark a challenge as complete
 
 ### Phase 5: Homepage & Landing
-- [ ] Create app/page.tsx — public landing page with: hero section (course title + description + CTA), 12-lesson roadmap visual, what you'll learn section, call-to-action to sign up
-- [ ] Create app/layout.tsx — root layout with metadata, OG tags, navigation header, footer
-- [ ] Style with Tailwind — professional dark theme with accent colors (match Opus brand: dark + blue/purple accents), responsive for mobile/tablet/desktop
+- [x] Create app/page.tsx — public landing page with: hero section (course title + description + CTA), 12-lesson roadmap visual, what you'll learn section, call-to-action to sign up
+- [x] Create app/layout.tsx — root layout with metadata, OG tags, navigation header, footer
+- [x] Style with Tailwind — professional dark theme with accent colors (match Opus brand: dark + blue/purple accents), responsive for mobile/tablet/desktop
 
 ### Phase 6: Achievements System
 - [ ] Create lib/achievements.ts — achievement definitions (badge_id, name, description, icon, check function)

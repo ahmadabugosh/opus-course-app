@@ -1,65 +1,101 @@
-import Image from "next/image";
+import Link from "next/link";
+import { LESSONS } from "@/lib/lessons";
+
+const highlights = [
+  "Build real-world workflows from day one",
+  "Learn decision agents, integrations, and Opus Code",
+  "Track your progress with achievements and milestones",
+  "Generate a certificate after completing all 12 lessons",
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 py-12 sm:px-6 lg:px-8">
+      <section className="rounded-2xl border border-border bg-surface p-8 md:p-12">
+        <p className="mb-3 inline-flex rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary">
+          Gamified Course • 100% Free to Learn
+        </p>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          Opus Mastery
+        </h1>
+        <p className="mt-4 max-w-3xl text-base text-muted sm:text-lg">
+          A structured 12-lesson journey to master Opus AI workflow automation.
+          Learn by building practical automations with videos, written guides, and
+          hands-on challenges.
+        </p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+          >
+            Start Learning Free
+          </Link>
+          <Link
+            href="/lessons/1"
+            className="inline-flex items-center justify-center rounded-lg border border-border px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-background/60"
+          >
+            Preview Lesson 1
+          </Link>
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-6 flex items-center justify-between gap-3">
+          <h2 className="text-2xl font-semibold tracking-tight">12-Lesson Roadmap</h2>
+          <span className="text-sm text-muted">Self-paced • Zero signup wall</span>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {LESSONS.map((lesson) => (
+            <Link
+              key={lesson.id}
+              href={`/lessons/${lesson.id}`}
+              className="group rounded-xl border border-border bg-surface p-4 transition hover:border-primary/70 hover:shadow-[0_0_0_1px_rgba(99,102,241,0.3)]"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                Lesson {lesson.id}
+              </p>
+              <h3 className="mt-2 text-lg font-semibold text-foreground group-hover:text-white">
+                {lesson.title}
+              </h3>
+              <p className="mt-2 text-sm text-muted">{lesson.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid gap-6 rounded-2xl border border-border bg-surface p-8 lg:grid-cols-2">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">What You&apos;ll Learn</h2>
+          <p className="mt-3 text-sm text-muted">
+            Each lesson combines video walkthroughs, actionable written guidance,
+            and a practical challenge you complete inside Opus.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <ul className="space-y-3">
+          {highlights.map((item) => (
+            <li key={item} className="flex items-start gap-3 text-sm text-foreground">
+              <span className="mt-0.5 text-success">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-2xl border border-primary/40 bg-primary/10 p-8 text-center">
+        <h2 className="text-2xl font-semibold tracking-tight">Ready to become an Opus Master?</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-muted">
+          Learn everything without an account. Sign in only when you complete 12/12 and
+          want your personalized certificate.
+        </p>
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Start the Course
+          </Link>
         </div>
-      </main>
+      </section>
     </div>
   );
 }
