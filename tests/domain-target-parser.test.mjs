@@ -27,6 +27,16 @@ test('parseRailwayTargetFromJson resolves Railway CLI domains array objects', ()
   assert.equal(parseRailwayTargetFromJson(raw), 'opus-course-production.up.railway.app');
 });
 
+test('parseRailwayTargetFromJson supports top-level array payloads', () => {
+  const raw = JSON.stringify([
+    {
+      hostname: 'https://array-shape.up.railway.app',
+    },
+  ]);
+
+  assert.equal(parseRailwayTargetFromJson(raw), 'array-shape.up.railway.app');
+});
+
 test('parseRailwayTargetFromJson returns null on empty or invalid input', () => {
   assert.equal(parseRailwayTargetFromJson(''), null);
   assert.equal(parseRailwayTargetFromJson('{"domains":[]}'), null);
