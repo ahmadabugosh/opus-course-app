@@ -38,6 +38,8 @@ test('verify script helpers normalize/match targets and support Cloudflare API f
   assert.equal(mod.matchesExpectedTarget({ kind: 'A', records: ['1.1.1.1'] }, 'example.railway.app'), false);
   assert.equal(mod.matchesFlattenedTarget({ kind: 'A', records: ['1.1.1.1', '2.2.2.2'] }, { kind: 'A', records: ['2.2.2.2'] }), true);
   assert.equal(mod.matchesFlattenedTarget({ kind: 'A', records: ['1.1.1.1'] }, { kind: 'A', records: ['9.9.9.9'] }), false);
+  assert.equal(mod.matchesFlattenedTarget({ kind: 'AAAA', records: ['2606:4700:4700::1111'] }, { kind: 'AAAA', records: ['2606:4700:4700::1111'] }), true);
+  assert.equal(mod.matchesFlattenedTarget({ kind: 'AAAA', records: ['2606:4700:4700::1111'] }, { kind: 'AAAA', records: ['2606:4700:4700::2222'] }), false);
 
   const apiOk = await mod.verifyWithCloudflareApi({
     domain: 'opus-course.learnopenclaw.ai',
@@ -55,6 +57,40 @@ test('verify script helpers normalize/match targets and support Cloudflare API f
   });
 
   assert.equal(apiOk, true);
+});
+
+test('run() accepts flattened AAAA matches', async () => {
+  const mod = await import(path.join(root, 'scripts/verify-custom-domain.mjs'));
+
+  const logs = [];
+  const errors = [];
+  const originalLog = console.log;
+  const originalError = console.error;
+
+  console.log = (...args) => logs.push(args.join(' '));
+  console.error = (...args) => errors.push(args.join(' '));
+
+  try {
+    await mod.run(
+      ['--domain=opus-course.learnopenclaw.ai', '--target=service.up.railway.app'],
+      {},
+      {
+        resolveTarget: async (host) => {
+          if (host === 'opus-course.learnopenclaw.ai') {
+            return { kind: 'AAAA', records: ['2606:4700:4700::1111'] };
+          }
+
+          return { kind: 'AAAA', records: ['2606:4700:4700::1111', '2606:4700:4700::2222'] };
+        },
+      },
+    );
+  } finally {
+    console.log = originalLog;
+    console.error = originalError;
+  }
+
+  assert.equal(errors.length, 0);
+  assert.match(logs.join('\n'), /flattened IP records/);
 });
 
 test('README documents domain verification command', () => {

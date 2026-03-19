@@ -34,8 +34,12 @@ export function matchesExpectedTarget(result, target) {
   return result.kind === 'CNAME' && result.records.map(normalize).includes(expected);
 }
 
+function isAddressKind(kind) {
+  return kind === 'A' || kind === 'AAAA';
+}
+
 export function matchesFlattenedTarget(domainResult, targetResult) {
-  if (domainResult.kind !== 'A' || targetResult.kind !== 'A') return false;
+  if (!isAddressKind(domainResult.kind) || !isAddressKind(targetResult.kind)) return false;
 
   const domainIps = new Set(domainResult.records.map(normalize));
   return targetResult.records.map(normalize).some((ip) => domainIps.has(ip));
@@ -46,8 +50,13 @@ async function resolveTarget(domain) {
     const records = await dns.resolveCname(domain);
     return { kind: 'CNAME', records: records.map(normalize) };
   } catch {
-    const records = await dns.resolve4(domain);
-    return { kind: 'A', records };
+    try {
+      const records = await dns.resolve4(domain);
+      return { kind: 'A', records };
+    } catch {
+      const records = await dns.resolve6(domain);
+      return { kind: 'AAAA', records };
+    }
   }
 }
 
@@ -121,10 +130,10 @@ export async function run(argv = args, env = process.env, deps = {}) {
       return;
     }
 
-    if (result.kind === 'A') {
+    if (isAddressKind(result.kind)) {
       const targetResult = await dnsResolver(target);
       if (matchesFlattenedTarget(result, targetResult)) {
-        console.log(`✅ DNS verified via flattened A records: ${domain} -> ${target}`);
+        console.log(`✅ DNS verified via flattened IP records: ${domain} -> ${target}`);
         return;
       }
     }
