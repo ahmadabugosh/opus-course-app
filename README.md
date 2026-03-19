@@ -127,3 +127,5 @@ node scripts/verify-custom-domain.mjs \
 ```
 
 The command exits `0` once the CNAME matches. If DNS is still propagating it will poll until `--wait-seconds` is exhausted.
+
+If Cloudflare proxy is enabled (`CF_PROXIED=true`) and public DNS no longer exposes the CNAME, you can pass Cloudflare auth (`--token` plus `--zone-id`/`--zone-name`, or env vars) and the verifier will confirm the CNAME directly via Cloudflare API as a fallback.

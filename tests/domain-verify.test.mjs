@@ -19,8 +19,38 @@ test('dns verification helper exists for custom-domain rollout validation', () =
   assert.match(script, /--domain=/);
   assert.match(script, /--target=/);
   assert.match(script, /--wait-seconds=/);
-  assert.match(script, /dns\.resolveCname/);
-  assert.match(script, /dns\.resolve4/);
+  assert.match(script, /--token=/);
+  assert.match(script, /--zone-id=/);
+  assert.match(script, /--zone-name=/);
+  assert.match(script, /verifyWithCloudflareApi/);
+});
+
+test('verify script helpers normalize/match targets and support Cloudflare API fallback', async () => {
+  const mod = await import(path.join(root, 'scripts/verify-custom-domain.mjs'));
+
+  assert.equal(mod.toWaitSeconds('-5'), 0);
+  assert.equal(mod.toWaitSeconds('abc'), 0);
+  assert.equal(mod.toWaitSeconds('12'), 12);
+
+  assert.equal(mod.matchesExpectedTarget({ kind: 'CNAME', records: ['Example.Railway.App.'] }, 'example.railway.app'), true);
+  assert.equal(mod.matchesExpectedTarget({ kind: 'A', records: ['1.1.1.1'] }, 'example.railway.app'), false);
+
+  const apiOk = await mod.verifyWithCloudflareApi({
+    domain: 'opus-course.learnopenclaw.ai',
+    target: 'service.up.railway.app',
+    token: 'token',
+    zoneId: 'zone123',
+    fetchFn: async () => ({
+      async json() {
+        return {
+          success: true,
+          result: [{ name: 'opus-course.learnopenclaw.ai', content: 'service.up.railway.app' }],
+        };
+      },
+    }),
+  });
+
+  assert.equal(apiOk, true);
 });
 
 test('README documents domain verification command', () => {

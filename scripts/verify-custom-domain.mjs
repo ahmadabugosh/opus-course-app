@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import dns from 'node:dns/promises';
-import { normalizeHost } from '../lib/domain.js';
+import { inferZoneNameFromHostname, normalizeHost } from '../lib/domain.js';
 
 const args = process.argv.slice(2);
 
@@ -26,7 +26,12 @@ export function toWaitSeconds(value) {
 }
 
 function normalize(value) {
-  return value.toLowerCase().replace(/\.$/, '');
+  return value.toLowerCase().replace(/\.+$/, '');
+}
+
+export function matchesExpectedTarget(result, target) {
+  const expected = normalize(target);
+  return result.kind === 'CNAME' && result.records.map(normalize).includes(expected);
 }
 
 async function resolveTarget(domain) {
@@ -39,7 +44,42 @@ async function resolveTarget(domain) {
   }
 }
 
-export async function run(argv = args, env = process.env) {
+async function resolveZoneId(zoneId, zoneName, headers, fetchFn) {
+  if (zoneId) return zoneId;
+  if (!zoneName) return undefined;
+
+  const response = await fetchFn(`https://api.cloudflare.com/client/v4/zones?name=${encodeURIComponent(zoneName)}&status=active`, { headers });
+  const data = await response.json();
+
+  if (!data.success) return undefined;
+
+  const zone = data.result?.find((item) => item.name === zoneName) ?? data.result?.[0];
+  return zone?.id;
+}
+
+export async function verifyWithCloudflareApi({ domain, target, token, zoneId, zoneName, fetchFn = fetch }) {
+  if (!token) return false;
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  };
+
+  const resolvedZoneId = await resolveZoneId(zoneId, zoneName, headers, fetchFn);
+  if (!resolvedZoneId) return false;
+
+  const response = await fetchFn(
+    `https://api.cloudflare.com/client/v4/zones/${resolvedZoneId}/dns_records?name=${encodeURIComponent(domain)}&type=CNAME`,
+    { headers },
+  );
+
+  const data = await response.json();
+  if (!data.success) return false;
+
+  return data.result?.some((record) => normalize(record.name) === normalize(domain) && normalize(record.content) === normalize(target));
+}
+
+export async function run(argv = args, env = process.env, deps = {}) {
   const domain = resolveDomainInput(
     getArg(argv, '--domain', env.CUSTOM_DOMAIN || env.NEXT_PUBLIC_APP_URL),
   );
@@ -47,19 +87,25 @@ export async function run(argv = args, env = process.env) {
     getArg(argv, '--target', env.CF_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN),
   );
   const waitSeconds = toWaitSeconds(getArg(argv, '--wait-seconds', '0'));
+  const token = getArg(argv, '--token', env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN);
+  const zoneId = getArg(argv, '--zone-id', env.CF_ZONE_ID || env.CLOUDFLARE_ZONE_ID);
+  const zoneName = getArg(argv, '--zone-name', env.CF_ZONE_NAME || env.CLOUDFLARE_ZONE_NAME || inferZoneNameFromHostname(domain));
+
+  const dnsResolver = deps.resolveTarget ?? resolveTarget;
+  const fetchFn = deps.fetchFn ?? fetch;
+  const sleep = deps.sleep ?? ((ms) => new Promise((resolve) => setTimeout(resolve, ms)));
 
   if (!domain || !target) {
-    console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300]');
+    console.error('Usage: node scripts/verify-custom-domain.mjs --domain=opus-course.learnopenclaw.ai --target=<railway-domain> [--wait-seconds=300] [--token=...] [--zone-id=...|--zone-name=...]');
     process.exit(1);
   }
 
   const deadline = Date.now() + waitSeconds * 1000;
-  const expected = normalize(target);
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const result = await resolveTarget(domain);
-    const matches = result.kind === 'CNAME' && result.records.includes(expected);
+    const result = await dnsResolver(domain);
+    const matches = matchesExpectedTarget(result, target);
 
     if (matches) {
       console.log(`✅ DNS verified: ${domain} -> ${target}`);
@@ -70,13 +116,20 @@ export async function run(argv = args, env = process.env) {
     const remainingMs = deadline - Date.now();
 
     if (remainingMs <= 0) {
+      const apiVerified = await verifyWithCloudflareApi({ domain, target, token, zoneId, zoneName, fetchFn });
+
+      if (apiVerified) {
+        console.log(`✅ DNS record verified in Cloudflare API: ${domain} -> ${target} (proxied records may hide public CNAME)`);
+        return;
+      }
+
       console.error(`❌ DNS mismatch for ${domain}. Expected CNAME -> ${target}, got ${result.kind}: ${rendered}`);
       process.exit(1);
     }
 
     const waitMs = Math.min(5000, Math.max(500, remainingMs));
     console.log(`⏳ Waiting for DNS propagation (${Math.ceil(remainingMs / 1000)}s left). Current ${result.kind}: ${rendered}`);
-    await new Promise((resolve) => setTimeout(resolve, waitMs));
+    await sleep(waitMs);
   }
 }
 
