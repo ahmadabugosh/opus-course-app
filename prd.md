@@ -345,11 +345,11 @@ ANALYTICS_ENABLED=true
 - [x] Create code-block.tsx component — syntax highlighted code with copy button
 
 ### Phase 4: Dashboard & Lesson Views
-- [ ] Create dashboard/page.tsx — main authenticated view with sidebar + current lesson
-- [ ] Create lesson-sidebar.tsx — left sidebar showing all 12 lessons with status icons (locked/available/in-progress/completed), progress bar, current title
-- [ ] Create lessons/[lessonId]/page.tsx — individual lesson page with content + video + challenge
-- [ ] Create progress-bar.tsx — visual progress ring/bar showing X/12 complete with current title
-- [ ] Create proof-submit-form.tsx — challenge submission form (URL input + file upload for screenshots + submit button)
+- [x] Create dashboard/page.tsx — main authenticated view with sidebar + current lesson
+- [x] Create lesson-sidebar.tsx — left sidebar showing all 12 lessons with status icons (locked/available/in-progress/completed), progress bar, current title
+- [x] Create lessons/[lessonId]/page.tsx — individual lesson page with content + video + challenge
+- [x] Create progress-bar.tsx — visual progress ring/bar showing X/12 complete with current title
+- [x] Create proof-submit-form.tsx — challenge submission form (URL input + file upload for screenshots + submit button)
 - [ ] Create /api/lessons/progress route — GET user's progress across all lessons, POST to update lesson status
 - [ ] Create /api/lessons/verify route — POST proof submission (saves proof URL, marks lesson complete, checks achievement triggers)
 - [ ] All lessons are freely accessible (no unlock gating) — user can browse any lesson in any order, but progress bar only fills when they self-mark a challenge as complete
