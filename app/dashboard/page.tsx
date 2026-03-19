@@ -5,7 +5,7 @@ import { ProofSubmitForm } from '@/components/proof-submit-form';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
 import { CompletionCelebration } from '@/components/completion-celebration';
-import { evaluateAchievementBadges } from '@/lib/achievements';
+import { evaluateAchievementBadges } from '@/lib/achievements-core';
 import {
   getDefaultCurrentLessonId,
   getLearnerTitle,

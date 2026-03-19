@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { evaluateAchievementBadges } from '../lib/achievements.ts';
+import { evaluateAchievementBadges } from '../lib/achievements-core.ts';
 
 test('awards agent + lesson-specific + opus-master badges from completion data', () => {
   const progress = Array.from({ length: 12 }, (_, index) => ({

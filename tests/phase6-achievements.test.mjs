@@ -10,7 +10,7 @@ function readFile(relativePath) {
 }
 
 test('achievements library exports achievement definitions with metadata + check functions', async () => {
-  const lib = await import('../lib/achievements.ts');
+  const lib = await import('../lib/achievements-core.ts');
 
   assert.ok(Array.isArray(lib.ACHIEVEMENTS));
   assert.equal(lib.ACHIEVEMENTS.length, 7);

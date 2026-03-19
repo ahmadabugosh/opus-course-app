@@ -6,7 +6,7 @@ import type { LessonMeta } from '@/lib/lessons';
 
 import { AchievementBadge } from '@/components/achievement-badge';
 import { ProgressBar } from '@/components/progress-bar';
-import { ACHIEVEMENTS, type BadgeId } from '@/lib/achievements';
+import { ACHIEVEMENTS, type BadgeId } from '@/lib/achievements-core';
 
 type SidebarLesson = {
   lessonId: number;

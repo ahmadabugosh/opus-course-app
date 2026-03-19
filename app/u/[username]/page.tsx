@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { all, get } from '@/lib/db';
 import { getLearnerTitle } from '@/lib/course-progression';
-import { ACHIEVEMENTS } from '@/lib/achievements';
+import { ACHIEVEMENTS } from '@/lib/achievements-core';
 
 type Params = { username: string };
 

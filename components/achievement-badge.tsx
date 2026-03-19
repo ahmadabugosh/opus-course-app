@@ -1,4 +1,4 @@
-import type { AchievementDefinition } from '@/lib/achievements';
+import type { AchievementDefinition } from '@/lib/achievements-core';
 
 type AchievementBadgeProps = {
   achievement: AchievementDefinition;

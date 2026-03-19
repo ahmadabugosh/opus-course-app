@@ -4,7 +4,7 @@ import { LessonSidebar } from '@/components/lesson-sidebar';
 import { ProofSubmitForm } from '@/components/proof-submit-form';
 import VideoEmbed from '@/components/video-embed';
 import { useProgress } from '@/components/progress-provider';
-import { evaluateAchievementBadges } from '@/lib/achievements';
+import { evaluateAchievementBadges } from '@/lib/achievements-core';
 import { getLearnerTitle } from '@/lib/course-progression';
 import { getAllLessons, getLessonById } from '@/lib/lessons';
 
