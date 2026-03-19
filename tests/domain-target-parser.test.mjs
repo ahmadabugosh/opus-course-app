@@ -67,6 +67,8 @@ test('parseRailwayTargetFromJson returns null on empty or invalid input', () => 
 test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () => {
   assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai'), 'learnopenclaw.ai');
+  assert.equal(inferZoneNameFromHostname('https://opus-course.learnopenclaw.ai/dashboard?x=1'), 'learnopenclaw.ai');
+  assert.equal(inferZoneNameFromHostname('opus-course.learnopenclaw.ai/path/ignored'), 'learnopenclaw.ai');
   assert.equal(inferZoneNameFromHostname('localhost'), null);
   assert.equal(inferZoneNameFromHostname(''), null);
 });
