@@ -125,6 +125,9 @@ test('inferZoneNameFromHostname resolves an apex zone from app hostnames', () =>
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.tr'), 'learnopenclaw.com.tr');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.co.id'), 'learnopenclaw.co.id');
   assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.my'), 'learnopenclaw.com.my');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.br'), 'learnopenclaw.com.br');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.mx'), 'learnopenclaw.com.mx');
+  assert.equal(inferZoneNameFromHostname('portal.learnopenclaw.com.ar'), 'learnopenclaw.com.ar');
   assert.equal(inferZoneNameFromHostname('localhost'), null);
   assert.equal(inferZoneNameFromHostname(''), null);
 });
