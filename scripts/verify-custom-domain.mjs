@@ -96,7 +96,7 @@ export async function run(argv = args, env = process.env, deps = {}) {
     getArg(argv, '--domain', env.CUSTOM_DOMAIN || env.NEXT_PUBLIC_APP_URL),
   );
   const target = resolveDomainInput(
-    getArg(argv, '--target', env.CF_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN),
+    getArg(argv, '--target', env.CF_TARGET_CNAME || env.CLOUDFLARE_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN),
   );
   const waitSeconds = toWaitSeconds(getArg(argv, '--wait-seconds', '0'));
   const token = getArg(argv, '--token', env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN);

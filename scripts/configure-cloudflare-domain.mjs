@@ -80,13 +80,14 @@ function getRailwayTargetFromCli() {
 const targetCandidate =
   getArgValue('--target') ||
   process.env.CF_TARGET_CNAME ||
+  process.env.CLOUDFLARE_TARGET_CNAME ||
   process.env.RAILWAY_PUBLIC_DOMAIN ||
   getRailwayTargetFromCli();
 
 const target = resolveCnameTarget(targetCandidate);
 
 if (!target) {
-  console.error('Missing or invalid target host. Set CF_TARGET_CNAME/RAILWAY_PUBLIC_DOMAIN (hostname only) or run in a linked Railway project so `railway domain --json` can resolve a valid Railway hostname.');
+  console.error('Missing or invalid target host. Set CF_TARGET_CNAME/CLOUDFLARE_TARGET_CNAME/RAILWAY_PUBLIC_DOMAIN (hostname only) or run in a linked Railway project so `railway domain --json` can resolve a valid Railway hostname.');
   process.exit(1);
 }
 

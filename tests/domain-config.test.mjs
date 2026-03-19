@@ -37,6 +37,8 @@ test('cloudflare helper supports dry-run mode, configurable proxy behavior, and 
   assert.match(script, /CLOUDFLARE_PROXIED/);
   assert.match(script, /CF_RECORD_NAME/);
   assert.match(script, /CLOUDFLARE_RECORD_NAME/);
+  assert.match(script, /CF_TARGET_CNAME/);
+  assert.match(script, /CLOUDFLARE_TARGET_CNAME/);
   assert.match(script, /railway domain --json/);
   assert.match(script, /resolveCnameTarget/);
 });

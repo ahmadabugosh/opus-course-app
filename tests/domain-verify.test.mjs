@@ -24,6 +24,8 @@ test('dns verification helper exists for custom-domain rollout validation', () =
   assert.match(script, /--zone-name=/);
   assert.match(script, /CF_API_KEY/);
   assert.match(script, /CF_API_EMAIL/);
+  assert.match(script, /CF_TARGET_CNAME/);
+  assert.match(script, /CLOUDFLARE_TARGET_CNAME/);
   assert.match(script, /verifyWithCloudflareApi/);
 });
 

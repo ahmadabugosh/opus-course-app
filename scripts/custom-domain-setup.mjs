@@ -47,7 +47,7 @@ export function run(argv = process.argv.slice(2), env = process.env) {
   const isDryRun = argv.includes('--dry-run');
   const appUrl = getArg(argv, '--app-url', env.NEXT_PUBLIC_APP_URL);
   const domain = getArg(argv, '--domain', resolveDomain(appUrl));
-  const target = getArg(argv, '--target', env.CF_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN);
+  const target = getArg(argv, '--target', env.CF_TARGET_CNAME || env.CLOUDFLARE_TARGET_CNAME || env.RAILWAY_PUBLIC_DOMAIN);
   const waitSeconds = getArg(argv, '--wait-seconds', env.DOMAIN_VERIFY_WAIT_SECONDS || '300');
   const token = getArg(argv, '--token', env.CF_API_TOKEN || env.CLOUDFLARE_API_TOKEN);
   const apiKey = getArg(argv, '--api-key', env.CF_API_KEY || env.CLOUDFLARE_API_KEY);
