@@ -2,7 +2,7 @@
 title: "Capstone Project"
 description: "Build a complete end-to-end automation using all core Opus patterns."
 duration: "45 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-12.mp4"
 challenge:
   title: "End-to-End Automation"
   description: "Deliver a production-ready workflow URL and architecture description."

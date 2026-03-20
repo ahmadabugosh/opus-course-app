@@ -25,7 +25,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Your First Workflow',
     description: 'Build your first Opus workflow and run it in preview mode.',
     duration: '20 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-01.mp4',
     challenge: {
       title: 'Text Summarizer Workflow',
       description: 'Build a text summarizer workflow and show successful preview output.',
@@ -41,7 +41,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Mastering the Builder',
     description: 'Learn the visual builder, variable wiring, and multi-step chains.',
     duration: '25 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-02.mp4',
     challenge: {
       title: '3-Step Document Processor',
       description: 'Create a 3-task chain that extracts facts, summarizes, and outputs action items.',
@@ -57,7 +57,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'The Opus Agent',
     description: 'Master prompt design, blueprint generation, and reliable outputs.',
     duration: '25 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-03.mp4',
     challenge: {
       title: 'Customer Feedback Analyzer',
       description: 'Create sentiment, extraction, and response generation in one workflow.',
@@ -73,7 +73,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Decision Agents',
     description: 'Add conditional routing with decision branches.',
     duration: '25 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-04.mp4',
     challenge: {
       title: 'Support Ticket Router',
       description: 'Route incoming tickets to high, medium, or low priority branches.',
@@ -89,7 +89,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Custom Agents',
     description: 'Pick models directly and configure advanced generation behavior.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-05.mp4',
     challenge: {
       title: 'Multi-language Content Generator',
       description: 'Generate and review multilingual marketing copy using multiple models.',
@@ -105,7 +105,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Human-in-the-Loop',
     description: 'Introduce review and approval gates in automation flows.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-06.mp4',
     challenge: {
       title: 'Content Approval Pipeline',
       description: 'Build a workflow with AI drafting plus a required human review step.',
@@ -121,7 +121,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Data Tasks',
     description: 'Process files and convert unstructured data into structured outputs.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-07.mp4',
     challenge: {
       title: 'Invoice Processor',
       description: 'Extract and structure invoice data from a PDF.',
@@ -137,7 +137,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Integrations',
     description: 'Connect Opus workflows to external apps and APIs.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-08.mp4',
     challenge: {
       title: 'Lead Enrichment Workflow',
       description: 'Enrich lead records with an external API and output a score.',
@@ -153,7 +153,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Sub-Workflows',
     description: 'Build reusable automations with Execute Workflow tasks.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-09.mp4',
     challenge: {
       title: 'Content Repurposer',
       description: 'Use one main workflow plus sub-workflows for multi-channel outputs.',
@@ -169,7 +169,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Opus Code',
     description: 'Use Python tasks for calculations and advanced transformations.',
     duration: '35 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-10.mp4',
     challenge: {
       title: 'Financial Report Generator',
       description: 'Use Opus Code to process sales data and produce report outputs.',
@@ -185,7 +185,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Going to Production',
     description: 'Activate workflows, run jobs, and monitor production behavior.',
     duration: '30 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-11.mp4',
     challenge: {
       title: 'Production Workflow Rollout',
       description: 'Activate one workflow and run at least 3 production jobs.',
@@ -201,7 +201,7 @@ export const LESSONS: LessonMeta[] = [
     title: 'Capstone Project',
     description: 'Build a full end-to-end automation using everything from the course.',
     duration: '45 minutes',
-    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    videoUrl: '/videos/lesson-12.mp4',
     challenge: {
       title: 'End-to-End Automation Build',
       description: 'Deliver a production-ready workflow with architecture explanation.',

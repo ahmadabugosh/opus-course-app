@@ -2,7 +2,7 @@
 title: "Mastering the Builder"
 description: "Master the visual editor and create multi-step agent chains."
 duration: "25 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-02.mp4"
 challenge:
   title: "3-Step Document Processor"
   description: "Build a 3-task chain for extraction, summary, and action items."

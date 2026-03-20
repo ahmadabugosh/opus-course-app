@@ -3,6 +3,10 @@ type VideoEmbedProps = {
   title: string;
 };
 
+function isLocalVideo(url: string): boolean {
+  return url.startsWith('/') && (url.endsWith('.mp4') || url.endsWith('.webm'));
+}
+
 function toEmbedUrl(url: string): string {
   try {
     const parsed = new URL(url);
@@ -28,6 +32,22 @@ function toEmbedUrl(url: string): string {
 }
 
 export default function VideoEmbed({ url, title }: VideoEmbedProps) {
+  if (isLocalVideo(url)) {
+    return (
+      <div className="overflow-hidden rounded-xl border border-white/10 bg-black/20 shadow-sm">
+        <video
+          controls
+          preload="metadata"
+          className="w-full"
+          title={title}
+        >
+          <source src={url} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    );
+  }
+
   const embedUrl = toEmbedUrl(url);
 
   return (

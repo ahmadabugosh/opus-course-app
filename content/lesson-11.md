@@ -2,7 +2,7 @@
 title: "Going to Production"
 description: "Activate workflows, run jobs, and monitor reliability."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-11.mp4"
 challenge:
   title: "Production Workflow Rollout"
   description: "Activate one workflow and run 3 production jobs successfully."

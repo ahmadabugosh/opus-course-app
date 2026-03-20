@@ -2,7 +2,7 @@
 title: "Custom Agents"
 description: "Use model-specific control for advanced AI behavior."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-05.mp4"
 challenge:
   title: "Multi-language Content Generator"
   description: "Generate and review translated copy using multiple models."

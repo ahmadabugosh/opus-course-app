@@ -2,7 +2,7 @@
 title: "Data Tasks"
 description: "Process files and transform unstructured documents into structured data."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-07.mp4"
 challenge:
   title: "Invoice Processor"
   description: "Extract invoice text and convert it into structured accounting fields."

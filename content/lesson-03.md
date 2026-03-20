@@ -2,7 +2,7 @@
 title: "The Opus Agent"
 description: "Write better agent prompts and design reliable outputs."
 duration: "25 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-03.mp4"
 challenge:
   title: "Customer Feedback Analyzer"
   description: "Classify sentiment, extract product mention, and draft a response."

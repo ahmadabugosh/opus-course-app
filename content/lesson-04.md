@@ -2,7 +2,7 @@
 title: "Decision Agents"
 description: "Route work dynamically using decision logic and branching."
 duration: "25 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-04.mp4"
 challenge:
   title: "Support Ticket Router"
   description: "Route incoming tickets to high, medium, or low paths."

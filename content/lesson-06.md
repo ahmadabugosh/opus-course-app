@@ -2,7 +2,7 @@
 title: "Human-in-the-Loop"
 description: "Add human review gates for quality and compliance."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-06.mp4"
 challenge:
   title: "Content Approval Pipeline"
   description: "Create a workflow with AI generation and mandatory human approval."

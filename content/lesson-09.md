@@ -2,7 +2,7 @@
 title: "Sub-Workflows"
 description: "Compose reusable automations with Execute Workflow."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-09.mp4"
 challenge:
   title: "Content Repurposer"
   description: "Use a main workflow to call multiple sub-workflows for different formats."

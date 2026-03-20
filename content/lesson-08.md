@@ -2,7 +2,7 @@
 title: "Integrations"
 description: "Connect workflows to external services and APIs."
 duration: "30 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-08.mp4"
 challenge:
   title: "Lead Enrichment Pipeline"
   description: "Enrich lead data through an external service and score leads."

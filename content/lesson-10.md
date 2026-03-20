@@ -2,7 +2,7 @@
 title: "Opus Code"
 description: "Use Python for calculations and advanced logic inside workflows."
 duration: "35 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-10.mp4"
 challenge:
   title: "Financial Report Generator"
   description: "Process sales data with Python and generate an executive-ready report."

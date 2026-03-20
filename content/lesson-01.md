@@ -2,7 +2,7 @@
 title: "Your First Workflow"
 description: "Create your first Opus workflow and run it in preview mode."
 duration: "20 minutes"
-videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+videoUrl: "/videos/lesson-01.mp4"
 challenge:
   title: "Text Summarizer Workflow"
   description: "Build a text summarizer workflow and submit a workflow URL or preview screenshot."
