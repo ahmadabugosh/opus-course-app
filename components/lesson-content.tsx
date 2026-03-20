@@ -58,7 +58,7 @@ export default function LessonContent({ markdown }: LessonContentProps) {
   const blocks = body.split('\n\n');
 
   return (
-    <article className="prose prose-invert max-w-none space-y-3 text-sm">
+    <article className="max-w-none space-y-3 text-sm font-normal text-gray-300">
       {blocks.map((block, index) => {
         const callout = renderCallout(block.trim(), index);
         if (callout) {
@@ -103,11 +103,26 @@ export default function LessonContent({ markdown }: LessonContentProps) {
             .map((line) => line.replace(/^-\s/, '').trim());
 
           return (
-            <ul key={`ul-${index}`} className="list-disc space-y-1.5 pl-5 text-sm text-gray-300">
+            <ul key={`ul-${index}`} className="list-disc space-y-1.5 pl-5 text-sm font-normal text-gray-300">
               {items.map((item, i) => (
                 <li key={`${item}-${i}`}>{parseInline(item)}</li>
               ))}
             </ul>
+          );
+        }
+
+        if (/^\d+\.\s/.test(block)) {
+          const items = block
+            .split('\n')
+            .filter((line) => /^\d+\.\s/.test(line))
+            .map((line) => line.replace(/^\d+\.\s/, '').trim());
+
+          return (
+            <ol key={`ol-${index}`} className="list-decimal space-y-1.5 pl-5 text-sm font-normal text-gray-300">
+              {items.map((item, i) => (
+                <li key={`${item}-${i}`}>{parseInline(item)}</li>
+              ))}
+            </ol>
           );
         }
 
