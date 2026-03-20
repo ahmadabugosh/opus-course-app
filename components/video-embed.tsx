@@ -36,6 +36,7 @@ export default function VideoEmbed({ url, title }: VideoEmbedProps) {
     return (
       <div className="overflow-hidden rounded-xl border border-white/10 bg-black/20 shadow-sm">
         <video
+          key={url}
           controls
           preload="metadata"
           className="w-full"
