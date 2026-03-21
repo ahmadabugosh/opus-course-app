@@ -127,7 +127,7 @@ export default function LessonPage({ params }: LessonPageProps) {
 
       <section className="space-y-5 rounded-2xl border border-[#333355] bg-[#1a1a33] p-4 sm:p-6 lg:h-[calc(100dvh-3rem)] lg:overflow-y-auto">
         <header className="space-y-2">
-          <p className="text-sm uppercase tracking-wide text-indigo-300">Lesson {lesson.id}</p>
+          <p className="text-sm uppercase tracking-wide text-indigo-300">Opus Course Lesson {lesson.id}</p>
           <h1 className="text-2xl font-bold text-white sm:text-3xl">{lesson.title}</h1>
           <p className="text-[#cccccc]">{lesson.description}</p>
         </header>

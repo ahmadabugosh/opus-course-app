@@ -94,16 +94,22 @@ export default function LessonContent({ markdown }: LessonContentProps) {
         }
 
         if (block.startsWith('## ')) {
-          const parts = block.split('\n\n');
-          const heading = parts[0].replace(/^##\s/, '');
-          const rest = parts.slice(1).join('\n\n');
-          const listItems = rest
-            ? rest.split('\n').filter((line) => /^[-\d]/.test(line)).map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim())
-            : [];
+          const lines = block.split('\n');
+          const heading = lines[0].replace(/^##\s/, '');
+          const bodyLines = lines.slice(1).filter((l) => l.trim());
+          const listItems = bodyLines
+            .filter((line) => /^[-\d]/.test(line))
+            .map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim());
+          const nonListLines = bodyLines.filter((line) => !/^[-\d]/.test(line));
 
           return (
             <div key={`h2-group-${index}`} className="space-y-2">
               <h2 className="text-base font-semibold text-white">{heading}</h2>
+              {nonListLines.length > 0 && (
+                <p className="text-sm leading-6 text-gray-300">
+                  {parseInline(nonListLines.join(' '))}
+                </p>
+              )}
               {listItems.length > 0 && (
                 <ul className="list-disc space-y-1.5 pl-5 text-sm font-normal text-gray-300">
                   {listItems.map((item, i) => (
@@ -116,16 +122,22 @@ export default function LessonContent({ markdown }: LessonContentProps) {
         }
 
         if (block.startsWith('### ')) {
-          const parts = block.split('\n\n');
-          const heading = parts[0].replace(/^###\s/, '');
-          const rest = parts.slice(1).join('\n\n');
-          const listItems = rest
-            ? rest.split('\n').filter((line) => /^[-\d]/.test(line)).map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim())
-            : [];
+          const lines = block.split('\n');
+          const heading = lines[0].replace(/^###\s/, '');
+          const bodyLines = lines.slice(1).filter((l) => l.trim());
+          const listItems = bodyLines
+            .filter((line) => /^[-\d]/.test(line))
+            .map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim());
+          const nonListLines = bodyLines.filter((line) => !/^[-\d]/.test(line));
 
           return (
             <div key={`h3-group-${index}`} className="space-y-2">
               <h3 className="text-sm font-semibold text-white">{heading}</h3>
+              {nonListLines.length > 0 && (
+                <p className="text-sm leading-6 text-gray-300">
+                  {parseInline(nonListLines.join(' '))}
+                </p>
+              )}
               {listItems.length > 0 && (
                 <ul className="list-disc space-y-1.5 pl-5 text-sm font-normal text-gray-300">
                   {listItems.map((item, i) => (

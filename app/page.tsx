@@ -56,7 +56,10 @@ export default function Home() {
         </div>
 
         <footer className="text-center text-xs text-[#8D8DB8] sm:text-sm">
-          Powered by OpenClaw
+          Built by{' '}
+          <a href="https://www.linkedin.com/in/ahmadabugosh/" target="_blank" rel="noopener noreferrer" className="text-indigo-300 hover:text-white transition-colors underline underline-offset-2">
+            Ahmad Abugosh
+          </a>
         </footer>
       </section>
     </main>

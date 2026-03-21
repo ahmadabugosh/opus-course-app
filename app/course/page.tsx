@@ -78,9 +78,9 @@ export default function DashboardPage() {
   }, [selectedLesson]);
 
   return (
-    <div className="flex h-[calc(100dvh-4rem)] w-full overflow-hidden">
-      {/* Left panel — robot + nav (fixed, no scroll on desktop) */}
-      <aside className="hidden w-[380px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#2a2a4a] bg-[#12122a] p-5 lg:flex">
+    <div className="flex w-full min-h-[calc(100dvh-4rem)]">
+      {/* Left panel — robot + nav */}
+      <aside className="hidden w-[380px] shrink-0 flex-col gap-4 border-r border-[#2a2a4a] bg-[#12122a] p-5 lg:flex">
         <div>
           <h2 className="text-xl font-semibold text-white">🤖 Opus Robot Assembly</h2>
           <p className="mt-1 text-sm text-[#9ca3cf]">Stage {totalCompleted}/12</p>
@@ -146,8 +146,8 @@ export default function DashboardPage() {
         </nav>
       </aside>
 
-      {/* Right panel — lesson content (scrollable) */}
-      <section className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      {/* Right panel — lesson content */}
+      <section className="flex-1 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-3xl space-y-6">
           <CompletionCelebration totalCompleted={totalCompleted} />
 
@@ -195,7 +195,7 @@ export default function DashboardPage() {
           </div>
 
           <header className="space-y-2">
-            <p className="text-sm uppercase tracking-wide text-indigo-300">Lesson {selectedLesson.id}</p>
+            <p className="text-sm uppercase tracking-wide text-indigo-300">Opus Course Lesson {selectedLesson.id}</p>
             <h1 className="text-2xl font-bold text-white sm:text-3xl">{selectedLesson.title}</h1>
             <p className="text-[#cccccc]">{selectedLesson.description}</p>
           </header>
