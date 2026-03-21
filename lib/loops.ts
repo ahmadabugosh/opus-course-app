@@ -30,17 +30,23 @@ export async function addOrUpdateContact(data: {
   }
 
   try {
-    const response = await loops.createContact(data.email, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      userId: data.userId,
+    const properties: Record<string, string | number | boolean | null> = {
       userGroup: data.userGroup || 'opus-mastery',
       source: data.source || 'learn-opus',
       lastLoginAt: data.lastLoginAt || new Date().toISOString(),
-      ...(data.questsCompletedCount !== undefined && { questsCompletedCount: data.questsCompletedCount }),
-      ...(data.courseCompleted !== undefined && { courseCompleted: data.courseCompleted }),
-      ...(data.courseCompletedAt && { courseCompletedAt: data.courseCompletedAt }),
-      ...(data.attestationUid && { attestationUid: data.attestationUid }),
+    };
+
+    if (data.firstName) properties.firstName = data.firstName;
+    if (data.lastName) properties.lastName = data.lastName;
+    if (data.userId) properties.userId = data.userId;
+    if (data.questsCompletedCount !== undefined) properties.questsCompletedCount = data.questsCompletedCount;
+    if (data.courseCompleted !== undefined) properties.courseCompleted = data.courseCompleted;
+    if (data.courseCompletedAt) properties.courseCompletedAt = data.courseCompletedAt;
+    if (data.attestationUid) properties.attestationUid = data.attestationUid;
+
+    const response = await loops.createContact({
+      email: data.email,
+      properties,
     });
 
     console.info(`[Loops] Contact added/updated: ${data.email}`, response);
@@ -57,7 +63,7 @@ export async function addOrUpdateContact(data: {
 export async function sendEvent(
   email: string,
   eventName: string,
-  eventProperties?: Record<string, unknown>,
+  eventProperties?: Record<string, string | number | boolean>,
 ): Promise<boolean> {
   if (!loops) {
     console.warn('[Loops] Event send skipped - API key not configured');
@@ -65,7 +71,11 @@ export async function sendEvent(
   }
 
   try {
-    const response = await loops.sendEvent(email, eventName, eventProperties);
+    const response = await loops.sendEvent({
+      email,
+      eventName,
+      eventProperties,
+    });
     console.info(`[Loops] Event sent: ${eventName} for ${email}`, response);
     return true;
   } catch (error) {
@@ -83,11 +93,16 @@ export async function sendCourseCompletionEvent(data: {
   courseCompletedAt: string;
   questsCompletedCount: number;
 }): Promise<boolean> {
-  return sendEvent(data.email, 'course_completed', {
-    attestationUid: data.attestationUid,
+  const eventProps: Record<string, string | number | boolean> = {
     courseCompletedAt: data.courseCompletedAt,
     questsCompletedCount: data.questsCompletedCount,
-  });
+  };
+
+  if (data.attestationUid) {
+    eventProps.attestationUid = data.attestationUid;
+  }
+
+  return sendEvent(data.email, 'course_completed', eventProps);
 }
 
 /**
