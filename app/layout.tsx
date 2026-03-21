@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
 import { ProgressProvider } from "@/components/progress-provider";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
@@ -51,21 +50,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ProgressProvider>
           <AnalyticsTracker />
-          <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur">
-            <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-              <Link href="/" className="text-base font-semibold tracking-tight">
-                ⚡ Opus Mastery
-              </Link>
-              <nav className="flex items-center gap-3 text-sm text-muted">
-                <Link href="/dashboard" className="hover:text-foreground transition-colors">
-                  Dashboard
-                </Link>
-                <Link href="/lessons/1" className="hover:text-foreground transition-colors">
-                  Lessons
-                </Link>
-              </nav>
-            </div>
-          </header>
+
           <main className="flex-1">{children}</main>
           <footer className="border-t border-border/80">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 text-sm text-muted sm:px-6 lg:px-8">
