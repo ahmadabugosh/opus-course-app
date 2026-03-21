@@ -86,20 +86,20 @@ export async function POST(request: Request) {
   cookieStore.set(AUTH_COOKIE_NAME, token, getSessionCookieOptions());
 
   // Add contact to Loops (async, non-blocking)
-  const progressStats = get<{ completed: number; achievements: number }>(
-    `SELECT 
-      COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed,
-      (SELECT COUNT(*) FROM achievements WHERE user_id = ?) as achievements
+  const progressStats = get<{ completed: number }>(
+    `SELECT COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed
      FROM progress 
      WHERE user_id = ?`,
-    user.id,
     user.id,
   );
 
   addOrUpdateContact({
     email,
-    lessonsCompleted: progressStats?.completed || 0,
-    achievementsEarned: progressStats?.achievements || 0,
+    userId: String(user.id),
+    questsCompletedCount: progressStats?.completed || 0,
+    lastLoginAt: new Date().toISOString(),
+    source: 'learn-opus',
+    userGroup: 'opus-mastery',
   }).catch((error) => console.error('[OTP Verify] Loops sync failed:', error));
 
   return NextResponse.json({ success: true, userId: user.id });

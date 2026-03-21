@@ -59,18 +59,20 @@ export async function POST() {
   Promise.all([
     sendCourseCompletionEvent({
       email: user.email,
-      certificateId: certificate.certificateId,
-      completionDate: certificate.completionDate,
-      lessonsCompleted: certificate.stats.completedLessons,
-      achievementsEarned: certificate.stats.achievementsCount,
+      attestationUid: certificate.certificateId,
+      courseCompletedAt: certificate.completionDate,
+      questsCompletedCount: certificate.stats.completedLessons,
     }),
     addOrUpdateContact({
       email: user.email,
-      displayName,
-      lessonsCompleted: certificate.stats.completedLessons,
-      achievementsEarned: certificate.stats.achievementsCount,
-      completionDate: certificate.completionDate,
-      certificateId: certificate.certificateId,
+      userId: String(userId),
+      firstName: user.display_name || user.username || undefined,
+      questsCompletedCount: certificate.stats.completedLessons,
+      courseCompleted: true,
+      courseCompletedAt: certificate.completionDate,
+      attestationUid: certificate.certificateId,
+      source: 'learn-opus',
+      userGroup: 'opus-mastery',
     }),
   ]).catch((error) => console.error('[Certificate] Loops sync failed:', error));
 

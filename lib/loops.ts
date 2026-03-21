@@ -15,11 +15,14 @@ export async function addOrUpdateContact(data: {
   email: string;
   firstName?: string;
   lastName?: string;
-  displayName?: string;
-  lessonsCompleted?: number;
-  achievementsEarned?: number;
-  completionDate?: string;
-  certificateId?: string;
+  userId?: string;
+  questsCompletedCount?: number;
+  courseCompleted?: boolean;
+  courseCompletedAt?: string;
+  lastLoginAt?: string;
+  source?: string;
+  userGroup?: string;
+  attestationUid?: string;
 }): Promise<boolean> {
   if (!loops) {
     console.warn('[Loops] Contact sync skipped - API key not configured');
@@ -30,12 +33,14 @@ export async function addOrUpdateContact(data: {
     const response = await loops.createContact(data.email, {
       firstName: data.firstName,
       lastName: data.lastName,
-      userGroup: 'opus-mastery-student',
-      ...(data.displayName && { displayName: data.displayName }),
-      ...(data.lessonsCompleted !== undefined && { lessonsCompleted: data.lessonsCompleted }),
-      ...(data.achievementsEarned !== undefined && { achievementsEarned: data.achievementsEarned }),
-      ...(data.completionDate && { completionDate: data.completionDate }),
-      ...(data.certificateId && { certificateId: data.certificateId }),
+      userId: data.userId,
+      userGroup: data.userGroup || 'opus-mastery',
+      source: data.source || 'learn-opus',
+      lastLoginAt: data.lastLoginAt || new Date().toISOString(),
+      ...(data.questsCompletedCount !== undefined && { questsCompletedCount: data.questsCompletedCount }),
+      ...(data.courseCompleted !== undefined && { courseCompleted: data.courseCompleted }),
+      ...(data.courseCompletedAt && { courseCompletedAt: data.courseCompletedAt }),
+      ...(data.attestationUid && { attestationUid: data.attestationUid }),
     });
 
     console.info(`[Loops] Contact added/updated: ${data.email}`, response);
@@ -74,16 +79,14 @@ export async function sendEvent(
  */
 export async function sendCourseCompletionEvent(data: {
   email: string;
-  certificateId: string;
-  completionDate: string;
-  lessonsCompleted: number;
-  achievementsEarned: number;
+  attestationUid?: string;
+  courseCompletedAt: string;
+  questsCompletedCount: number;
 }): Promise<boolean> {
   return sendEvent(data.email, 'course_completed', {
-    certificateId: data.certificateId,
-    completionDate: data.completionDate,
-    lessonsCompleted: data.lessonsCompleted,
-    achievementsEarned: data.achievementsEarned,
+    attestationUid: data.attestationUid,
+    courseCompletedAt: data.courseCompletedAt,
+    questsCompletedCount: data.questsCompletedCount,
   });
 }
 
@@ -92,10 +95,10 @@ export async function sendCourseCompletionEvent(data: {
  */
 export async function trackProgressMilestone(
   email: string,
-  lessonsCompleted: number,
-  totalLessons: number = 12,
+  questsCompletedCount: number,
+  totalQuests: number = 12,
 ): Promise<boolean> {
-  const percentage = Math.floor((lessonsCompleted / totalLessons) * 100);
+  const percentage = Math.floor((questsCompletedCount / totalQuests) * 100);
   const milestones = [25, 50, 75, 100];
   const milestone = milestones.find((m) => percentage >= m && percentage < m + 10);
 
@@ -104,8 +107,8 @@ export async function trackProgressMilestone(
   }
 
   return sendEvent(email, 'progress_milestone', {
-    lessonsCompleted,
-    totalLessons,
+    questsCompletedCount,
+    totalQuests,
     percentage,
     milestone: `${milestone}%`,
   });
