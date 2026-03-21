@@ -211,44 +211,7 @@ export default function CertificatePage() {
           Finish all 12 lessons, then verify your email with OTP to generate your personalized completion PDF.
         </p>
 
-        <div className="mt-6 flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={handleGenerate}
-            disabled={loading}
-            className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {loading ? 'Generating…' : 'Get Certificate'}
-          </button>
-
-          <button
-            type="button"
-            onClick={handleGenerate}
-            disabled={loading}
-            className="rounded-lg border border-indigo-400/40 px-4 py-2 text-sm font-semibold text-indigo-200 hover:border-indigo-300 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            Generate Certificate
-          </button>
-
-          {latestDownloadUrl ? (
-            <a
-              href={latestDownloadUrl}
-              className="rounded-lg border border-indigo-400/40 px-4 py-2 text-sm font-semibold text-indigo-200 hover:border-indigo-300 hover:text-white"
-            >
-              Download Latest PDF
-            </a>
-          ) : null}
-
-          <button
-            type="button"
-            onClick={handleEmailCertificate}
-            className="rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-slate-200 hover:border-white/40 hover:text-white"
-          >
-            Email Certificate
-          </button>
-        </div>
-
-        {showOtpGate || (!isAuthenticated && error?.toLowerCase().includes('sign in')) ? (
+        {!isAuthenticated ? (
           <div className="mt-5 rounded-xl border border-indigo-400/30 bg-indigo-500/10 p-4">
             <p className="text-sm font-semibold text-indigo-100">Verify your email to continue</p>
             <p className="mt-1 text-xs text-indigo-200">Flow: enter email → send OTP → verify code → Get Certificate.</p>
@@ -295,7 +258,37 @@ export default function CertificatePage() {
 
             {otpStatus ? <p className="mt-3 text-sm text-indigo-100">{otpStatus}</p> : null}
           </div>
-        ) : null}
+        ) : (
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={handleGenerate}
+              disabled={loading}
+              className="rounded-lg bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? 'Generating…' : 'Generate Certificate'}
+            </button>
+
+            {latestDownloadUrl ? (
+              <a
+                href={latestDownloadUrl}
+                className="rounded-lg border border-indigo-400/40 px-4 py-2 text-sm font-semibold text-indigo-200 hover:border-indigo-300 hover:text-white"
+              >
+                Download Latest PDF
+              </a>
+            ) : null}
+
+            {result ? (
+              <button
+                type="button"
+                onClick={handleEmailCertificate}
+                className="rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-slate-200 hover:border-white/40 hover:text-white"
+              >
+                Email Certificate
+              </button>
+            ) : null}
+          </div>
+        )}
 
         {error ? <p className="mt-4 text-sm text-rose-300">{error}</p> : null}
         {emailStatus ? <p className="mt-2 text-sm text-slate-300">{emailStatus}</p> : null}

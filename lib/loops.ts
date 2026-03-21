@@ -143,7 +143,7 @@ export async function sendOtpEmail(email: string, otpCode: string): Promise<bool
       transactionalId: 'cmn0xrrp22xbz0i0u9i4ovg3q',
       email,
       dataVariables: {
-        otpCode,
+        otp_code: otpCode, // Loops template expects snake_case
       },
     });
 
