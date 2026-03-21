@@ -113,3 +113,29 @@ export async function trackProgressMilestone(
     milestone: `${milestone}%`,
   });
 }
+
+/**
+ * Send OTP code via Loops transactional email
+ */
+export async function sendOtpEmail(email: string, otpCode: string): Promise<boolean> {
+  if (!loops) {
+    console.warn('[Loops] OTP email skipped - API key not configured');
+    return false;
+  }
+
+  try {
+    const response = await loops.sendTransactionalEmail({
+      transactionalId: 'cmn0xrrp22xbz0i0u9i4ovg3q',
+      email,
+      dataVariables: {
+        otpCode,
+      },
+    });
+
+    console.info(`[Loops] OTP email sent to ${email}`, response);
+    return true;
+  } catch (error) {
+    console.error(`[Loops] Failed to send OTP email to ${email}:`, error);
+    return false;
+  }
+}

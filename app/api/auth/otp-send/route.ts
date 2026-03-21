@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { get, run } from '@/lib/db';
 import { generateOtpCode, getOtpExpiry, hashOtpCode } from '@/lib/auth';
+import { sendOtpEmail } from '@/lib/loops';
 
 type UserRow = {
   id: number;
@@ -27,8 +28,13 @@ export async function POST(request: Request) {
     run('INSERT INTO users (email, otp_code, otp_expires_at) VALUES (?, ?, ?)', email, otpHash, otpExpiresAt);
   }
 
-  // BLOCKED: SMTP integration not configured yet - TODO: revisit with real email provider
-  console.info(`[OTP] ${email} => ${otp}`);
+  // Send OTP email via Loops
+  const emailSent = await sendOtpEmail(email, otp);
+
+  if (!emailSent) {
+    console.error(`[OTP] Failed to send email to ${email}, but OTP saved. Code: ${otp}`);
+    // Still return success since OTP is saved in DB - user can retry or check logs
+  }
 
   return NextResponse.json({ success: true, message: 'OTP sent' });
 }
