@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ProgressProvider } from "@/components/progress-provider";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { DebugPanel } from "@/components/debug-panel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <ProgressProvider>
           <AnalyticsTracker />
+          <DebugPanel />
 
           <main className="flex-1">{children}</main>
           <footer className="border-t border-border/80">
