@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard • Opus Mastery",
+  title: "Dashboard • Opus AppliedAI Mastery Course",
   description: "Track your lesson progress, achievements, and current Opus challenge.",
   alternates: {
-    canonical: "/dashboard",
+    canonical: "/course",
   },
   openGraph: {
-    title: "Dashboard • Opus Mastery",
+    title: "Dashboard • Opus AppliedAI Mastery Course",
     description: "Track your lesson progress, achievements, and current Opus challenge.",
-    url: "/dashboard",
+    url: "/course",
     images: [{ url: "/api/og" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dashboard • Opus Mastery",
+    title: "Dashboard • Opus AppliedAI Mastery Course",
     description: "Track your lesson progress, achievements, and current Opus challenge.",
     images: ["/api/og"],
   },

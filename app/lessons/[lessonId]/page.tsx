@@ -76,7 +76,7 @@ export default function LessonPage({ params }: LessonPageProps) {
   return (
     <main className="mx-auto grid w-full max-w-[1280px] gap-6 px-4 py-6 lg:grid-cols-[minmax(320px,38%),1fr]">
       <aside className="rounded-2xl border border-[#2a2a4a] bg-[#12122a] p-4 lg:sticky lg:top-6 lg:h-[calc(100dvh-3rem)] lg:overflow-y-auto">
-        <h2 className="text-xl font-semibold text-white">🤖 Robot Assembly Hatch</h2>
+        <h2 className="text-xl font-semibold text-white">🤖 Opus Robot Assembly Hatch</h2>
         <p className="mt-1 text-sm text-[#9ca3cf]">Build one part per completed lesson. Stage {totalCompleted}/12.</p>
 
         <div className="mt-4">

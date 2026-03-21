@@ -53,7 +53,7 @@ export function CompletionCelebration({ totalCompleted }: CompletionCelebrationP
             Get Certificate
           </Link>
           <Link
-            href="/dashboard"
+            href="/course"
             className="rounded-lg border border-white/30 px-4 py-2 text-sm font-semibold text-white hover:border-white/60"
           >
             View Dashboard

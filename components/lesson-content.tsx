@@ -55,7 +55,20 @@ function renderCallout(line: string, index: number) {
 
 export default function LessonContent({ markdown }: LessonContentProps) {
   const body = markdown.replace(/^---[\s\S]*?---\n?/, '').trim();
-  const blocks = body.split('\n\n');
+  const rawBlocks = body.split('\n\n');
+
+  // Merge heading blocks with immediately following list blocks so they render as a unit
+  const blocks: string[] = [];
+  for (let i = 0; i < rawBlocks.length; i++) {
+    const current = rawBlocks[i];
+    const next = rawBlocks[i + 1];
+    if (/^#{1,3}\s/.test(current) && next && /^[-\d]/.test(next)) {
+      blocks.push(current + '\n\n' + next);
+      i++; // skip next since we merged it
+    } else {
+      blocks.push(current);
+    }
+  }
 
   return (
     <article className="max-w-none space-y-3 text-sm font-normal text-gray-300">
@@ -81,18 +94,46 @@ export default function LessonContent({ markdown }: LessonContentProps) {
         }
 
         if (block.startsWith('## ')) {
+          const parts = block.split('\n\n');
+          const heading = parts[0].replace(/^##\s/, '');
+          const rest = parts.slice(1).join('\n\n');
+          const listItems = rest
+            ? rest.split('\n').filter((line) => /^[-\d]/.test(line)).map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim())
+            : [];
+
           return (
-            <h2 key={`h2-${index}`} className="text-base font-semibold text-white">
-              {block.replace(/^##\s/, '')}
-            </h2>
+            <div key={`h2-group-${index}`} className="space-y-2">
+              <h2 className="text-base font-semibold text-white">{heading}</h2>
+              {listItems.length > 0 && (
+                <ul className="list-disc space-y-1.5 pl-5 text-sm font-normal text-gray-300">
+                  {listItems.map((item, i) => (
+                    <li key={`${item}-${i}`}>{parseInline(item)}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
           );
         }
 
         if (block.startsWith('### ')) {
+          const parts = block.split('\n\n');
+          const heading = parts[0].replace(/^###\s/, '');
+          const rest = parts.slice(1).join('\n\n');
+          const listItems = rest
+            ? rest.split('\n').filter((line) => /^[-\d]/.test(line)).map((line) => line.replace(/^[-]\s/, '').replace(/^\d+\.\s/, '').trim())
+            : [];
+
           return (
-            <h3 key={`h3-${index}`} className="text-sm font-semibold text-white">
-              {block.replace(/^###\s/, '')}
-            </h3>
+            <div key={`h3-group-${index}`} className="space-y-2">
+              <h3 className="text-sm font-semibold text-white">{heading}</h3>
+              {listItems.length > 0 && (
+                <ul className="list-disc space-y-1.5 pl-5 text-sm font-normal text-gray-300">
+                  {listItems.map((item, i) => (
+                    <li key={`${item}-${i}`}>{parseInline(item)}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
           );
         }
 

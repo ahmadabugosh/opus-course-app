@@ -2,24 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Opus Mastery — Master AI Workflow Automation",
+  title: "Opus Mastery Course - Master AI Automation Workflow",
   description:
-    "Master AI workflow automation in 12 hands-on lessons with Opus Mastery.",
+    "Master AI workflow automation with Opus in 12 hands-on lessons.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Opus Mastery — Master AI Workflow Automation",
+    title: "Opus Mastery Course - Master AI Automation Workflow",
     description:
-      "Master AI workflow automation in 12 hands-on lessons with Opus Mastery.",
+      "Master AI workflow automation with Opus in 12 hands-on lessons.",
     url: "/",
     images: [{ url: "/api/og" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Opus Mastery — Master AI Workflow Automation",
+    title: "Opus Mastery Course - Master AI Automation Workflow",
     description:
-      "Master AI workflow automation in 12 hands-on lessons with Opus Mastery.",
+      "Master AI workflow automation with Opus in 12 hands-on lessons.",
     images: ["/api/og"],
   },
 };
@@ -31,14 +31,14 @@ export default function Home() {
 
       <section className="relative z-10 mx-auto flex w-full max-w-5xl flex-col justify-between px-5 py-6 sm:px-8 sm:py-8">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-indigo-300 sm:text-sm">
-            Opus Mastery
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-indigo-300 sm:text-lg">
+            Opus (flagship platform of AppliedAI) Mastery Course
           </p>
         </div>
 
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-            Master AI Workflow Automation in 12 Hands-On Lessons
+            Master AI Workflow Automation with Opus in 12 Hands-On Lessons
           </h1>
           <p className="mt-4 max-w-2xl text-sm text-[#B8B8D8] sm:text-base">
             Learn practical Opus automation by building real workflows lesson by
@@ -46,7 +46,7 @@ export default function Home() {
           </p>
 
           <Link
-            href="/dashboard"
+            href="/course"
             className="group relative mt-8 inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold"
           >
             <span className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 opacity-85 blur transition duration-300 group-hover:opacity-100 group-hover:blur-md motion-safe:animate-pulse" />

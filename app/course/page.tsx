@@ -82,7 +82,7 @@ export default function DashboardPage() {
       {/* Left panel — robot + nav (fixed, no scroll on desktop) */}
       <aside className="hidden w-[380px] shrink-0 flex-col gap-4 overflow-y-auto border-r border-[#2a2a4a] bg-[#12122a] p-5 lg:flex">
         <div>
-          <h2 className="text-xl font-semibold text-white">🤖 Robot Assembly</h2>
+          <h2 className="text-xl font-semibold text-white">🤖 Opus Robot Assembly</h2>
           <p className="mt-1 text-sm text-[#9ca3cf]">Stage {totalCompleted}/12</p>
         </div>
 
@@ -102,13 +102,14 @@ export default function DashboardPage() {
           <p className="mt-2 text-sm text-[#9ca3cf]">{currentTitle}</p>
         </div>
 
-        <nav className="flex-1 overflow-y-auto rounded-xl border border-[#2a2a4a] bg-[#1a1a36] p-3">
-          <p className="text-sm font-semibold text-white">Lessons</p>
-          <ul className="mt-3 space-y-1">
+        <nav className="flex-1 overflow-y-auto">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#9ca3cf]">Lessons</p>
+          <ul className="mt-3 space-y-0.5">
             {lessons.map((lesson) => {
               const progressEntry = progress.find((entry) => entry.lessonId === lesson.id);
               const status = progressEntry?.status ?? 'not_started';
               const isCurrent = selectedLesson.id === lesson.id;
+              const isCompleted = status === 'completed';
 
               return (
                 <li key={lesson.id}>
@@ -116,14 +117,27 @@ export default function DashboardPage() {
                     type="button"
                     onClick={() => setSelectedLessonId(lesson.id)}
                     aria-label={`Open lesson ${lesson.id}`}
-                    className={`flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left text-sm transition ${
-                      isCurrent ? 'bg-[#2a2a52] text-white' : 'text-[#d4d4ef] hover:bg-[#26264a]'
+                    className={`flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition ${
+                      isCurrent
+                        ? 'bg-indigo-500/15 text-white ring-1 ring-indigo-500/30'
+                        : 'text-[#d4d4ef] hover:bg-[#26264a]'
                     }`}
                   >
-                    <span className="mt-0.5">{getStatusLabel(status, isCurrent)}</span>
-                    <span>
-                      {lesson.id}. {lesson.title}
+                    <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                      isCompleted
+                        ? 'bg-emerald-500/20 text-emerald-400'
+                        : isCurrent
+                          ? 'bg-indigo-500/20 text-indigo-300'
+                          : 'bg-[#2a2a4a] text-[#9ca3cf]'
+                    }`}>
+                      {isCompleted ? '✓' : lesson.id}
                     </span>
+                    <div className="flex-1 min-w-0">
+                      <span className={`block truncate ${isCompleted ? 'text-[#9ca3cf]' : ''}`}>
+                        {lesson.title}
+                      </span>
+                      <span className="block text-xs text-[#7a7a9f] mt-0.5">{lesson.description?.slice(0, 50)}{(lesson.description?.length ?? 0) > 50 ? '…' : ''}</span>
+                    </div>
                   </button>
                 </li>
               );
