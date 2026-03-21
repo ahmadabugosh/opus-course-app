@@ -55,7 +55,7 @@ export default function RootLayout({
           <footer className="border-t border-border/80">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6 text-sm text-muted sm:px-6 lg:px-8">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <p>Course built for practical automation mastery in Opus (by AppliedAI).</p>
+                <p>Course built for practical automation mastery in <a href="https://www.opus.com/" target="_blank" rel="noopener noreferrer" className="text-indigo-300 hover:text-white transition-colors underline underline-offset-2">Opus</a> (by AppliedAI).</p>
                 <p>12 lessons • Zero signup friction • Certificate at completion</p>
               </div>
               <div className="flex items-center gap-4">
