@@ -48,7 +48,7 @@ export function CompletionCelebration({ totalCompleted }: CompletionCelebrationP
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/certificate"
-            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-emerald-100"
+            className="rounded-lg bg-white px-4 py-2 text-sm font-semibold !text-slate-900 hover:bg-emerald-100"
           >
             Get Certificate
           </Link>
