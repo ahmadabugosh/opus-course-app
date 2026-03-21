@@ -41,16 +41,13 @@ export default function Home() {
           <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
             Master AI Workflow Automation with Opus in 12 Hands-On Lessons
           </h1>
-          <p className="mt-4 max-w-2xl text-sm text-[#B8B8D8] sm:text-base">
-            Learn practical Opus automation by building real workflows lesson by
-            lesson. Finish all 12 and unlock your completion certificate.
-          </p>
 
-          <div className="mt-8 w-48 sm:w-56">
+
+          <div className="mt-8 w-72 sm:w-96">
             <RobotAssemblyAnimated />
           </div>
 
-          <p className="mt-3 text-sm text-[#B8B8D8] sm:text-base">
+          <p className="mt-3 text-lg font-medium text-[#B8B8D8] sm:text-xl">
             Complete the Course → Assemble Your Opus Robot
           </p>
 
