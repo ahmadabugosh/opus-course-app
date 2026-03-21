@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { RobotAssemblyAnimated } from "@/components/robot-assembly/robot-assembly-animated";
 
 export const metadata: Metadata = {
   title: "Opus Mastery Course - Master AI Automation Workflow",
@@ -45,9 +46,13 @@ export default function Home() {
             lesson. Finish all 12 and unlock your completion certificate.
           </p>
 
+          <div className="mt-8 w-48 sm:w-56">
+            <RobotAssemblyAnimated />
+          </div>
+
           <Link
             href="/course"
-            className="group relative mt-8 inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold"
+            className="group relative mt-6 inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold"
           >
             <span className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 opacity-85 blur transition duration-300 group-hover:opacity-100 group-hover:blur-md motion-safe:animate-pulse" />
             <span className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500" />
