@@ -50,22 +50,21 @@ export default function Home() {
             <RobotAssemblyAnimated />
           </div>
 
+          <p className="mt-3 text-sm text-[#B8B8D8] sm:text-base">
+            Complete the Course → Assemble Your Opus Robot
+          </p>
+
           <Link
             href="/course"
             className="group relative mt-6 inline-flex items-center justify-center rounded-xl px-8 py-3 text-base font-semibold"
           >
             <span className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500 opacity-85 blur transition duration-300 group-hover:opacity-100 group-hover:blur-md motion-safe:animate-pulse" />
             <span className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-indigo-500" />
-            <span className="relative">Start Learning</span>
+            <span className="relative">Start Learning Opus</span>
           </Link>
         </div>
 
-        <footer className="text-center text-xs text-[#8D8DB8] sm:text-sm">
-          Built by{' '}
-          <a href="https://www.linkedin.com/in/ahmadabugosh/" target="_blank" rel="noopener noreferrer" className="text-indigo-300 hover:text-white transition-colors underline underline-offset-2">
-            Ahmad Abugosh
-          </a>
-        </footer>
+        <div className="h-8" />
       </section>
     </main>
   );
