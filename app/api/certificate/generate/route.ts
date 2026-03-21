@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { get } from '@/lib/db';
 import { AUTH_COOKIE_NAME, verifySessionToken } from '@/lib/auth';
 import { createAndStoreCertificate, getUserSummary } from '@/lib/certificate';
+import { sendCourseCompletionEvent, addOrUpdateContact } from '@/lib/loops';
 
 type CertificateRow = {
   certificate_id: string;
@@ -53,6 +54,25 @@ export async function POST() {
 
   const displayName = user.display_name || user.username || user.email;
   const certificate = createAndStoreCertificate({ userId, displayName });
+
+  // Send completion event to Loops (async, non-blocking)
+  Promise.all([
+    sendCourseCompletionEvent({
+      email: user.email,
+      certificateId: certificate.certificateId,
+      completionDate: certificate.completionDate,
+      lessonsCompleted: certificate.stats.completedLessons,
+      achievementsEarned: certificate.stats.achievementsCount,
+    }),
+    addOrUpdateContact({
+      email: user.email,
+      displayName,
+      lessonsCompleted: certificate.stats.completedLessons,
+      achievementsEarned: certificate.stats.achievementsCount,
+      completionDate: certificate.completionDate,
+      certificateId: certificate.certificateId,
+    }),
+  ]).catch((error) => console.error('[Certificate] Loops sync failed:', error));
 
   return NextResponse.json({
     success: true,

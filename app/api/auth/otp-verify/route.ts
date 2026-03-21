@@ -8,6 +8,7 @@ import {
   getSessionCookieOptions,
   verifyOtpCode,
 } from '@/lib/auth';
+import { addOrUpdateContact } from '@/lib/loops';
 
 type VerifyPayload = {
   email?: string;
@@ -83,6 +84,23 @@ export async function POST(request: Request) {
   const token = createSessionToken({ userId: user.id });
   const cookieStore = await cookies();
   cookieStore.set(AUTH_COOKIE_NAME, token, getSessionCookieOptions());
+
+  // Add contact to Loops (async, non-blocking)
+  const progressStats = get<{ completed: number; achievements: number }>(
+    `SELECT 
+      COUNT(CASE WHEN status = 'completed' THEN 1 END) as completed,
+      (SELECT COUNT(*) FROM achievements WHERE user_id = ?) as achievements
+     FROM progress 
+     WHERE user_id = ?`,
+    user.id,
+    user.id,
+  );
+
+  addOrUpdateContact({
+    email,
+    lessonsCompleted: progressStats?.completed || 0,
+    achievementsEarned: progressStats?.achievements || 0,
+  }).catch((error) => console.error('[OTP Verify] Loops sync failed:', error));
 
   return NextResponse.json({ success: true, userId: user.id });
 }
