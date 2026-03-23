@@ -13,6 +13,7 @@ import { addOrUpdateContact } from '@/lib/loops';
 type VerifyPayload = {
   email?: string;
   code?: string;
+  displayName?: string;
   localProgress?: Array<{
     lessonId: number;
     status?: string;
@@ -26,6 +27,7 @@ type UserRow = {
   id: number;
   otp_code: string | null;
   otp_expires_at: string | null;
+  display_name: string | null;
 };
 
 function migrateProgress(userId: number, progress: VerifyPayload['localProgress']) {
@@ -64,7 +66,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Email and code are required' }, { status: 400 });
   }
 
-  const user = get<UserRow>('SELECT id, otp_code, otp_expires_at FROM users WHERE email = ?', email);
+  const user = get<UserRow>('SELECT id, otp_code, otp_expires_at, display_name FROM users WHERE email = ?', email);
 
   if (!user?.otp_code || !user.otp_expires_at) {
     return NextResponse.json({ error: 'OTP not found. Request a new code.' }, { status: 401 });
@@ -78,6 +80,12 @@ export async function POST(request: Request) {
   }
 
   run('UPDATE users SET otp_code = NULL, otp_expires_at = NULL, updated_at = datetime(\'now\') WHERE id = ?', user.id);
+
+  // Save display name if provided
+  const displayName = body?.displayName?.trim();
+  if (displayName && displayName.length > 0 && displayName.length <= 100) {
+    run('UPDATE users SET display_name = ?, updated_at = datetime(\'now\') WHERE id = ?', displayName, user.id);
+  }
 
   migrateProgress(user.id, body?.localProgress);
 
@@ -102,5 +110,9 @@ export async function POST(request: Request) {
     userGroup: 'opus-mastery',
   }).catch((error) => console.error('[OTP Verify] Loops sync failed:', error));
 
-  return NextResponse.json({ success: true, userId: user.id });
+  return NextResponse.json({
+    success: true,
+    userId: user.id,
+    hasDisplayName: !!(displayName || user.display_name),
+  });
 }

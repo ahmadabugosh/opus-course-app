@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 
+import { jsPDF } from 'jspdf';
+
 import { get, run } from '@/lib/db';
 
 type CertificateStats = {
@@ -25,10 +27,6 @@ export function generateCertificateId() {
   return crypto.randomUUID();
 }
 
-function escapePdfText(text: string) {
-  return text.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
-}
-
 export function generateCertificatePdfBuffer({
   certificateId,
   displayName,
@@ -42,64 +40,152 @@ export function generateCertificatePdfBuffer({
   achievementsCount: number;
   completedLessons: number;
 }) {
-  const lines = [
-    'BT',
-    '/F1 34 Tf',
-    '72 730 Td',
-    `(Opus Mastery - Complete Course) Tj`,
-    '0 -55 Td',
-    '/F1 20 Tf',
-    `(${escapePdfText(displayName)}) Tj`,
-    '0 -30 Td',
-    '/F1 14 Tf',
-    `(Completed: ${escapePdfText(completionDate)}) Tj`,
-    '0 -22 Td',
-    `(Certificate ID: ${escapePdfText(certificateId)}) Tj`,
-    '0 -22 Td',
-    `(Course stats: ${completedLessons}/12 lessons, ${achievementsCount} achievements) Tj`,
-    'ET',
-  ];
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const w = doc.internal.pageSize.getWidth();
+  const h = doc.internal.pageSize.getHeight();
 
-  const stream = `${lines.join('\n')}\n`;
-  const streamLength = Buffer.byteLength(stream, 'utf8');
+  // === Background ===
+  doc.setFillColor(18, 18, 40); // Deep dark blue
+  doc.rect(0, 0, w, h, 'F');
 
-  const pdf = `%PDF-1.4
-1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
-endobj
-2 0 obj
-<< /Type /Pages /Count 1 /Kids [3 0 R] >>
-endobj
-3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
-endobj
-4 0 obj
-<< /Length ${streamLength} >>
-stream
-${stream}endstream
-endobj
-5 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
-endobj
-xref
-0 6
-0000000000 65535 f 
-0000000010 00000 n 
-0000000065 00000 n 
-0000000122 00000 n 
-0000000248 00000 n 
-0000000000 00000 n 
-trailer
-<< /Root 1 0 R /Size 6 >>
-startxref
-0
-%%EOF`;
+  // === Outer border ===
+  doc.setDrawColor(180, 140, 60); // Gold
+  doc.setLineWidth(2);
+  doc.rect(8, 8, w - 16, h - 16);
 
-  // Store explicit MIME marker for discoverability in tests/tooling.
-  const mime = 'application/pdf';
-  void mime;
+  // === Inner border ===
+  doc.setDrawColor(180, 140, 60);
+  doc.setLineWidth(0.5);
+  doc.rect(14, 14, w - 28, h - 28);
 
-  return Buffer.from(pdf, 'utf8');
+  // === Corner decorations ===
+  const cs = 20;
+  doc.setDrawColor(180, 140, 60);
+  doc.setLineWidth(1.5);
+  // Top-left
+  doc.line(8, 8, 8 + cs, 8);
+  doc.line(8, 8, 8, 8 + cs);
+  // Top-right
+  doc.line(w - 8 - cs, 8, w - 8, 8);
+  doc.line(w - 8, 8, w - 8, 8 + cs);
+  // Bottom-left
+  doc.line(8, h - 8, 8 + cs, h - 8);
+  doc.line(8, h - 8 - cs, 8, h - 8);
+  // Bottom-right
+  doc.line(w - 8 - cs, h - 8, w - 8, h - 8);
+  doc.line(w - 8, h - 8 - cs, w - 8, h - 8);
+
+  let y = 32;
+
+  // === "OPUS MASTERY" header ===
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(180, 140, 60);
+  doc.text('O P U S   M A S T E R Y', w / 2, y, { align: 'center' });
+
+  // === Divider ===
+  y += 5;
+  doc.setDrawColor(180, 140, 60);
+  doc.setLineWidth(0.3);
+  doc.line(w / 2 - 35, y, w / 2 + 35, y);
+
+  // === "Certificate of Completion" ===
+  y += 12;
+  doc.setFontSize(11);
+  doc.setTextColor(180, 140, 60);
+  doc.text('C E R T I F I C A T E   O F   C O M P L E T I O N', w / 2, y, { align: 'center' });
+
+  // === "This is to certify that" ===
+  y += 14;
+  doc.setFontSize(10);
+  doc.setTextColor(160, 160, 180);
+  doc.setFont('helvetica', 'italic');
+  doc.text('This is to certify that', w / 2, y, { align: 'center' });
+
+  // === User's name ===
+  y += 16;
+  doc.setFont('times', 'bold');
+  // Truncate very long names and adjust font size
+  let nameSize = 36;
+  let truncatedName = displayName;
+  if (displayName.length > 40) {
+    truncatedName = displayName.slice(0, 37) + '...';
+  }
+  if (truncatedName.length > 25) {
+    nameSize = 30;
+  }
+  doc.setFontSize(nameSize);
+  doc.setTextColor(255, 220, 130); // Gold/amber
+  doc.text(truncatedName, w / 2, y, { align: 'center' });
+
+  // === Divider under name ===
+  y += 6;
+  doc.setDrawColor(180, 140, 60);
+  doc.setLineWidth(0.3);
+  doc.line(w / 2 - 50, y, w / 2 + 50, y);
+
+  // === Description ===
+  y += 10;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.setTextColor(180, 180, 200);
+  doc.text('has successfully completed all 12 lessons of the Opus Mastery course', w / 2, y, { align: 'center' });
+  doc.text('and demonstrated proficiency in AI workflow automation with Claude.', w / 2, y + 6, { align: 'center' });
+
+  // === Title badge ===
+  y += 20;
+  const badgeW = 72;
+  const badgeH = 14;
+  doc.setDrawColor(180, 140, 60);
+  doc.setLineWidth(0.8);
+  doc.setFillColor(35, 30, 50);
+  doc.roundedRect(w / 2 - badgeW / 2, y - 8, badgeW, badgeH, 3, 3, 'FD');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 220, 130);
+  doc.text('Opus Master', w / 2, y, { align: 'center' });
+
+  // === Footer info section ===
+  y += 22;
+  const footerY = y;
+  doc.setFontSize(8);
+
+  // Date
+  doc.setTextColor(140, 140, 160);
+  doc.text('DATE ISSUED', w / 2 - 70, footerY, { align: 'center' });
+  doc.setTextColor(200, 200, 220);
+  doc.text(completionDate, w / 2 - 70, footerY + 5, { align: 'center' });
+
+  // Lessons completed
+  doc.setTextColor(140, 140, 160);
+  doc.text('LESSONS COMPLETED', w / 2, footerY, { align: 'center' });
+  doc.setTextColor(200, 200, 220);
+  doc.text(`${completedLessons} / 12`, w / 2, footerY + 5, { align: 'center' });
+
+  // Achievements
+  doc.setTextColor(140, 140, 160);
+  doc.text('ACHIEVEMENTS', w / 2 + 70, footerY, { align: 'center' });
+  doc.setTextColor(200, 200, 220);
+  doc.text(`${achievementsCount}`, w / 2 + 70, footerY + 5, { align: 'center' });
+
+  // === Certificate ID ===
+  y = footerY + 16;
+  doc.setFontSize(7);
+  doc.setTextColor(100, 100, 120);
+  doc.text(`Certificate ID: ${certificateId}`, w / 2, y, { align: 'center' });
+
+  // === Bottom tagline ===
+  doc.setFontSize(7);
+  doc.setTextColor(100, 100, 120);
+  doc.setFont('helvetica', 'italic');
+  doc.text('"Master the AI, automate the future."', w / 2, h - 22, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(80, 80, 100);
+  doc.text('LearnOpus.com \u2022 Opus Mastery Course', w / 2, h - 17, { align: 'center' });
+
+  // Output as application/pdf buffer
+  const arrayBuffer = doc.output('arraybuffer');
+  return Buffer.from(arrayBuffer);
 }
 
 export function getCertificateStats(userId: number): CertificateStats {
