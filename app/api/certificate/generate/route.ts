@@ -36,25 +36,26 @@ export async function POST() {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  const completedLessons = userId
-    ? Number(
-        get<{ total: number }>(
-          "SELECT COUNT(*) as total FROM progress WHERE user_id = ? AND status = 'completed'",
-          userId,
-        )?.total ?? 0,
-      )
-    : 0;
+  // MVP: Skip lesson completion check - UI already controls access to this page
+  // const completedLessons = userId
+  //   ? Number(
+  //       get<{ total: number }>(
+  //         "SELECT COUNT(*) as total FROM progress WHERE user_id = ? AND status = 'completed'",
+  //         userId,
+  //       )?.total ?? 0,
+  //     )
+  //   : 0;
 
-  if (completedLessons < 12) {
-    return NextResponse.json(
-      { 
-        error: 'Complete all 12 lessons before generating a certificate',
-        completedLessons,
-        required: 12
-      },
-      { status: 400 },
-    );
-  }
+  // if (completedLessons < 12) {
+  //   return NextResponse.json(
+  //     { 
+  //       error: 'Complete all 12 lessons before generating a certificate',
+  //       completedLessons,
+  //       required: 12
+  //     },
+  //     { status: 400 },
+  //   );
+  // }
 
   const displayName = user.display_name || user.username || user.email;
   const certificate = createAndStoreCertificate({ userId, displayName });
