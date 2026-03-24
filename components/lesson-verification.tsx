@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from 'react';
+import { useMemo, useState, useEffect, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useProgress } from '@/components/progress-provider';
 import type { LessonMeta } from '@/lib/lessons';
@@ -20,18 +21,73 @@ type LessonVerificationProps = {
 };
 
 export function LessonVerification({ lesson }: LessonVerificationProps) {
-  const { markComplete, isComplete } = useProgress();
+  const router = useRouter();
+  const { markComplete, isComplete, getTotalCompleted } = useProgress();
   const completed = isComplete(lesson.id);
   const isAdmin = useIsAdmin();
 
   const [proofText, setProofText] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(completed);
+  const [justCompleted, setJustCompleted] = useState(false);
 
   const remainingChars = useMemo(() => {
     const remaining = lesson.challenge.verificationMinLength - proofText.trim().length;
     return remaining > 0 ? remaining : 0;
   }, [lesson.challenge.verificationMinLength, proofText]);
+
+  // Play short metallic sound effect when lesson is completed
+  const playCompletionSound = () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      // Metallic "clink" sound - quick high-pitched tone
+      oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.1);
+      
+      oscillator.type = 'triangle';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.15);
+    } catch {
+      // Silently fail if audio context not supported
+    }
+  };
+
+  // Auto-advance to next lesson after completion
+  useEffect(() => {
+    if (justCompleted) {
+      playCompletionSound();
+      
+      const totalCompleted = getTotalCompleted();
+      
+      // Wait 1.5 seconds, then navigate
+      const timer = setTimeout(() => {
+        if (totalCompleted >= 12) {
+          // All lessons complete - no auto-advance
+          return;
+        }
+        
+        // Navigate to next lesson
+        const nextLessonId = lesson.id + 1;
+        if (nextLessonId <= 12) {
+          router.push(`/lessons/${nextLessonId}`);
+        }
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [justCompleted, lesson.id, router, getTotalCompleted]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,6 +103,14 @@ export function LessonVerification({ lesson }: LessonVerificationProps) {
 
     markComplete(lesson.id, cleanedProof);
     setSubmitted(true);
+    setJustCompleted(true);
+    setError(null);
+  };
+
+  const handleAdminBypass = () => {
+    markComplete(lesson.id, '[admin bypass]');
+    setSubmitted(true);
+    setJustCompleted(true);
     setError(null);
   };
 
@@ -90,20 +154,29 @@ export function LessonVerification({ lesson }: LessonVerificationProps) {
       </button>
 
       {submitted && (
-        <p className="robot-checkmark-pop mt-3 inline-flex items-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
-          <span className="text-base">✅</span>
-          Verification accepted. Robot assembly advanced.
-        </p>
+        <>
+          <p className="robot-checkmark-pop mt-3 inline-flex items-center gap-2 rounded-md border border-emerald-500/40 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
+            <span className="text-base">✅</span>
+            {getTotalCompleted() >= 12 
+              ? 'All 12 lessons complete! 🎉' 
+              : 'Verification accepted. Robot assembly advanced.'}
+          </p>
+          
+          {getTotalCompleted() >= 12 && (
+            <a
+              href="/certificate"
+              className="mt-4 inline-flex items-center rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:from-indigo-400 hover:to-purple-400"
+            >
+              🎓 Generate Your Certificate
+            </a>
+          )}
+        </>
       )}
 
       {isAdmin && !submitted && (
         <button
           type="button"
-          onClick={() => {
-            markComplete(lesson.id, '[admin bypass]');
-            setSubmitted(true);
-            setError(null);
-          }}
+          onClick={handleAdminBypass}
           className="mt-3 inline-flex items-center rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-medium text-amber-300 transition hover:bg-amber-500/20"
         >
           ⚡ Admin: Mark complete (skip verification)
