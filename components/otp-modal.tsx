@@ -2,6 +2,18 @@
 
 import { useState } from 'react';
 
+type CertificateResult = {
+  success: boolean;
+  certificateId: string;
+  completionDate: string;
+  downloadUrl: string;
+  profileUrl: string | null;
+  stats: {
+    completedLessons: number;
+    achievementsCount: number;
+  };
+};
+
 type OtpModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -11,8 +23,9 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [step, setStep] = useState<'email' | 'code' | 'name'>('email');
+  const [step, setStep] = useState<'email' | 'code' | 'name' | 'generating' | 'certificate'>('email');
   const [status, setStatus] = useState('');
+  const [certificate, setCertificate] = useState<CertificateResult | null>(null);
 
   if (!isOpen) {
     return null;
@@ -36,6 +49,29 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
     setStep('code');
   }
 
+  async function generateCertificate() {
+    setStep('generating');
+    setStatus('Generating your certificate...');
+
+    try {
+      const response = await fetch('/api/certificate/generate', { method: 'POST' });
+      const payload = await response.json();
+
+      if (!response.ok) {
+        setStatus(payload.error || 'Failed to generate certificate. Please try again.');
+        setStep('name');
+        return;
+      }
+
+      setCertificate(payload as CertificateResult);
+      setStep('certificate');
+      setStatus('');
+    } catch {
+      setStatus('Failed to generate certificate. Please try again.');
+      setStep('name');
+    }
+  }
+
   async function verifyOtp() {
     setStatus('Verifying...');
 
@@ -53,11 +89,10 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
     const data = (await response.json()) as { success: boolean; hasDisplayName?: boolean };
 
     if (data.hasDisplayName) {
-      // User already has a name, complete login
-      setStatus('Signed in successfully.');
-      setTimeout(onClose, 300);
+      // User already has a name — go straight to certificate generation
+      await generateCertificate();
     } else {
-      // Prompt for display name
+      // Prompt for display name first
       setStatus('');
       setStep('name');
     }
@@ -70,7 +105,7 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
       return;
     }
 
-    setStatus('Saving...');
+    setStatus('Saving name...');
 
     const response = await fetch('/api/user/update-name', {
       method: 'POST',
@@ -83,28 +118,85 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
       return;
     }
 
-    setStatus('Welcome, ' + trimmedName + '!');
-    setTimeout(onClose, 500);
+    // Name saved — now generate certificate immediately
+    await generateCertificate();
   }
 
-  function skipName() {
-    setStatus('Signed in successfully.');
-    setTimeout(onClose, 300);
+  async function skipName() {
+    // Generate certificate even without name
+    await generateCertificate();
   }
+
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const shareText = 'I just completed Opus Mastery — 12 hands-on AI workflow automation lessons 🚀';
+  const certificateUrl = certificate?.downloadUrl ? `${origin}${certificate.downloadUrl}` : null;
+  const profileUrl = certificate?.profileUrl ? `${origin}${certificate.profileUrl}` : null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="w-full max-w-md rounded-xl border border-indigo-500/40 bg-slate-950 p-6 text-white shadow-2xl">
         <div className="mb-4 flex items-start justify-between">
           <h2 className="text-xl font-semibold">
-            {step === 'name' ? 'Almost there!' : 'Get your certificate'}
+            {step === 'certificate'
+              ? '🎉 Certificate Ready!'
+              : step === 'generating'
+                ? 'Generating...'
+                : step === 'name'
+                  ? 'Almost there!'
+                  : 'Get your certificate'}
           </h2>
           <button className="text-sm text-slate-300 hover:text-white" onClick={onClose} type="button">
             Close
           </button>
         </div>
 
-        {step === 'name' ? (
+        {step === 'certificate' && certificate ? (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+              <p className="font-semibold text-lg">Certificate ready ✅</p>
+              <p className="mt-2">Completed lessons: {certificate.stats.completedLessons}/12</p>
+              {certificate.stats.achievementsCount > 0 && (
+                <p className="mt-1">Achievements earned: {certificate.stats.achievementsCount}</p>
+              )}
+              <p className="mt-1">Completion date: {certificate.completionDate}</p>
+            </div>
+
+            <a
+              href={certificate.downloadUrl}
+              className="flex w-full items-center justify-center rounded-md bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-400"
+            >
+              ⬇️ Download Certificate PDF
+            </a>
+
+            <div className="flex gap-2">
+              {certificateUrl && (
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificateUrl)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 rounded-md border border-slate-700 px-3 py-2 text-center text-sm font-medium text-slate-300 hover:border-slate-500 hover:text-white"
+                >
+                  Share on LinkedIn
+                </a>
+              )}
+              {(profileUrl || certificateUrl) && (
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(profileUrl || certificateUrl || '')}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 rounded-md border border-slate-700 px-3 py-2 text-center text-sm font-medium text-slate-300 hover:border-slate-500 hover:text-white"
+                >
+                  Share on Twitter/X
+                </a>
+              )}
+            </div>
+          </div>
+        ) : step === 'generating' ? (
+          <div className="flex flex-col items-center py-8">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-500 border-t-transparent" />
+            <p className="mt-4 text-sm text-slate-300">Generating your certificate...</p>
+          </div>
+        ) : step === 'name' ? (
           <>
             <p className="mb-4 text-sm text-slate-300">
               Enter your full name — this will appear on your certificate.
@@ -127,7 +219,7 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
               onClick={submitName}
               disabled={!displayName.trim()}
             >
-              Save Name
+              Generate Certificate
             </button>
 
             <button
@@ -135,7 +227,7 @@ export function OtpModal({ isOpen, onClose }: OtpModalProps) {
               type="button"
               onClick={skipName}
             >
-              Skip for now
+              Skip — use email instead
             </button>
           </>
         ) : (
