@@ -47,7 +47,11 @@ export async function POST() {
 
   if (completedLessons < 12) {
     return NextResponse.json(
-      { error: 'Complete all 12 lessons before generating a certificate' },
+      { 
+        error: 'Complete all 12 lessons before generating a certificate',
+        completedLessons,
+        required: 12
+      },
       { status: 400 },
     );
   }

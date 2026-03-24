@@ -98,7 +98,7 @@ export default function CertificatePage() {
 
     try {
       const response = await fetch('/api/certificate/generate', { method: 'POST' });
-      const payload = (await response.json()) as GenerateResponse | { error?: string };
+      const payload = (await response.json()) as GenerateResponse | { error?: string; completedLessons?: number; required?: number };
 
       if (response.status === 401) {
         setShowOtpGate(true);
@@ -107,7 +107,15 @@ export default function CertificatePage() {
       }
 
       if (!response.ok) {
-        throw new Error((payload as { error?: string }).error || 'Failed to generate certificate');
+        const errorPayload = payload as { error?: string; completedLessons?: number; required?: number };
+        let errorMessage = errorPayload.error || 'Failed to generate certificate';
+        
+        // Show detailed progress if available
+        if (typeof errorPayload.completedLessons === 'number' && typeof errorPayload.required === 'number') {
+          errorMessage = `${errorMessage} (You have ${errorPayload.completedLessons}/${errorPayload.required} lessons completed)`;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setShowOtpGate(false);
