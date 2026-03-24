@@ -130,7 +130,7 @@ export function generateCertificatePdfBuffer({
   doc.setFontSize(10);
   doc.setTextColor(180, 180, 200);
   doc.text('has successfully completed all 12 lessons of the Opus Mastery course', w / 2, y, { align: 'center' });
-  doc.text('and demonstrated proficiency in AI workflow automation with Claude.', w / 2, y + 6, { align: 'center' });
+  doc.text('and demonstrated proficiency in AI workflow automation (using the AppliedAI Opus platform).', w / 2, y + 6, { align: 'center' });
 
   // === Title badge ===
   y += 20;
