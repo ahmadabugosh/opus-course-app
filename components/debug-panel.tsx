@@ -18,6 +18,7 @@ type ProgressState = {
 export function DebugPanel() {
   const [isVisible, setIsVisible] = useState(false);
   const [progress, setProgress] = useState<ProgressState | null>(null);
+  const [syncStatus, setSyncStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -84,6 +85,45 @@ export function DebugPanel() {
     window.location.reload();
   };
 
+  const syncToDatabase = async () => {
+    setSyncStatus('Syncing...');
+    
+    try {
+      const stored = localStorage.getItem(PROGRESS_STORAGE_KEY);
+      if (!stored) {
+        setSyncStatus('❌ No progress in localStorage');
+        return;
+      }
+
+      const progressData = JSON.parse(stored) as ProgressState;
+      const localProgress = Object.values(progressData.lessons).map((lesson) => ({
+        lessonId: lesson.lessonId,
+        status: lesson.status,
+        completedAt: lesson.completedAt,
+        startedAt: null,
+        proofUrl: null,
+      }));
+
+      const response = await fetch('/api/progress/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ localProgress }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setSyncStatus(`❌ ${result.error || 'Sync failed'}`);
+        return;
+      }
+
+      setSyncStatus(`✅ ${result.message}`);
+      setTimeout(() => setSyncStatus(null), 3000);
+    } catch (error) {
+      setSyncStatus(`❌ ${error instanceof Error ? error.message : 'Sync failed'}`);
+    }
+  };
+
   if (!isVisible) {
     return null;
   }
@@ -119,7 +159,19 @@ export function DebugPanel() {
           >
             Mark all 12 complete
           </button>
+          <button
+            onClick={syncToDatabase}
+            className="block w-full rounded bg-blue-600 px-2 py-1 text-xs hover:bg-blue-700"
+          >
+            🔄 Sync localStorage → Database
+          </button>
         </div>
+
+        {syncStatus && (
+          <div className="rounded bg-amber-900/50 p-2 text-xs text-amber-100">
+            {syncStatus}
+          </div>
+        )}
 
         <div className="grid grid-cols-3 gap-1">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((lessonId) => (
