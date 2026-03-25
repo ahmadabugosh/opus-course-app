@@ -8,23 +8,48 @@ type LessonContentProps = {
 
 function parseInline(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g).filter(Boolean);
+  // Match inline code, bold, and links
+  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\[([^\]]+)\]\(([^)]+)\))/g).filter(Boolean);
 
-  for (const part of parts) {
+  let i = 0;
+  while (i < parts.length) {
+    const part = parts[i];
+    
     if (part.startsWith('`') && part.endsWith('`')) {
       nodes.push(
         <code key={`${part}-${nodes.length}`} className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-indigo-200">
           {part.slice(1, -1)}
         </code>,
       );
+      i++;
     } else if (part.startsWith('**') && part.endsWith('**')) {
       nodes.push(
         <strong key={`${part}-${nodes.length}`} className="font-semibold text-white">
           {part.slice(2, -2)}
         </strong>,
       );
-    } else {
+      i++;
+    } else if (part.startsWith('[')) {
+      // This is a link - next two parts are link text and URL from capture groups
+      const linkText = parts[i + 1];
+      const linkUrl = parts[i + 2];
+      nodes.push(
+        <a
+          key={`link-${nodes.length}`}
+          href={linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-indigo-400 underline hover:text-indigo-300"
+        >
+          {linkText}
+        </a>,
+      );
+      i += 3; // Skip the link text and URL capture groups
+    } else if (part) {
       nodes.push(<span key={`${part}-${nodes.length}`}>{part}</span>);
+      i++;
+    } else {
+      i++;
     }
   }
 
