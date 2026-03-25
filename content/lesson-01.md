@@ -12,6 +12,10 @@ challenge:
 
 # Your First Workflow
 
+## Before You Start
+
+**Create your free Opus account:** Visit [opus.com](https://www.opus.com/) and sign up for a free account. You'll need this to follow along with all lessons in this course.
+
 ## What You'll Learn
 - How Opus workflows are structured
 - How to wire input, agent, and output tasks
