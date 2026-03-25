@@ -78,16 +78,13 @@ export function LessonVerification({ lesson }: LessonVerificationProps) {
           return;
         }
         
-        // Navigate to next lesson
-        const nextLessonId = lesson.id + 1;
-        if (nextLessonId <= 12) {
-          router.push(`/lessons/${nextLessonId}`);
-        }
+        // Navigate back to course page (which will auto-select next lesson)
+        router.push(`/course`);
       }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [justCompleted, lesson.id, router, getTotalCompleted]);
+  }, [justCompleted, router, getTotalCompleted]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

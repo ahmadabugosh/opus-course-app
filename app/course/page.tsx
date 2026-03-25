@@ -42,6 +42,17 @@ export default function DashboardPage() {
   const [selectedLessonId, setSelectedLessonId] = useState(defaultLessonId);
   const [lessonMarkdown, setLessonMarkdown] = useState<string>('');
 
+  // Auto-advance to next incomplete lesson when a lesson is completed
+  useEffect(() => {
+    const currentLesson = progress.find((p) => p.lessonId === selectedLessonId);
+    if (currentLesson?.status === 'completed') {
+      const nextLessonId = getDefaultCurrentLessonId(progress);
+      if (nextLessonId !== selectedLessonId) {
+        setSelectedLessonId(nextLessonId);
+      }
+    }
+  }, [progress, selectedLessonId]);
+
   const selectedLesson = useMemo(
     () => lessons.find((lesson) => lesson.id === selectedLessonId) ?? lessons[0],
     [selectedLessonId],

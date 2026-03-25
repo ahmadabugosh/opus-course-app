@@ -23,7 +23,7 @@ challenge:
 - Draft vs active workflow states
 
 ## Step-by-Step Guide
-1. Create a new workflow.
+1. Create a new workflow (choose **"Build from scratch"** when prompted).
 2. Add a text input variable named `raw_text`.
 3. Add an Opus Agent task to summarize in 3 bullet points.
 4. Connect the agent output to workflow output.
