@@ -25,6 +25,19 @@ function getStatusLabel(status: 'not_started' | 'in_progress' | 'completed', isC
 export default function DashboardPage() {
   const { getProgress, getTotalCompleted } = useProgress();
 
+  // Handle logout for testing: ?logout=true
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('logout') === 'true') {
+      // Clear all progress
+      window.localStorage.clear();
+      // Redirect to course page without query params
+      window.location.href = '/course';
+    }
+  }, []);
+
   if (lessons.length === 0) {
     return (
       <main className="mx-auto w-full max-w-3xl px-4 py-10 text-center">
